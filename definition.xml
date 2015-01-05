@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+      name="Player-Killer" 
+      id="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+      octgnVersion="3.1.127.0" 
+      version="3.15.2.0"
+      markersize="16" 
+      setsurl="http://www.google.com"
+      gameurl="http://www.google.com"
+      authors="Seurimas"
+      description="Player Killer prototype"
+      tags="prototype duel fantasy"
+      iconurl="https://raw.github.com/db0/Android-Netrunner-OCTGN/master/ANR_box.jpg">
+    <scripts>
+        <script src="scripts/baseActions.py" />
+    </scripts>
+    <events>
+       <event name="OnTableLoad" action="chkTwoSided" />
+       <event name="OnLoadDeck" action="checkDeck" />
+    </events>
+    <sounds>
+    </sounds>
+    <fonts>
+       <font src="Fonts/CyberpunkIsNotDead_ANR.ttf" size="11" target="context"/> <!--menu-->
+       <font src="Fonts/ANR_symbols_only-enlarged.ttf" size="12" target="chat"/> <!--chat-->
+    </fonts>   
+    <proxygen definitionsrc="Proxy/proxydef.xml"/>
+    <globalvariables>
+    </globalvariables>
+    <card back="card/back.jpg" front="card/front.jpg" width="63" height="88" cornerRadius="2">
+        <property name="Type" type="String" hidden="False" ignoreText="False" />
+        <property name="Subtype" type="String" hidden="False" ignoreText="False" />
+        <property name="Description" type="String" hidden="False" ignoreText="False" />
+        <property name="Script" type="String" hidden="True" ignoreText="True" />
+    </card>
+    <table background="card/front.jpg" name="Table" visibility="all" ordered="False" width="20" height="15" />
+    <player>
+        <hand name="Hand" visibility="me" ordered="False" width="9" height="9" icon="counters/r0.bmp">
+			<cardaction menu="Play Card" default="True" shortcut="enter" execute="playCard" />
+		</hand>
+        <group name="Deck" visibility="none" ordered="True" width="9" height="9" icon="counters/r0.bmp" collapsed="False">
+            <groupaction menu="Draw" default="True" shortcut="Ctrl+D" execute="draw" />
+        </group>
+        <group name="Backpack" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
+        <group name="Discard" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
+        <counter name="Stamina" default="0" reset="False" icon="counters/r0.bmp" />
+        <counter name="Health" default="10" reset="False" icon="counters/r0.bmp" />
+        <counter name="Mana" default="0" reset="False" icon="counters/r0.bmp" />
+        <counter name="Subterfuge" default="0" reset="False" icon="counters/r0.bmp"/>
+    </player>
+    <shared>
+        <group name="Wounds" visibility="all" ordered="False" width="1" height="1" icon="counters/r0.bmp" collapsed="False" />
+    </shared>
+    <deck>
+        <section name="Class" group="Hand" />
+        <section name="Items" group="Backpack" />
+        <section name="Main Deck" group="Deck" />
+    </deck>
+    <sharedDeck>
+        <section name="Wounds" group="Wounds" />
+    </sharedDeck>
+</game>

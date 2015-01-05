@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+  <section name="Class" shared="False">
+    <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e70001">Rogue</card>
+  </section>
+  <section name="Items" shared="False">
+    <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e70003">Dodging</card>
+  </section>
+  <section name="Main Deck" shared="False">
+    <card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e70005">Hide</card>
+    <card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e70002">Sneak Attack</card>
+    <card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e70004">Deathly Illness</card>
+  </section>
+  <section name="Wounds" shared="True" />
+  <notes><![CDATA[]]></notes>
+</deck>

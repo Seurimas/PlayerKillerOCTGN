@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <blocks>
+        <block type="text" id="title">
+            <location x="40" y="34" />
+            <text color="#000000" size="15" />
+            <border color="#FFFFFF" size="2" />
+        </block>
+        <block type="text" id="cost">
+            <location x="295" y="34" />
+            <text color="#000000" size="15" />
+            <border color="#FFFFFF" size="2" />
+        </block>
+        <block type="text" id="cardtype">
+            <location x="40" y="300" />
+            <text color="#000000" size="15" />
+            <border color="#FFFFFF" size="2" />
+        </block>
+        <block type="text" id="text">
+            <location x="40" y="330" />
+            <text color="#000000" size="15" />
+            <border color="#FFFFFF" size="2" />
+            <wordwrap height="150" width="300" />
+        </block>
+        <block type="text" id="PTBox">
+            <location x="300" y="470" />
+            <text color="#000000" size="15" />
+            <border color="#FFFFFF" size="2" />
+        </block>
+    </blocks>
+    <template src="proxy/White_Card_Template.png" default="True">
+        <matches>
+            <match name="Color" value="value" />
+            <match name="property2" value="value" />
+        </matches>
+        <textblocks>
+            <link block="title">
+                <property name="Name" />
+            </link>
+            <link block="cost">
+                <property name="Cost" />
+            </link>
+            <link block="cardtype" separator=" - ">
+                <property name="Type" />
+                <property name="Subtype" />
+            </link>
+            <link block="text">
+                <property name="Description" />
+            </link>
+            <link block="PTBox">
+                <property name="PTBox" />
+            </link>
+        </textblocks>
+    </template>
+    
+</templates>
