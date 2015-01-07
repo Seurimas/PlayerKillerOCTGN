@@ -32,6 +32,7 @@
         <property name="Type" type="String" hidden="False" ignoreText="False" />
         <property name="Subtype" type="String" hidden="False" ignoreText="False" />
         <property name="Description" type="String" hidden="False" ignoreText="False" />
+        <property name="Cost" type="String" hidden="False" ignoreText="False" />
         <property name="Script" type="String" hidden="True" ignoreText="True" />
     </card>
     <table background="card/front.jpg" name="Table" visibility="all" ordered="False" width="20" height="15" />
