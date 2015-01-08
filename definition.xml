@@ -3,21 +3,22 @@
       xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
       name="Player-Killer" 
       id="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
-      octgnVersion="3.1.127.0" 
-      version="3.15.2.0"
+      octgnVersion="0.0.0.1" 
+      version="0.0.0.1"
       markersize="16" 
       setsurl="http://www.google.com"
       gameurl="http://www.google.com"
       authors="Seurimas"
       description="Player Killer prototype"
       tags="prototype duel fantasy"
-      iconurl="https://raw.github.com/db0/Android-Netrunner-OCTGN/master/ANR_box.jpg">
+      iconurl="http://www.google.com">
     <scripts>
         <script src="scripts/baseActions.py" />
     </scripts>
     <events>
        <event name="OnTableLoad" action="chkTwoSided" />
        <event name="OnLoadDeck" action="checkDeck" />
+       <event name="OnMoveCard" action="checkMovedCard" />
     </events>
     <sounds>
     </sounds>
@@ -35,7 +36,13 @@
         <property name="Cost" type="String" hidden="False" ignoreText="False" />
         <property name="Script" type="String" hidden="True" ignoreText="True" />
     </card>
-    <table background="card/front.jpg" name="Table" visibility="all" ordered="False" width="20" height="15" />
+    <table background="table/Dragonwallpaper2.png" boardPosition="-640,-400,1280,800"  name="Table" visibility="all" ordered="False" width="1280" height="800">
+	<cardaction menu="Add Markers" default="False" shortcut="Alt+M" batchExecute="addMarker" />
+	<groupactions menu="Turns">
+		<groupaction menu="Declare Start of Turn" default="False" shortcut="F1" execute="sot" />
+		<groupaction menu="Declare End of Turn" default="False" shortcut="F12" execute="eot" />
+	</groupactions>
+	</table>
     <player>
         <hand name="Hand" visibility="me" ordered="False" width="9" height="9" icon="counters/r0.bmp">
 			<cardaction menu="Play Card" default="True" shortcut="enter" execute="playCard" />
@@ -45,20 +52,15 @@
         </group>
         <group name="Backpack" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
         <group name="Discard" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
-        <counter name="Stamina" default="0" reset="False" icon="counters/r0.bmp" />
-        <counter name="Health" default="10" reset="False" icon="counters/r0.bmp" />
-        <counter name="Mana" default="0" reset="False" icon="counters/r0.bmp" />
-        <counter name="Subterfuge" default="0" reset="False" icon="counters/r0.bmp"/>
+        <counter name="Stamina" default="0" reset="False" icon="counters/stamina.bmp" />
+        <counter name="Health" default="10" reset="False" icon="counters/health.bmp" />
+        <counter name="Mana" default="0" reset="False" icon="counters/mana.bmp" />
+        <counter name="Subterfuge" default="0" reset="False" icon="counters/subterfuge.bmp"/>
     </player>
-    <shared>
-        <group name="Wounds" visibility="all" ordered="False" width="1" height="1" icon="counters/r0.bmp" collapsed="False" />
-    </shared>
+    <shared/>
     <deck>
         <section name="Class" group="Hand" />
         <section name="Items" group="Backpack" />
         <section name="Main Deck" group="Deck" />
     </deck>
-    <sharedDeck>
-        <section name="Wounds" group="Wounds" />
-    </sharedDeck>
 </game>

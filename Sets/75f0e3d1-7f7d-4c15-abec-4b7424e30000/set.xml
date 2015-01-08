@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<set xmlns:noNamespaceSchemaLocation="CardSet.xsd" 
+     name="General Set" 
+     id="75f0e3d1-7f7d-4c15-abec-4b7424e30000" 
+     gameId="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+     gameVersion="0.0.0.1" 
+     version="0.0.0.1">
+<cards>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30000" name="Disarm">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Choose a non-armor item equipped to another character. That item is out of play until the end of their next turn."/>
+         <property name="Cost" value=" "/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30001" name="Healing Elixir">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Elixir"/>
+         <property name="Description" value="Discard: cure up to 2 standard wounds."/>
+         <property name="Cost" value="1 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30002" name="Healing Poultice">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Poultice"/>
+         <property name="Description" value="Discard: cure 1 wound."/>
+         <property name="Cost" value="1 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30003" name="Tactical Retreat">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Draw 1 card. Return 1 item from the discard pile into play."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30004" name="Leather Armor">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Armor"/>
+         <property name="Description" value="You have 2 more health."/>
+         <property name="Cost" value="2 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30005" name="Bruised But Not Beaten">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="If you are at 0 or less health, cure 2 standard wounds and 1 wound of any kind. Otherwise, cure 2 standard wounds."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30006" name="Healing Salve">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Salve"/>
+         <property name="Description" value="Discard: convert 1 of your normal, non-standard wounds to a standard wound."/>
+         <property name="Cost" value="2 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30007" name="Restoration Salve">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Salve"/>
+         <property name="Description" value="Discard, discard a Poultice item: convert 1 of your injuries to its original normal wound."/>
+         <property name="Cost" value="2 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30008" name="Spellsword's Blade">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Weapon"/>
+         <property name="Description" value="1 mana: Treat an attack as also a spell (gaining all bonuses for being so)."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30009" name="Defenseless">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Standard"/>
+         <property name="Description" value="When you are the target of an attack or spell, all wounds dealt to you are unpreventable."/>
+         <property name="Cost" value="1 standard"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000a" name="Staggered">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Standard"/>
+         <property name="Description" value="At the start of your turn, lose 1 stamina. You may discard 2 cards from your hand to convert Staggered to a normal standard wound."/>
+         <property name="Cost" value="1 standard"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000b" name="Two Steps Ahead">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Draw 3 cards."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000c" name="Winter Technique">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Your next attack this turn deals 1 additional frost wound."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000d" name="Summer Technique">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Your next attack this turn deals 1 additional burn wound."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000e" name="Second Wind">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Special"/>
+         <property name="Description" value="You may reveal this card at the start of your turn. If you do, discard this card and ignore all injuries on you for this turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000f" name="Arkon's Intent">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Play an attack from your discard."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30010" name="Burst of Energy">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Gain 2 stamina. At the start of your next turn, lose 1 stamina. You may not retreat next turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30011" name="Arkon's Glory">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Draw a random attack card from your deck. You may play it immediately, if able."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30012" name="Special Care">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Convert an injury to its original normal wound."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+</cards></set>

@@ -7,7 +7,7 @@
             <border color="#FFFFFF" size="2" />
         </block>
         <block type="text" id="cost">
-            <location x="295" y="34" />
+            <location x="40" y="50" />
             <text color="#000000" size="15" />
             <border color="#FFFFFF" size="2" />
         </block>

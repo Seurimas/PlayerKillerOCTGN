@@ -1,0 +1,22 @@
+### CYBERPUNK IS NOT DEAD
+by Aurelius
+
+Thanks for downloading this font!
+You are free to use it wherever you want, but it would be nice to credit me.
+
+Enjoy!
+
+Aurelius
+
+--------
+
+EDIT by Db0: Font is modified to have some semblance of lowercase character,  
+             and also includes unicodes for the Android:Netrunner special characters which are used by the game. 
+             See the included Unicode_reference.txt file.
+             
+Link to original font: http://www.dafont.com/cyberpunk-is-not-dead.font
+
+### ANR_symbols_only-enlarged
+
+This is an empty font, save for the special Android Netrunner symbols. (See Unicode_reference.txt file.). 
+This means that the rest of the font is whatever you system default it.

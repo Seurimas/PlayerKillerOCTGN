@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+<section name="Class" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10000">MAGE</card>
+</section>
+<section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000b">Wand of Ice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Elixir</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">Healing Poultice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10011">Mana Potion</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30004">Leather Armor</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Healing Salve</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30008">Spellsword's Blade</card>
+</section>
+<section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10001">Magic Missile</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10006">Cold Snap</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10007">Frostball</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10008">Shiver</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000d">Frostwall</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000f">Frozen</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10010">Arcane Shock</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20004">Multi Strike</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20011">Stab</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30003">Tactical Retreat</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30005">Bruised But Not Beaten</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000c">Winter Technique</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000e">Second Wind</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1001b">Snowflake</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10022">Transfer Heat</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10026">Icicle</card>
+</section>
+</deck>

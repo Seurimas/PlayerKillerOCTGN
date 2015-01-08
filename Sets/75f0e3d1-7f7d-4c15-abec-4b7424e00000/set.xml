@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<set xmlns:noNamespaceSchemaLocation="CardSet.xsd" 
+     name="Rogue Set" 
+     id="75f0e3d1-7f7d-4c15-abec-4b7424e00000" 
+     gameId="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+     gameVersion="0.0.0.1" 
+     version="0.0.0.1">
+<cards>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00000" name="ROGUE">
+         <property name="Type" value="Class"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="At the start of your turn, gain 1 subterfuge. At the end of your turn, lose all subterfuge."/>
+         <property name="Cost" value="15 weight, 10 health"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00001" name="Sneak Attack">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 3 standard wounds to a target if that target has any shadow injuries. Otherwise, deal 2 shadow wounds."/>
+         <property name="Cost" value="3 subterfuge"/>
+         <property name="Script" value="[IF, [GT, [INJURIES, &quot;Shadow&quot;, TARGET], 0], [DEAL, &quot;Standard&quot;, 3, TARGET], [DEAL, &quot;Shadow&quot;, 2, TARGET]]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00002" name="Slice">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 1 standard wound to a target."/>
+         <property name="Cost" value="1 subterfuge"/>
+         <property name="Script" value="[DEAL, &quot;Standard&quot;, 1, TARGET]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00003" name="Haemorrhage">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 2 standard wounds to a target if that target has any shadow wounds. Otherwise, deal 1 shadow wound."/>
+         <property name="Cost" value="2 subterfuge"/>
+         <property name="Script" value="[IF, [GT, [WOUNDS, &quot;Shadow&quot;, TARGET], 0], [DEAL, &quot;Standard&quot;, 2, TARGET], [DEAL, &quot;Shadow&quot;, 1, TARGET]]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00004" name="Dodging">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Armor"/>
+         <property name="Description" value="When you would be dealt at least 2 standard wound, receive 1 less and gain 1 subterfuge. Only active while in Stealth (played a Stealth tactic last turn)."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00005" name="Dripping Dagger">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Weapon"/>
+         <property name="Description" value="Subterfuge attacks deal 1 additional shadow wound."/>
+         <property name="Cost" value="5 weight"/>
+         <property name="Script" value="[0, [ON, [CHECKACTION, &quot;Attack&quot;, &quot;Subterfuge&quot;], [ADD, [DEALEXTRA, 1, &quot;Shadow&quot;]]]]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00006" name="Smoke Bomb">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Tool"/>
+         <property name="Description" value="1 stamina: Gain 1 subterfuge and gain Stealth until your next turn. You may not use a Stealth tactic this turn."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00007" name="Aconite">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="Lose 1 mana at the beginning of your turn. Aconite may not be cured while you have mana. You may spend 2 mana to convert Aconite to a normal shadow wound."/>
+         <property name="Cost" value="1 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00008" name="Deathly Illness">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="When you cure, convert, or remove an injury (including this one), take 1 standard wound."/>
+         <property name="Cost" value="1 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00009" name="Deadly Sumac">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="The first time you attack each turn, take 1 standard wound. Deadly Sumac may not be cured until you attack. You may take 2 standard wounds to convert Deadly Sumac to a normal shadow wound."/>
+         <property name="Cost" value="1 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000a" name="Curare">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="Your first card played each turn costs 1 additional stamina. Curare may not be cured until you play a card. You may spend 2 stamina to convert Curare to a normal shadow wound."/>
+         <property name="Cost" value="2 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000b" name="Monkshood">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="Discard a card from your hand after playing any card. Monkshood may not be cured until you play a card. You may discard 2 cards to convert Monkshood to a normal shadow wound."/>
+         <property name="Cost" value="1 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000c" name="Throat Slash">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Standard"/>
+         <property name="Description" value="At the end of your turn, take 1 standard wound."/>
+         <property name="Cost" value="2 subterfuge, 1 standard"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000d" name="Hide">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stealth"/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 1 subterfuge and draw a card. You may only play 1 Stealth tactic per turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000e" name="Sneak">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stealth"/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 2 subterfuge. You may only play 1 Stealth tactic per turn."/>
+         <property name="Cost" value=" "/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000f" name="Take Advantage">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stealth"/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 1 stamina. You may only play 1 Stealth tactic per turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00010" name="Cloak">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Accessory"/>
+         <property name="Description" value="At the start of your turn, gain 1 subterfuge. At the end of your turn, lose all subterfuge."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00011" name="Toxic Shock">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="When you receive a standard wound, convert it to a normal shadow wound and convert this injury to a normal shadow wound."/>
+         <property name="Cost" value="1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00012" name="Critical Strike">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Your next attack this turn deals 1 additional wound of each type of wound it deals."/>
+         <property name="Cost" value="1 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00013" name="Carrier's Venom">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 1 shadow wound to a target. Ignore the play cost of your next injury action."/>
+         <property name="Cost" value="2 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00014" name="Aggressive Infection">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Pick a target with at least 1 shadow injury. Convert up to 3 normal standard wounds to normal shadow wounds."/>
+         <property name="Cost" value="1 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00015" name="Carrier's Strike">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 2 standard wounds to a target. Ignore the play cost of your next injury action."/>
+         <property name="Cost" value="2 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00016" name="Poisoned Dart">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Pick a target. Use a shadow injury from your hand on that target without replacing a normal shadow wound, but paying its play cost."/>
+         <property name="Cost" value="1 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00017" name="Riposte">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stealth"/>
+         <property name="Description" value="Pick a target. Gain Stealth and gain 1 subterfuge each time they target you with an attack or spell until your next turn. You may only play 1 Stealth tactic per turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00018" name="Bait and Switch">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Pick a target with a shadow injury. Add one of their shadow injuries to your hand, gain its play cost, and give the target a shadow wound."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00019" name="Lie In Wait">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stealth"/>
+         <property name="Description" value="Lose all your subterfuge. Gain Stealth until your next turn, then gain that much subterfuge. You may only play 1 Stealth tactic per turn."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001a" name="Carrier's Gift">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Remove up to 2 standard wounds from a target that is not yourself. Gain 1 subterfuge for each standard wound removed this way."/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001b" name="Carrier's Call">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Deal 5 standard wounds to a target. May only be played if the target has received a new shadow injury this turn."/>
+         <property name="Cost" value="3 subterfuge"/>
+         <property name="Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001c" name="Immunity Lock">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="You may not convert or cure other shadow injuries. When you receive another shadow injury, convert Immunity Lock to a normal shadow wound."/>
+         <property name="Cost" value="2 subterfuge, 1 shadow"/>
+         <property name="Script" value=""/>
+    </card>
+</cards></set>
