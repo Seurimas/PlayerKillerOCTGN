@@ -85,11 +85,11 @@ def get_targets(current_state, current_token):
         current_state["TARGETS"] = picked_cards
     return picked_cards
 
-add_token_script(Token("TARGET"), target_token)
-add_token_script(Token("CHECKED"), checked_token)
-add_token_script(Token("TARGETCOUNT"), targetcount_token)
-add_token_script(Token("EACHTARGET"), each_target)
 if __name__ == "__main__":
+    add_token_script(Token("TARGET"), target_token)
+    add_token_script(Token("CHECKED"), checked_token)
+    add_token_script(Token("TARGETCOUNT"), targetcount_token)
+    add_token_script(Token("EACHTARGET"), each_target)
     from deal_wounds import *
     test_val = follow_script({"TARGETS":["A guy", "A gal", "A goblin"]}, [[Token("EACHTARGET"), [Token("DEAL"), 1, "Standard", Token("TARGET")]]])
     assert(test_val["dealt"] == {"A guy":[["Standard", 1]],

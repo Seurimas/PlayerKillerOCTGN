@@ -15,11 +15,13 @@
     <scripts>
         <script src="scripts/baseActions.py" />
         <script src="scripts/script_base.py" />
+        <script src="scripts/wounds.py" />
         <script src="scripts/game_scripts.py" />
         <script src="scripts/targetting.py" />
     </scripts>
     <events>
        <event name="OnTableLoad" action="chkTwoSided" />
+       <event name="OnTableLoad" action="setupTokens" />
        <event name="OnLoadDeck" action="checkDeck" />
        <event name="OnMoveCard" action="checkMovedCard" />
     </events>
@@ -42,6 +44,10 @@
     </card>
     <table background="table/Dragonwallpaper2.png" boardPosition="-640,-400,1280,800"  name="Table" visibility="all" ordered="False" width="1280" height="800">
 	<cardaction menu="Use Card" default="True" shortcut="enter" execute="useCard" />
+	<cardaction menu="Print standard wound count" default="False" shortcut="enter" execute="printWounds" />
+	<cardaction menu="Print standard injury count" default="False" shortcut="enter" execute="printInjuries" />
+	<cardaction menu="Print burn wound count" default="False" shortcut="enter" execute="printWoundsBurn" />
+	<cardaction menu="Print burn injury count" default="False" shortcut="enter" execute="printInjuriesBurn" />
 	<cardaction menu="Add Markers" default="False" shortcut="Alt+M" batchExecute="addMarker" />
 	<groupactions menu="Turns">
 		<groupaction menu="Declare Start of Turn" default="False" shortcut="F1" execute="sot" />

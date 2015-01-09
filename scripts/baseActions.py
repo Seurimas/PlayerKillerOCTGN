@@ -56,7 +56,6 @@ def chkTwoSided():
         whisper("You are the flipped side!")
     
 def playCard(card, x = 0, y = 0):
-    mute()
     if card.Type == "Class":
         for card in me.piles["Backpack"]:
             playCard(card)
@@ -70,15 +69,16 @@ def playCard(card, x = 0, y = 0):
     card.moveToTable(getCardX(card), getCardY(card))
     
 def useCard(card, x = 0, y = 0):
-    mute()
     notify(str(get_targets({}, [Token("GETTARGETS"), 1, 2, True, Token("TABLE")])))
-
-mdict = {"Standard Wound":"7ae6b4f2-afee-423a-bc18-70a236b41000",
-         "Burn Wound":"7ae6b4f2-afee-423a-bc18-70a236b41001",
-         "Frost Wound":"7ae6b4f2-afee-423a-bc18-70a236b41002",
-         "Mortal Wound":"7ae6b4f2-afee-423a-bc18-70a236b41003",
-         "Shadow Wound":"7ae6b4f2-afee-423a-bc18-70a236b41004"
-         }
+    
+def printWounds(card, x = 0, y = 0):
+    notify(str(get_value_from({"THIS": card}, [Token("WOUNDS"), "Standard"])))
+def printInjuries(card, x = 0, y = 0):
+    notify(str(get_value_from({"THIS": card}, [Token("INJURIES"), "Standard"])))
+def printWoundsBurn(card, x = 0, y = 0):
+    notify(str(get_value_from({"THIS": card}, [Token("WOUNDS"), "Burn"])))
+def printInjuriesBurn(card, x = 0, y = 0):
+    notify(str(get_value_from({"THIS": card}, [Token("INJURIES"), "Burn"])))
     
 def addMarker(cards, x = 0, y = 0): # A simple function to manually add any of the available markers.
     marker, quantity = askMarker() # Ask the player how many of the same type they want.
