@@ -7,12 +7,13 @@
      version="0.0.0.1">
 <cards>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40000" name="GOBLIN">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40000" name="Goblin">
          <property name="Type" value="Monster"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Do not draw at the beginning of your turn."/>
          <property name="Cost" value="5 weight, 5 health"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40001" name="Sap">
@@ -21,6 +22,7 @@
          <property name="Description" value="Deal 1 standard wound to a target. The target's maximum health is 2 less than its normal maximum."/>
          <property name="Cost" value=" "/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40002" name="Scratch">
@@ -29,6 +31,7 @@
          <property name="Description" value="Deal 1 standard wound to a target. This wound is treated as shadow until the end of your turn."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40003" name="Bite">
@@ -37,6 +40,7 @@
          <property name="Description" value="Deal 2 standard wounds to a target. These wounds are treated as shadow until the end of your turn."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40004" name="Goblin Fever">
@@ -45,6 +49,7 @@
          <property name="Description" value="Standard wounds may not be cured. Convert this wound to a normal standard wound at the end of your turn."/>
          <property name="Cost" value="1 shadow"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40005" name="Exploding Flask">
@@ -53,6 +58,7 @@
          <property name="Description" value="Discard, 1 stamina: Deal 1 burn wounds to a target."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40006" name="Icky Flask">
@@ -61,14 +67,16 @@
          <property name="Description" value="Discard, 1 stamina: Deal 1 shadow wounds to a target."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40007" name="KOBOLD">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40007" name="Kobold">
          <property name="Type" value="Monster"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Do not draw at the beginning of your turn."/>
          <property name="Cost" value="5 weight, 5 health"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40008" name="Shoot">
@@ -77,6 +85,7 @@
          <property name="Description" value="Deal 1 standard wound and 1 shadow wound to a target."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40009" name="Pierce">
@@ -85,6 +94,7 @@
          <property name="Description" value="Deal 1 unpreventable standard wound to a target."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e4000a" name="Jammed!">
@@ -93,6 +103,7 @@
          <property name="Description" value="Discard your weapon if able. If you do, deal 2 standard wounds to a target. Otherwise, deal 1 standard wound to a target."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e4000b" name="Pet Hyena">
@@ -101,6 +112,7 @@
          <property name="Description" value="Summon an ally HYENA with 1 health and 1 stamina. It may spend its stamina to attack to deal 1 standard wound."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e4000c" name="Pet Jackal">
@@ -109,6 +121,7 @@
          <property name="Description" value="Summon an ally JACKAL with 3 health and 1 stamina. It may spend its stamina to attack to deal 1 standard wound."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e4000d" name="Rickety Crossbow">
@@ -117,5 +130,6 @@
          <property name="Description" value="At the start of your turn, if you were not attacked last turn, gain 1 stamina and draw a card."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 </cards></set>

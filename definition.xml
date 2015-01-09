@@ -14,6 +14,9 @@
       iconurl="http://www.google.com">
     <scripts>
         <script src="scripts/baseActions.py" />
+        <script src="scripts/script_base.py" />
+        <script src="scripts/game_scripts.py" />
+        <script src="scripts/targetting.py" />
     </scripts>
     <events>
        <event name="OnTableLoad" action="chkTwoSided" />
@@ -35,8 +38,10 @@
         <property name="Description" type="String" hidden="False" ignoreText="False" />
         <property name="Cost" type="String" hidden="False" ignoreText="False" />
         <property name="Script" type="String" hidden="True" ignoreText="True" />
+        <property name="Constant" type="String" hidden="True" ignoreText="True" />
     </card>
     <table background="table/Dragonwallpaper2.png" boardPosition="-640,-400,1280,800"  name="Table" visibility="all" ordered="False" width="1280" height="800">
+	<cardaction menu="Use Card" default="True" shortcut="enter" execute="useCard" />
 	<cardaction menu="Add Markers" default="False" shortcut="Alt+M" batchExecute="addMarker" />
 	<groupactions menu="Turns">
 		<groupaction menu="Declare Start of Turn" default="False" shortcut="F1" execute="sot" />

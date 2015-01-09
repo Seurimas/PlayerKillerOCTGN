@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<set xmlns:noNamespaceSchemaLocation="CardSet.xsd" 
+     name="Special" 
+     id="75f0e3d1-7f7d-4c15-abec-4b7424e50000" 
+     gameId="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+     gameVersion="0.0.0.1" 
+     version="0.0.0.1">
+<cards>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50000" name="Standard Wound">
+         <property name="Type" value="Wound"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Standard Wound"/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+         <property name="Constant" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50001" name="Mortal Wound">
+         <property name="Type" value="Wound"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Mortal Wound"/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+         <property name="Constant" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50002" name="Frost Wound">
+         <property name="Type" value="Wound"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Frost Wound"/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+         <property name="Constant" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50003" name="Burn Wound">
+         <property name="Type" value="Wound"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Burn Wound"/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+         <property name="Constant" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50004" name="Shadow Wound">
+         <property name="Type" value="Wound"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Shadow Wound"/>
+         <property name="Cost" value=""/>
+         <property name="Script" value=""/>
+         <property name="Constant" value=""/>
+    </card>
+</cards></set>

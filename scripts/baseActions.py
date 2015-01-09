@@ -63,19 +63,22 @@ def playCard(card, x = 0, y = 0):
         me.piles["Deck"].shuffle()
         for _ in range(5):
             draw(me.piles["Deck"])
-    elif me.Stamina <= 0:
+    elif me.Stamina <= 0 and card.Type != "Item":
         notify("Are you sure it's your turn?")
         if not confirm("You're trying to play a card with no Stamina. Is it your turn?"):
             return "ABORT"
     card.moveToTable(getCardX(card), getCardY(card))
-    notify(card.Type)
+    
+def useCard(card, x = 0, y = 0):
+    mute()
+    notify(str(get_targets({}, [Token("GETTARGETS"), 1, 2, True, Token("TABLE")])))
 
 mdict = {"Standard Wound":"7ae6b4f2-afee-423a-bc18-70a236b41000",
          "Burn Wound":"7ae6b4f2-afee-423a-bc18-70a236b41001",
          "Frost Wound":"7ae6b4f2-afee-423a-bc18-70a236b41002",
          "Mortal Wound":"7ae6b4f2-afee-423a-bc18-70a236b41003",
          "Shadow Wound":"7ae6b4f2-afee-423a-bc18-70a236b41004"
-         }    
+         }
     
 def addMarker(cards, x = 0, y = 0): # A simple function to manually add any of the available markers.
     marker, quantity = askMarker() # Ask the player how many of the same type they want.

@@ -7,12 +7,13 @@
      version="0.0.0.1">
 <cards>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20000" name="FIGHTER">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20000" name="Fighter">
          <property name="Type" value="Class"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="The first time you attack each turn, draw a card."/>
          <property name="Cost" value="20 weight, 10 health"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20001" name="Mutilate">
@@ -21,6 +22,7 @@
          <property name="Description" value="Deal 1 mortal wound to a target."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20002" name="Power Attack">
@@ -29,6 +31,7 @@
          <property name="Description" value="Deal 2 standard wounds to a target with 5 or more health or deal 1 standard wound and 1 mortal wound to a target with 4 or less health."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20003" name="Dismember">
@@ -37,6 +40,7 @@
          <property name="Description" value="Deal 3 standard wounds to a target with 5 or more health or deal 2 standard wound and 1 mortal wound to a target with 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20004" name="Multi Strike">
@@ -45,6 +49,7 @@
          <property name="Description" value="Deal 1 standard wound to any number of targets or 3 standard wounds to one target."/>
          <property name="Cost" value="2 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20005" name="Longsword">
@@ -53,6 +58,7 @@
          <property name="Description" value="Attacks deal 1 additional standard wound. Finesse attacks' play cost is reduced by 1 stamina (minimum 0)."/>
          <property name="Cost" value="6 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20006" name="Cleaving Axe">
@@ -61,6 +67,7 @@
          <property name="Description" value="Brutal attacks deal 1 additional mortal wound."/>
          <property name="Cost" value="8 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20007" name="Kite Shield">
@@ -69,6 +76,7 @@
          <property name="Description" value="When you would be dealt at least 2 standard wounds during an attack, you receive 1 less."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20008" name="Scalemail">
@@ -77,6 +85,7 @@
          <property name="Description" value="You have 4 more health."/>
          <property name="Cost" value="4 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20009" name="Platemail">
@@ -85,6 +94,7 @@
          <property name="Description" value="You have 6 more health."/>
          <property name="Cost" value="8 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000a" name="&quot;My Hand!&quot;">
@@ -93,6 +103,7 @@
          <property name="Description" value="When you attack or cast a spell, you must either discard a card or take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000b" name="&quot;My Leg!&quot;">
@@ -101,6 +112,7 @@
          <property name="Description" value="When you retreat, you must either draw 2 fewer cards or take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000c" name="&quot;My Eye!&quot;">
@@ -109,6 +121,7 @@
          <property name="Description" value="When you start you turn, you must either not draw or take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000d" name="Heavy Bleeding">
@@ -117,6 +130,7 @@
          <property name="Description" value="At the start of your turn, take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000e" name="True Strike">
@@ -125,6 +139,7 @@
          <property name="Description" value="Deal 2 standard wounds to a target. Wounds from this attack may not be prevented."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000f" name="Behead">
@@ -133,6 +148,7 @@
          <property name="Description" value="Deal 1 mortal wound and 3 standard wounds to a target with at least 3 mortal wounds and 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20010" name="Deft Strike">
@@ -141,6 +157,7 @@
          <property name="Description" value="Deal 1 standard wound to a target. Draw a card."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20011" name="Stab">
@@ -149,6 +166,7 @@
          <property name="Description" value="Deal 1 standard wound to a target."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20012" name="Sunder">
@@ -157,6 +175,7 @@
          <property name="Description" value="Deal 1 standard wound to a target. The target then randomly discards 1 card from their hand."/>
          <property name="Cost" value="1 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20013" name="Berserker's Fury">
@@ -165,6 +184,7 @@
          <property name="Description" value="Your attacks deal 1 additional standard wound. Keep in play until you cure a wound or injure anyone."/>
          <property name="Cost" value=" "/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20014" name="Barefisted Brawler">
@@ -173,6 +193,7 @@
          <property name="Description" value="You may punch any number of times per turn."/>
          <property name="Cost" value="6 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20015" name="Executioner's Call">
@@ -181,6 +202,7 @@
          <property name="Description" value="Your next Brutal attack this turn deals 1 additional mortal wound."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20016" name="Martial Poise">
@@ -189,6 +211,7 @@
          <property name="Description" value="Your next attack deals 1 additional standard wound to all targets."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20017" name="Violent Disposition">
@@ -197,6 +220,7 @@
          <property name="Description" value="Your attacks deal 1 additional standard wound. Keep in play until one of your attacks deals 3 or fewer wounds."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20018" name="Arkon's Ruling">
@@ -205,5 +229,6 @@
          <property name="Description" value="Deal 2 mortal wounds to a target with 5 or more health or 3 mortal wounds to a target with 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 </cards></set>

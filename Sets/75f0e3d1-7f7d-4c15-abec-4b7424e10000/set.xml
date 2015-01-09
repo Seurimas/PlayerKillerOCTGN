@@ -7,12 +7,13 @@
      version="0.0.0.1">
 <cards>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10000" name="MAGE">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10000" name="Mage">
          <property name="Type" value="Class"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="At the start of your turn, gain 1 mana."/>
          <property name="Cost" value="15 weight, 10 health"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10001" name="Magic Missile">
@@ -21,6 +22,7 @@
          <property name="Description" value="Deal 1 standard wound to a target."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10002" name="Fireball">
@@ -29,6 +31,7 @@
          <property name="Description" value="Deal 1 burn wound to each of any number of targets."/>
          <property name="Cost" value="2 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10003" name="Searing Pain">
@@ -37,6 +40,7 @@
          <property name="Description" value="Remove 1 standard wound from a target if able. If you do, deal 2 burn wounds to that target. Otherwise, deal 1  burn wound and 1 standard wound."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10004" name="Cauterize">
@@ -45,6 +49,7 @@
          <property name="Description" value="Remove up to 2 standard wounds from a target. If you remove 2, deal 1 burn wound to the target."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10005" name="Consume Flame">
@@ -53,6 +58,7 @@
          <property name="Description" value="Convert all normal burn wounds on a target to standard wounds. If you are not the target, gain 1 mana for each burn wound converted this way."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10006" name="Cold Snap">
@@ -61,6 +67,7 @@
          <property name="Description" value="Deal 2 frost wounds to a target."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10007" name="Frostball">
@@ -69,6 +76,7 @@
          <property name="Description" value="Deal 1 frost wound to each of any number of targets."/>
          <property name="Cost" value="2 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10008" name="Shiver">
@@ -77,6 +85,7 @@
          <property name="Description" value="Remove 1 standard wound from a target. If you do, deal 1 frost wounds to the target."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10009" name="Wand of Death">
@@ -85,6 +94,7 @@
          <property name="Description" value="Spells deal 2 additional standard wound."/>
          <property name="Cost" value="8 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000a" name="Wand of Fire">
@@ -93,6 +103,7 @@
          <property name="Description" value="Spells deal 1 additional burn wound. This does not apply to spells which deal frost wounds."/>
          <property name="Cost" value="5 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000b" name="Wand of Ice">
@@ -101,6 +112,7 @@
          <property name="Description" value="Spells deal 1 additional frost wound. This does not apply to spells which deal burn wounds."/>
          <property name="Cost" value="5 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000c" name="Firewall">
@@ -109,6 +121,7 @@
          <property name="Description" value="When you are the target of an attack, deal 1 burn wound to the attacker. Keep in play until the start of your next turn."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000d" name="Frostwall">
@@ -117,6 +130,7 @@
          <property name="Description" value="When you are the target of an attack, deal 1 frost wound to the attacker. Keep in play until the start of your next turn."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000e" name="Wildfire">
@@ -125,6 +139,7 @@
          <property name="Description" value="At the end of any turn, take 1 standard wound if you were dealt burn wounds that turn. You may have any number of Wildfire wounds."/>
          <property name="Cost" value="1 mana, 1 burn"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000f" name="Frozen">
@@ -133,6 +148,7 @@
          <property name="Description" value="At the start of your turn, lose 1 stamina. You may have any number of Frozen wounds, but only ever lose 1 stamina a turn from them."/>
          <property name="Cost" value="3 mana, 1 frost"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10010" name="Arcane Shock">
@@ -141,6 +157,7 @@
          <property name="Description" value="At the start of your turn, if you have any non-standard wounds then take 1 standard wound."/>
          <property name="Cost" value="1 mana, 1 standard"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10011" name="Mana Potion">
@@ -149,6 +166,7 @@
          <property name="Description" value="Discard: gain 2 mana."/>
          <property name="Cost" value="1 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10012" name="Wizard's Hat">
@@ -157,6 +175,7 @@
          <property name="Description" value="The first spell you cast this turn costs 1 less mana."/>
          <property name="Cost" value="4 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10013" name="Gleaming Wizard's Robes">
@@ -165,6 +184,7 @@
          <property name="Description" value="1 stamina: Gain 1 mana."/>
          <property name="Cost" value="2 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10014" name="Familiar">
@@ -173,6 +193,7 @@
          <property name="Description" value="Summon an ally FAMILIAR with 3 health and 1 stamina. It may spend its stamina to give you 1 mana or attack to deal 1 standard wound."/>
          <property name="Cost" value="2 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10015" name="Mana Shield">
@@ -181,6 +202,7 @@
          <property name="Description" value="Keep in play. On being dealt at least 2 standard wounds, prevent 2 standard wounds and discard this card."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10016" name="Focus Energy">
@@ -189,6 +211,7 @@
          <property name="Description" value="Gain 2 mana."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10017" name="Mana Burn">
@@ -197,6 +220,7 @@
          <property name="Description" value="Deal 1 standard wound to a target for each 2 mana that target has. The target loses 1 mana for each standard wound dealt this way."/>
          <property name="Cost" value="2 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10018" name="Excessive Heat">
@@ -205,6 +229,7 @@
          <property name="Description" value="At the end of your turn, convert 1 standard wound to a burn wound."/>
          <property name="Cost" value="1 mana, 1 burn"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10019" name="Frostbite">
@@ -213,6 +238,7 @@
          <property name="Description" value="At the end of your turn, convert 1 standard wound to a frost wound."/>
          <property name="Cost" value="1 mana, 1 frost"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001a" name="Incinerate">
@@ -221,6 +247,7 @@
          <property name="Description" value="Deal 2 burn wounds to a target if they have 3 or fewer burn wounds. Otherwise, deal 3 burn wounds."/>
          <property name="Cost" value="4 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001b" name="Snowflake">
@@ -229,6 +256,7 @@
          <property name="Description" value="Deal 1 frost wound to a target. You may play your next Frost spell this turn for 1 less stamina."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001c" name="Combustion">
@@ -237,6 +265,7 @@
          <property name="Description" value="Pick a target with at least X burn wounds. Deal X standard wounds to that target."/>
          <property name="Cost" value="X mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001d" name="Force Blast">
@@ -245,6 +274,7 @@
          <property name="Description" value="Deal 3 standard wounds to a target. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001e" name="Force Push">
@@ -253,6 +283,7 @@
          <property name="Description" value="Deal 2 standard wound to a target. Draw a card. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001f" name="Force Pulse">
@@ -261,6 +292,7 @@
          <property name="Description" value="Deal 2 standard wound to any number of targets. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10020" name="Concussion">
@@ -269,6 +301,7 @@
          <property name="Description" value="Discard any number of Force spells from your hand. Deal that many standard wounds to a target. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10021" name="Creeping Cold">
@@ -277,6 +310,7 @@
          <property name="Description" value="Pick a target with at least 1 frost injury. Give that target another copy of one of their Frost injuries, without replacing any other wound."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10022" name="Transfer Heat">
@@ -285,6 +319,7 @@
          <property name="Description" value="Convert all of your standard wounds to burn wounds. Deal as many frost wounds as standard wounds converted this way to a target."/>
          <property name="Cost" value="3 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10023" name="Immediate Recall">
@@ -293,6 +328,7 @@
          <property name="Description" value="Play a spell from your discard."/>
          <property name="Cost" value="1 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10024" name="Imperfect Spellbook">
@@ -301,6 +337,7 @@
          <property name="Description" value="1 stamina: Discard a spell from your hand to play a spell from your discard."/>
          <property name="Cost" value="7 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10025" name="Wand of Swiftness">
@@ -309,6 +346,7 @@
          <property name="Description" value="When you cast a spell, draw a card."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10026" name="Icicle">
@@ -317,6 +355,7 @@
          <property name="Description" value="Deal 2 frost wounds to a target. You may play your next Frost spell this turn for 1 less stamina."/>
          <property name="Cost" value="4 mana"/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10027" name="Blizzard">
@@ -325,5 +364,6 @@
          <property name="Description" value="Keep in play. Reduce the play cost of your Frost spells by 1 mana. Discard when you did not cast any Frost spells in a turn."/>
          <property name="Cost" value=""/>
          <property name="Script" value=""/>
+         <property name="Constant" value=""/>
     </card>
 </cards></set>
