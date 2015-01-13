@@ -17,6 +17,8 @@ def setupTokens():
     add_token_script(Token("OWNER"), owner_token)
     add_token_script(Token("CHECKACTION"), checkaction_token)
     add_token_script(Token("WOUNDS"), wounds_token)
+    add_token_script(Token("GETWOUND"), getwound_token)
+    add_token_script(Token("NORMALWOUNDS"), wounds_token)
     add_token_script(Token("INJURIES"), injuries_token)
     for variable in variables:
         add_token_script(Token(variable), variable_token(variable))
@@ -46,6 +48,17 @@ def owner_token(current_state, current_token):
         for card in table:
             if card.Type == "Class" and card.controller == controller:
                 return card
+    elif type(card) is tuple and card[0] == "WOUND":
+        return card[1]
+    
+def played_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("PLAYED must be list head.")
+    if len(current_token) == 1:
+        card = get_value_from(current_state, Token("THIS"))
+    else:
+        card = get_value_from(current_state, current_token[1])
+    return card.group == table
     
 def variable_token(singleton):
     def _actual_token(current_state, current_token):

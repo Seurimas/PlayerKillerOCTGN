@@ -94,9 +94,9 @@ def deal_extra(current_state, current_token):
         add_wounds(current_state, target, (wound_type, wound_count), deal_type="DEALEXTRA")
 #     defer_til_end(current_state, deal_extra_at_end)
 
-def wounds_token(current_state, current_token):
+def wounds_token_dual(current_state, current_token):
     if type(current_token) is not list:
-        raise Exception("WOUNDS must be list head.")
+        raise Exception(current_token + " must be list head.")
     target = None
     wound_type = None
     if len(current_token) == 2:
@@ -106,8 +106,21 @@ def wounds_token(current_state, current_token):
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
     normal_wounds = target.markers[wounds_markers[wound_type]]
-    injuries = get_injuries(wound_type, target)
+    if current_token[0] == Token("WOUNDS"):
+        injuries = get_injuries(wound_type, target)
+    elif current_token[0] == Token("NORMALWOUNDS"):
+        injuries = 0
     return normal_wounds + injuries
+
+def getwound_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("GETWOUND must be list head.")
+    target = get_value_from(current_state, current_token[1])
+    wound_type = get_value_from(current_state, current_token[2])
+    if target.markers[wounds_markers[wound_type]] != 0:
+        return ("WOUND", target, wound_type)
+    else:
+        return None
 
 def get_injuries(wound_type, target):
     injuries = 0

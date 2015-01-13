@@ -177,6 +177,7 @@ def and_token(current_state, current_token):
 add_token_script(Token("AND"), and_token)
 assert(get_value_from({}, [Token("AND"), True, True]) == True)
 assert(get_value_from({}, [Token("AND"), True, False]) == False)
+assert(get_value_from({}, [Token("AND"), False, True]) == False)
 
 comparisons = {Token("GT"): lambda x, y: x > y,
                Token("LT"): lambda x, y: x < y,

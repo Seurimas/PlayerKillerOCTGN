@@ -46,16 +46,40 @@ def cards_in_source(source):
     else:
         raise Exception("Failed to find valid source definition from %s" % (source, ))
 
-def get_targets(current_state, current_token):
+def choosex_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("CHOOSEX must be list head.")
+    prompt = get_value_from(current_state, current_token[1])
+    minimum = get_value_from(current_state, current_token[2])
+    maximum = get_value_from(current_state, current_token[3])
+    value = -1
+    while value < minimum or value > maximum:
+        value = askInteger(prompt + "(minimum %d; maximum %d)" % (minimum, maximum), minimum)
+    return value
+
+def gettarget_token_dual(current_state, current_token):
     if not type(current_token) is list:
+        raise Exception(current_token + " must be list head")
+    elif len(current_token) != 5 and current_token[0] == Token("GETTARGETS"):
         raise Exception("GETTARGETS requires 4 arguments: minimum target count, maximum target count, target selector, source definition")
-    min_count = get_value_from(current_state, current_token[1])
-    max_count = get_value_from(current_state, current_token[2])
-    target_validator = current_token[3]
-    if not valid_source(current_token[4]):
-        source_defition = get_value_from(current_state, current_token[4])
-    else:
-        source_defition = current_token[4]
+    elif len(current_token) != 3 and current_token[0] == Token("GETTARGET"):
+        raise Exception("GETTARGET requires 2 arguments: target selector, source definition")
+    if current_token[0] == Token("GETTARGET"):
+        min_count = 1
+        max_count = 1
+        target_validator = current_token[1]
+        if not valid_source(current_token[2]):
+            source_defition = get_value_from(current_state, current_token[2])
+        else:
+            source_defition = current_token[2]
+    elif current_token[0] == Token("GETTARGETS"):
+        min_count = get_value_from(current_state, current_token[1])
+        max_count = get_value_from(current_state, current_token[2])
+        target_validator = current_token[3]
+        if not valid_source(current_token[4]):
+            source_defition = get_value_from(current_state, current_token[4])
+        else:
+            source_defition = current_token[4]
     valid_cards = []
     for card in cards_in_source(source_defition):
         current_state["CHECKED"] = card
@@ -81,8 +105,10 @@ def get_targets(current_state, current_token):
         current_state["FAIL"] = "Cancelled picking targets."
     elif len(picked_cards) < min_count and len(picked_cards) > max_count:
         current_state["FAIL"] = "Found %s targets but need between %s and %s" % (len(picked_cards), min_count, max_count)
-    else:
+    elif current_token[0] == Token("GETTARGETS"):
         current_state["TARGETS"] = picked_cards
+    elif current_token[0] == Token("GETTARGET"):
+        current_state["TARGET"] = picked_cards[0]
     return picked_cards
 
 if __name__ == "__main__":
@@ -90,7 +116,11 @@ if __name__ == "__main__":
     add_token_script(Token("CHECKED"), checked_token)
     add_token_script(Token("TARGETCOUNT"), targetcount_token)
     add_token_script(Token("EACHTARGET"), each_target)
-    from deal_wounds import *
+    from wounds import *
+    for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY"]:
+        def deal_with(deal_type):
+            return lambda current_state, current_token: deal(current_state, current_token, deal_type=deal_type)
+        add_token_script(Token(deal_type), deal_with(deal_type))
     test_val = follow_script({"TARGETS":["A guy", "A gal", "A goblin"]}, [[Token("EACHTARGET"), [Token("DEAL"), 1, "Standard", Token("TARGET")]]])
     assert(test_val["dealt"] == {"A guy":[["Standard", 1]],
                                   "A gal":[["Standard", 1]],
@@ -101,8 +131,8 @@ if __name__ == "__main__":
     test_val = get_value_from({"TARGETS":["A guy", "A gal", "A goblin"]}, Token("TARGETCOUNT"))
     assert(test_val == 3)
 
-if __name__ == "__main__":
-    me = object()
-    me.pile = {"Discard":[], "Deck":[], "Backpack":[]}
-    me.hand = []
-    table = []
+# if __name__ == "__main__":
+#     me = object()
+#     me.pile = {"Discard":[], "Deck":[], "Backpack":[]}
+#     me.hand = []
+#     table = []
