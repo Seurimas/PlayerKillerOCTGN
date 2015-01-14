@@ -67,7 +67,7 @@ def isenemy_token(current_state, current_token):
             return True
     return False
 
-def ischaracter(current_state, current_token):
+def ischaracter_token(current_state, current_token):
     if type(current_token) is not list:
         raise Exception("ISENEMY must be list head.")
     candidate = get_value_from(current_state, current_token[1])
@@ -80,14 +80,14 @@ def getenemy_token(current_state, current_token):
     if type(current_token) is not list:
         raise Exception("GETENEMY must be list head.")
     return get_value_from(current_state, [Token("GETTARGET"),
-                                          [Token("ISENEMY"), Token("TARGET"), Token("CHARACTER")],
+                                          [Token("ISENEMY"), Token("CHECKED"), Token("CHARACTER")],
                                           Token("TABLE")])
     
 def getcharacter_token(current_state, current_token):
     if type(current_token) is not list:
         raise Exception("GETCHARACTER must be list head.")
     return get_value_from(current_state, [Token("GETTARGET"),
-                                          [Token("ISCHARACTER"), Token("TARGET")],
+                                          [Token("ISCHARACTER"), Token("CHECKED")],
                                           Token("TABLE")])
 
 def gettarget_token_dual(current_state, current_token):

@@ -12,8 +12,8 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="The first time you attack each turn, draw a card."/>
          <property name="Cost" value="20 weight, 10 health"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Script" value="[GAINWEIGHT, 20]"/>
+         <property name="Constant" value="[ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]], [DRAW, 1]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20001" name="Mutilate">
@@ -21,7 +21,7 @@
          <property name="Subtype" value="Brutal"/>
          <property name="Description" value="Deal 1 mortal wound to a target."/>
          <property name="Cost" value="1 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 1], [DEAL, 1, &quot;Mortal&quot;, TARGET]"/>
          <property name="Constant" value=""/>
     </card>
 
@@ -30,7 +30,7 @@
          <property name="Subtype" value="Brutal"/>
          <property name="Description" value="Deal 2 standard wounds to a target with 5 or more health or deal 1 standard wound and 1 mortal wound to a target with 4 or less health."/>
          <property name="Cost" value="1 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 1], [IF, [GT, [HEALTH, TARGET], 4], [DO, [DEAL, 1, &quot;Mortal&quot;, TARGET], [DEAL, 1, &quot;Standard&quot;, TARGET]], [DEAL, 2, &quot;Standard&quot;, TARGET]]"/>
          <property name="Constant" value=""/>
     </card>
 
@@ -39,7 +39,7 @@
          <property name="Subtype" value="Brutal"/>
          <property name="Description" value="Deal 3 standard wounds to a target with 5 or more health or deal 2 standard wound and 1 mortal wound to a target with 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 2], [IF, [GT, [HEALTH, TARGET], 4], [DO, [DEAL, 1, &quot;Mortal&quot;, TARGET], [DEAL, 2, &quot;Standard&quot;, TARGET]], [DEAL, 3, &quot;Standard&quot;, TARGET]]"/>
          <property name="Constant" value=""/>
     </card>
 
@@ -48,14 +48,14 @@
          <property name="Subtype" value="Finesse"/>
          <property name="Description" value="Deal 1 standard wound to any number of targets or 3 standard wounds to one target."/>
          <property name="Cost" value="2 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 2], [DEAL, 3, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20005" name="Longsword">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Weapon"/>
-         <property name="Description" value="Attacks deal 1 additional standard wound. Finesse attacks' play cost is reduced by 1 stamina (minimum 0)."/>
+         <property name="Description" value="Attacks deal 1 additional standard wound. Finesse attacks cost 1 less stamina to play (minimum 0)."/>
          <property name="Cost" value="6 weight"/>
          <property name="Script" value=""/>
          <property name="Constant" value=""/>
@@ -67,7 +67,7 @@
          <property name="Description" value="Brutal attacks deal 1 additional mortal wound."/>
          <property name="Cost" value="8 weight"/>
          <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Constant" value="[0, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Brutal&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Mortal&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20007" name="Kite Shield">
@@ -76,7 +76,7 @@
          <property name="Description" value="When you would be dealt at least 2 standard wounds during an attack, you receive 1 less."/>
          <property name="Cost" value="3 weight"/>
          <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Constant" value="[1,  [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [GTE, [DEALT, &quot;Standard&quot;], 2]], [PREVENT, &quot;Standard&quot;, 1]]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20008" name="Scalemail">
@@ -138,7 +138,7 @@
          <property name="Subtype" value="Finesse"/>
          <property name="Description" value="Deal 2 standard wounds to a target. Wounds from this attack may not be prevented."/>
          <property name="Cost" value="1 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 1], [DEALALWAYS, 2, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant" value=""/>
     </card>
 
@@ -147,7 +147,7 @@
          <property name="Subtype" value="Brutal"/>
          <property name="Description" value="Deal 1 mortal wound and 3 standard wounds to a target with at least 3 mortal wounds and 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 2], [IF, [AND, [GTE, [WOUNDS, TARGET, &quot;Mortal&quot;], 3], [LTE, [HEALTH, TARGET], 4]], [DO, [DEAL, 1, &quot;Mortal&quot;, TARGET], [DEAL, 3, &quot;Standard&quot;, TARGET]], [FAIL, &quot;Target does not have required damage.&quot;]]"/>
          <property name="Constant" value=""/>
     </card>
 
@@ -156,16 +156,16 @@
          <property name="Subtype" value="Finesse"/>
          <property name="Description" value="Deal 1 standard wound to a target. Draw a card."/>
          <property name="Cost" value="1 stamina"/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [PAYSTAMINA, 1], [DEAL, 1, &quot;Standard&quot;, TARGET], [DRAW, 1]"/>
          <property name="Constant" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20011" name="Stab">
-         <property name="Type" value="Attack"/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20011" name="Readied Strike">
+         <property name="Type" value="Tactic"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Deal 1 standard wound to a target."/>
+         <property name="Description" value="Draw a card. If it is an attack, you may play it immediately, paying its play cost."/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
+         <property name="Script" value="[GETENEMY], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant" value=""/>
     </card>
 

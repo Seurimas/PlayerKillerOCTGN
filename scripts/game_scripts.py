@@ -31,6 +31,12 @@ def setupTokens():
         add_token_script(Token(variable), variable_token(variable))
     for counter in counters:
         add_token_script(Token(counter), playerstat_token(counter))
+        add_token_script(Token("PAY" + counter), paystat_token(counter))
+        add_token_script(Token("PAYX" + counter), payxstat_token(counter))
+        add_token_script(Token("REDUCECOST" + counter), reducecoststat_token(counter))
+        add_token_script(Token("GAIN" + counter), gainstat_token(counter))
+        add_token_script(Token("LOSE" + counter), losestat_token(counter))
+        add_token_script(Token("SET" + counter), setstat_token(counter))
     for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY"]:
         def deal_with(deal_type):
             return lambda current_state, current_token: deal(current_state, current_token, deal_type=deal_type)
@@ -46,15 +52,20 @@ def add_event(current_state, event_type, event_value):
     current_events.append((event_type, event_value))
     current_state["events"] = current_events
     
+def card_owner(card):
+    controller = card.controller
+    for card in table:
+        if card.Type == "Class" and card.controller == controller:
+            return card
+    else:
+        raise Exception("Card %s's own has no Class in play!" % (card.name, ))
+    
 def owner_token(current_state, current_token):
     if type(current_token) is not list:
         raise Exception("OWNER must be list head.")
     card = get_value_from(current_state, current_token[1])
     if type(card) is Card:
-        controller = card.controller
-        for card in table:
-            if card.Type == "Class" and card.controller == controller:
-                return card
+        return card_owner(card)
     elif type(card) is tuple and card[0] == "WOUND":
         return card[1]
     
@@ -85,4 +96,5 @@ def checkaction_token(current_state, current_token):
 if __name__ == "__main__":
     from targetting import *
     from wounds import *
+    from counters import *
     setupTokens()

@@ -1,11 +1,11 @@
 def get_counter_value(target, statname):
-    return target.__getattr__(statname.capitalize())
+    return target.controller.__getattr__(statname.capitalize())
 
 def get_paid_value(target, statname, current_state):
     return current_state.get("pay", {}).get(target, {}).get(statname.capitalize(), 0)
 
 def can_pay(target, statname, current_state):
-    return get_counter_value(target, statname) > get_paid_value(target, statname, current_state)
+    return get_counter_value(target, statname) >= get_paid_value(target, statname, current_state)
 
 def playerstat_token(statname):
     def _actual_token(current_state, current_token):
@@ -17,6 +17,21 @@ def playerstat_token(statname):
             target = get_value_from(current_state, current_token[1])
         counter_value = get_counter_value(target, statname)
         return counter_value
+    return _actual_token
+
+def payxstat_token(statname):
+    def _actual_token(current_state, current_token):
+        if not type(current_token) is list:
+            raise Exception("PAYX" + statname + " must be list head.")
+        if len(current_token) == 1:
+            target = owner_this(current_state)
+        else:
+            target = get_value_from(current_state, current_token[1])
+        max_paid = get_counter_value(target, statname) - get_paid_value(target, statname, current_state)
+        paid = choosex_token(current_state, [Token("CHOOSEX"), "How much %s is X? (Max: %d)" % (statname.capitalize(), max_paid),
+                                             0, max_paid])
+        pay_stat(statname, paid, target, current_state)
+        return paid
     return _actual_token
 
 def paystat_token(statname):
@@ -34,15 +49,6 @@ def paystat_token(statname):
             abort(current_state, "Cannot pay %d %s (only have %d)" % (amount, statname.capitalize(), get_counter_value(target, statname)))
     return _actual_token
 
-def pay_stat(statname, amount, target, current_state):
-    current_payments = current_state.get("pay", {})
-    target_payments = current_payments.get(target, {})
-    stat_payment = target_payments.get(statname.capitalize(), 0)
-    stat_payment += amount
-    target_payments[statname.capitalize()] = stat_payment
-    current_payments[target] = target_payments
-    current_state["pay"] = current_payments
-
 def reducecoststat_token(statname):
     def _actual_token(current_state, current_token):
         if not type(current_token) is list:
@@ -55,6 +61,15 @@ def reducecoststat_token(statname):
             amount = get_value_from(current_state, current_token[2])
         reducecost_stat(statname, amount, target, current_state)
     return _actual_token
+
+def pay_stat(statname, amount, target, current_state):
+    current_payments = current_state.get("pay", {})
+    target_payments = current_payments.get(target, {})
+    stat_payment = target_payments.get(statname.capitalize(), 0)
+    stat_payment += amount
+    target_payments[statname.capitalize()] = stat_payment
+    current_payments[target] = target_payments
+    current_state["pay"] = current_payments
 
 def reducecost_stat(statname, amount, target, current_state):
     pay_stat(statname, -amount, target, current_state)

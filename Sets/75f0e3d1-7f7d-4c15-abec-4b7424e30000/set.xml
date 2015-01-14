@@ -7,10 +7,10 @@
      version="0.0.0.1">
 <cards>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30000" name="Disarm">
-         <property name="Type" value="Tactic"/>
-         <property name="Subtype" value=""/>
-         <property name="Description" value="Choose a non-armor item equipped to another character. That item is out of play until the end of their next turn."/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30000" name="Quick Strike">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value="Finesse"/>
+         <property name="Description" value="Deal 1 standard wound to a target. Draw a card. This attack cannot deal extra wounds."/>
          <property name="Cost" value=" "/>
          <property name="Script" value=""/>
          <property name="Constant" value=""/>

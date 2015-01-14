@@ -9,6 +9,9 @@ class Token(object):
     def __hash__(self):
         return self.name.__hash__()
     
+    def __repr__(self):
+        return self.name
+    
 def get_list_from(string):
     acc = []
     next_token, remaining_string = get_next_token(string)
@@ -33,7 +36,7 @@ def get_next_token(string):
             else:
                 token += string[0]
                 string = string[1:]
-        return token, string
+        return token, string[1:]
     elif string[0] == "[":
         string = string[1:]
         return get_list_from(string)
@@ -59,6 +62,10 @@ def parse_tokens(string):
         raise Exception("Invalid token string, found '%s' at end." % remainder)
     return parsed
 
+assert(get_list_from("") == ([], ''))
+fighter = [[Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "Attack"], [Token("EQUAL"), Token("CHARACTER"), [Token("OWNER"), Token("THIS")]],
+                         [Token("NOT"), [Token("THISTURN"), [Token("EQUAL"), Token("TYPE"), "Attack"]]]], [Token("DRAW"), 1]]]
+assert(get_list_from("""[ON, [AND, [EQUAL, TYPE, "Attack"], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, "Attack"]]]], [DRAW, 1]]""") == (fighter, ""))
 assert(parse_tokens("TOKEN") == Token("TOKEN"))
 assert(parse_tokens("[TOKEN]") == [Token("TOKEN")])
 assert(parse_tokens("[[TOKEN]]") == [[Token("TOKEN")]])

@@ -3,6 +3,9 @@ flipModX = -Card.width()
 flipModY = -Card.height()
 MAX_HAND_SIZE = 7
 
+post_priorities = [0, 1, 2, 3]
+pre_priorities = [-2, -1]
+
 def checkDeck(player, groups):
     mute()
     if player != me: return
@@ -37,8 +40,9 @@ def checkMovedCard(player, card, fromGroup, toGroup,
     
     
 def draw(group):
-    card = group.top()
-    card.moveTo(me.hand)
+    if me.Stamina > 0 or confirm("You're trying to draw with no Stamina. Is it your turn?"):
+        card = group.top()
+        card.moveTo(me.hand)
 
 def chkTwoSided():
     mute()
@@ -62,17 +66,63 @@ def playCard(card, x = 0, y = 0):
             playCard(card)
         me.piles["Deck"].shuffle()
         for _ in range(5):
-            draw(me.piles["Deck"])
+            drawn = me.piles["Deck"].top()
+            drawn.moveTo(me.hand)
     elif me.Stamina <= 0 and card.Type != "Item":
         notify("Are you sure it's your turn?")
         if not confirm("You're trying to play a card with no Stamina. Is it your turn?"):
             return "ABORT"
-    card.moveToTable(getCardX(card), getCardY(card))
+        else:
+            useCard(card)
+    else:
+        card.moveToTable(getCardX(card), getCardY(card))
     
 def useCard(card, x = 0, y = 0):
-    if card.Script != "":
-        pass
-    
+    if type(card.Script) is str:
+        script_tokens, remainder = get_list_from(card.Script)
+        notify("Script: [%s] - Tokens: [%s] - Remainder: [%s]" % (card.Script, script_tokens, remainder) )
+        card.Script = script_tokens
+    character = card_owner(card)
+    state = {"CHARACTER": character,
+             "THIS": card,
+             "TYPE": card.Type,
+             "SUBTYPE": card.Subtype}
+    for priority in pre_priorities:
+        for modifier_card in table:
+            state = applyCard(priority, modifier_card, state)
+            if should_abort(state):
+                notify("%s caused failure: %s" % (modifier_card.name, state["FAIL"]))
+    if card.group == me.hand:
+        pay_stat("STAMINA", 1, character, state)
+    if len(card.Script) != 0:
+        state = follow_script(state, card.Script)
+    else:
+        state = state
+    if type(state) is str:
+        notify("Failed: " + state)
+    else:
+        for priority in post_priorities:
+            for modifier_card in table:
+                state = applyCard(priority, modifier_card, state)
+                if should_abort(state):
+                    notify("%s caused failure: %s" % (modifier_card.name, state["FAIL"]))
+        if card.group == me.hand:
+            card.moveToTable(getCardX(card), getCardY(card))
+        notify("%s" % state)
+
+def applyCard(priority, card, current_state):
+    if type(card.Constant) is str:
+        script_tokens = get_list_from(card.Constant)[0]
+        card.Constant = script_tokens
+    if len(card.Constant) != 0:
+        for effect in card.Constant:
+            if effect[0] == priority:
+                return follow_script(current_state, card.Constant[1:])
+        else:
+            return current_state
+    else:
+        return current_state
+
 def printWounds(card, x = 0, y = 0):
     notify(str(get_value_from({"THIS": card}, [Token("WOUNDS"), "Standard"])))
 def printInjuries(card, x = 0, y = 0):
