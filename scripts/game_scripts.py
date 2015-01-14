@@ -9,6 +9,13 @@ variables = ["THIS", "CHARACTER", "TYPE", "SUBTYPE"]
 counters = ["HEALTH", "MANA", "SUBTERFUGE", "STAMINA"]
 
 def setupTokens():
+    add_token_script(Token("GETTARGET"), gettarget_token_dual)
+    add_token_script(Token("GETTARGETS"), gettarget_token_dual)
+    add_token_script(Token("GETENEMY"), getenemy_token)
+    add_token_script(Token("GETCHARACTER"), getcharacter_token)
+    add_token_script(Token("ISENEMY"), isenemy_token)
+    add_token_script(Token("ISCHARACTER"), ischaracter_token)
+    add_token_script(Token("TARGET"), target_token)
     add_token_script(Token("TARGET"), target_token)
     add_token_script(Token("CHECKED"), checked_token)
     add_token_script(Token("TARGETCOUNT"), targetcount_token)
@@ -16,9 +23,9 @@ def setupTokens():
     add_token_script(Token("DEALT"), dealt_token)
     add_token_script(Token("OWNER"), owner_token)
     add_token_script(Token("CHECKACTION"), checkaction_token)
-    add_token_script(Token("WOUNDS"), wounds_token)
+    add_token_script(Token("WOUNDS"), wounds_token_dual)
     add_token_script(Token("GETWOUND"), getwound_token)
-    add_token_script(Token("NORMALWOUNDS"), wounds_token)
+    add_token_script(Token("NORMALWOUNDS"), wounds_token_dual)
     add_token_script(Token("INJURIES"), injuries_token)
     for variable in variables:
         add_token_script(Token(variable), variable_token(variable))
@@ -74,17 +81,6 @@ def checkaction_token(current_state, current_token):
     type_matches = current_state["TYPE"] == get_value_from(current_state, current_token[1])
     subtype_matches = current_state["SUBTYPE"] == get_value_from(current_state, current_token[2])
     return type_matches and subtype_matches
-
-def playerstat_token(statname):
-    def _actual_token(current_state, current_token):
-        if type(current_token) is not list:
-            raise Exception(statname + " must be list head.")
-        if len(current_token) == 1:
-            target = owner_this(current_state)
-        else:
-            target = get_value_from(current_state, current_token[1])
-        return target.__getattr__(statname.capitalize())
-    return _actual_token
 
 if __name__ == "__main__":
     from targetting import *

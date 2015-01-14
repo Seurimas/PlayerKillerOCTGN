@@ -16,6 +16,7 @@
         <script src="scripts/baseActions.py" />
         <script src="scripts/script_base.py" />
         <script src="scripts/wounds.py" />
+        <script src="scripts/counters.py" />
         <script src="scripts/game_scripts.py" />
         <script src="scripts/targetting.py" />
     </scripts>

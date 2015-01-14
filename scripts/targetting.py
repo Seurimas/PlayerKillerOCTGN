@@ -57,6 +57,39 @@ def choosex_token(current_state, current_token):
         value = askInteger(prompt + "(minimum %d; maximum %d)" % (minimum, maximum), minimum)
     return value
 
+def isenemy_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("ISENEMY must be list head.")
+    candidate = get_value_from(current_state, current_token[1])
+    myself = get_value_from(current_state, current_token[2])
+    if candidate.Type == "Class" and myself.Type == "Class":
+        if myself != candidate:
+            return True
+    return False
+
+def ischaracter(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("ISENEMY must be list head.")
+    candidate = get_value_from(current_state, current_token[1])
+    if candidate.Type == "Class":
+        return True
+    else:
+        return False
+    
+def getenemy_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("GETENEMY must be list head.")
+    return get_value_from(current_state, [Token("GETTARGET"),
+                                          [Token("ISENEMY"), Token("TARGET"), Token("CHARACTER")],
+                                          Token("TABLE")])
+    
+def getcharacter_token(current_state, current_token):
+    if type(current_token) is not list:
+        raise Exception("GETCHARACTER must be list head.")
+    return get_value_from(current_state, [Token("GETTARGET"),
+                                          [Token("ISCHARACTER"), Token("TARGET")],
+                                          Token("TABLE")])
+
 def gettarget_token_dual(current_state, current_token):
     if not type(current_token) is list:
         raise Exception(current_token + " must be list head")

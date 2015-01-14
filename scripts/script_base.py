@@ -97,6 +97,9 @@ def follow_script(initial_state, token_list):
             return get_abort_reason(current_state)
     return current_state
 
+def abort(current_state, reason):
+    current_state["FAIL"] = reason
+
 def should_abort(current_state):
     return current_state.get("FAIL", False)
 
@@ -130,14 +133,28 @@ def on_token(current_state, current_token):
     if not type(current_token) is list:
         raise Exception("ON requires a list token.")
     if get_value_from(current_state, current_token[1]) == True:
-        return get_value_from(current_state, current_token[2])
+        tokens = current_token[2:]
+        while not should_abort(current_state) and tokens:
+            get_value_from(current_state, tokens[0])
+            tokens = tokens[1:]
     else:
         return None
+    
+def do_token(current_state, current_token):
+    if not type(current_token) is list:
+        raise Exception("DO requires a list token.")
+    tokens = current_token[1:]
+    while not should_abort(current_state) and tokens:
+        get_value_from(current_state, tokens[0])
+        tokens = tokens[1:]
     
 add_token_script(Token("ON"), on_token)
 assert(follow_script({}, [[Token("ON"), True, Token("FAIL")]]) == "Action failed.")
 assert(follow_script({}, [[Token("ON"), True, "Win"]]) == {}) # We've returned the final state.
-assert(get_value_from({}, [Token("ON"), True, "Win"]) == "Win") # We've returned the final state.
+
+add_token_script(Token("DO"), do_token)
+assert(follow_script({}, [[Token("DO"), True, Token("FAIL")]]) == "Action failed.")
+assert(follow_script({}, [[Token("DO"), True, "Win"]]) == {}) # We've returned the final state.
 
 def not_token(current_state, current_token):
     if not type(current_token) is list:

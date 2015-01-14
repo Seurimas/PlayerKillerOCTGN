@@ -57,6 +57,7 @@ def chkTwoSided():
     
 def playCard(card, x = 0, y = 0):
     if card.Type == "Class":
+        card.moveToTable(getCardX(card), getCardY(card))
         for card in me.piles["Backpack"]:
             playCard(card)
         me.piles["Deck"].shuffle()
@@ -69,7 +70,8 @@ def playCard(card, x = 0, y = 0):
     card.moveToTable(getCardX(card), getCardY(card))
     
 def useCard(card, x = 0, y = 0):
-    notify(str(get_targets({}, [Token("GETTARGETS"), 1, 2, True, Token("TABLE")])))
+    if card.Script != "":
+        pass
     
 def printWounds(card, x = 0, y = 0):
     notify(str(get_value_from({"THIS": card}, [Token("WOUNDS"), "Standard"])))
