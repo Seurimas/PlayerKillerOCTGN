@@ -4,9 +4,9 @@
 </section>
 <section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00004">Dodging</card>
 <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00005">Dripping Dagger</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00006">Smoke Bomb</card>
 <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Elixir</card>
 <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">Healing Poultice</card>
-<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00010">Cloak</card>
 <card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Healing Salve</card>
 </section>
 <section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00001">Sneak Attack</card>

@@ -12,8 +12,9 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="At the start of your turn, gain 1 subterfuge or 2 if in Stealth. At the end of your turn, lose all subterfuge."/>
          <property name="Cost" value="15 weight, 10 health"/>
-         <property name="Script" value="[GAINWEIGHT, 15]"/>
-         <property name="Constant" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, [IF, [STATUS, &quot;Stealth&quot;], 2, 1]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Play_Script" value="[GAINWEIGHT, 15]"/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, [IF, [STATUS, &quot;Stealth&quot;], 2, 1]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00001" name="Sneak Attack">
@@ -21,8 +22,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 3 standard wounds to a target if that target has any shadow injuries. Otherwise, deal 2 shadow wounds."/>
          <property name="Cost" value="3 subterfuge"/>
-         <property name="Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [INJURIES, &quot;Shadow&quot;, TARGET], 0], [DEAL, 3, &quot;Standard&quot;, TARGET], [DEAL, 2, &quot;Shadow&quot;, TARGET]]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [INJURIES, &quot;Shadow&quot;, TARGET], 0], [DEAL, 3, &quot;Standard&quot;, TARGET], [DEAL, 2, &quot;Shadow&quot;, TARGET]]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00002" name="Slice">
@@ -30,8 +32,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 1 standard wound to a target."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00003" name="Haemorrhage">
@@ -39,8 +42,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 2 standard wounds to a target if that target has any shadow wounds. Otherwise, deal 1 shadow wound."/>
          <property name="Cost" value="2 subterfuge"/>
-         <property name="Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [IF, [GT, [WOUNDS, &quot;Shadow&quot;, TARGET], 0], [DEAL, 2, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Shadow&quot;, TARGET]]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [IF, [GT, [WOUNDS, &quot;Shadow&quot;, TARGET], 0], [DEAL, 2, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Shadow&quot;, TARGET]]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00004" name="Dodging">
@@ -48,8 +52,9 @@
          <property name="Subtype" value="Armor"/>
          <property name="Description" value="When you would be dealt at least 2 standard wound, prevent 1 and gain 1 subterfuge. Only active while in Stealth."/>
          <property name="Cost" value="3 weight"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value="[1,  [ON, [GTE, [DEALT, &quot;Standard&quot;], 2], [DO, [PREVENT, 1, &quot;Standard&quot;], [GAINSUBTERFUGE, 1]]]"/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value="[1,  [ON, [GTE, [DEALT, &quot;Standard&quot;], 2], [DO, [PREVENT, 1, &quot;Standard&quot;], [GAINSUBTERFUGE, 1]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00005" name="Dripping Dagger">
@@ -57,17 +62,19 @@
          <property name="Subtype" value="Weapon"/>
          <property name="Description" value="Subterfuge attacks deal 1 additional shadow wound."/>
          <property name="Cost" value="5 weight"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value="[0, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Subterfuge&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Shadow&quot;]]]"/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Subterfuge&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Shadow&quot;]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00006" name="Smoke Bomb">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Tool"/>
-         <property name="Description" value="1 stamina: Gain 1 subterfuge and gain Stealth until your next turn. May not use while in Stealth."/>
+         <property name="Description" value="1 stamina: Gain 1 subterfuge and gain Stealth until your next turn. May not be used while in Stealth."/>
          <property name="Cost" value="3 weight"/>
-         <property name="Script" value="[IF, [NOT, [STATUS, CHARACTER, &quot;Stealth&quot;]], [DO, [PAYSTAMINA, 1], [GAINSUBTERFUGE, 1], [GAINSTATUS, &quot;Stealth&quot;], [GAINSTATUS, &quot;SmokeBomb&quot;]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
-         <property name="Constant" value="[0, [ONTURNSTART, [ON, [STATUS, CHARACTER, &quot;SmokeBomb&quot;], [DO, [LOSESTATUS, CHARACTER, &quot;Stealth&quot;], [LOSESTATUS, CHARACTER, &quot;SmokeBomb&quot;]]]]]"/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [ON, [STATUS, CHARACTER, &quot;SmokeBomb&quot;], [DO, [LOSESTATUS, CHARACTER, &quot;Stealth&quot;], [LOSESTATUS, CHARACTER, &quot;SmokeBomb&quot;]]]]]"/>
+         <property name="Use_Script" value="[IF, [NOT, [STATUS, CHARACTER, &quot;Stealth&quot;]], [DO, [PAYSTAMINA, 1], [GAINSUBTERFUGE, 1], [GAINSTATUS, &quot;Stealth&quot;], [GAINSTATUS, &quot;SmokeBomb&quot;]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00007" name="Aconite">
@@ -75,8 +82,9 @@
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="Lose 1 mana at the beginning of your turn. Aconite may not be cured while you have mana. You may spend 2 mana to convert Aconite to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
-         <property name="Script" value="[IF, [PLAYED], [DO, [PAYMANA, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]], [DO, [GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]]]"/>
-         <property name="Constant" value="[0, [ONTURNSTART, [LOSEMANA, 1]], [ON, [AND, [CURED, THIS], [GT, [MANA], 0]], [FAIL, &quot;You may not cure Aconite while mana still binds it to the body.&quot;]]"/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Constant_Script" value="[2, [ON, [AND, [CURED, THIS], [GT, [MANA], 0]], [FAIL, &quot;You may not cure Aconite while mana still binds it to the body.&quot;]], [0, [ONTURNSTART, [LOSEMANA, 1]]]"/>
+         <property name="Use_Script" value="[DO, [PAYMANA, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00008" name="Deathly Illness">
@@ -84,8 +92,9 @@
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="When you cure, convert, or remove an injury (including this one), take 1 standard wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
-         <property name="Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00009" name="Deadly Sumac">
@@ -93,62 +102,69 @@
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="The first time you attack each turn, take 1 standard wound. Deadly Sumac may not be cured until you attack. You may take 2 standard wounds to convert Deadly Sumac to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
-         <property name="Script" value="[IF, [PLAYED], [DO, [TAKEWOUNDS, 2, &quot;Standard&quot;, [OWNER, THIS]], [CONVERTINJURY, THIS, &quot;Shadow&quot;]], [DO, [GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]]]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Constant_Script" value="[2, ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_SUMAC&quot;], [LOSESTATUS, &quot;UNLOCK_SUMAC&quot;], [FAIL, &quot;You may not cure Deadly Sumac while it is in remission.&quot;]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]]], [TAKEWOUND, 1, &quot;Standard&quot;, [OWNER, THIS]], [GAINSTATUS, &quot;UNLOCK_SUMAC&quot;]]]"/>
+         <property name="Use_Script" value="[DO, [TAKEWOUNDS, 2, &quot;Standard&quot;, [OWNER, THIS]], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000a" name="Curare">
          <property name="Type" value="Injury"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="Your first card played each turn costs 1 additional stamina. Curare may not be cured until you play a card. You may spend 2 stamina to convert Curare to a normal shadow wound."/>
-         <property name="Cost" value="2 subterfuge, 1 shadow"/>
-         <property name="Script" value="[IF, [PLAYED], [DO, [PAYSTAMINA, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]],[DO, [GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]]]"/>
-         <property name="Constant" value=""/>
+         <property name="Description" value="Tactics cost 1 additional stamina to play. Curare may not be cured until you play a tactic. You may spend 2 stamina to convert Curare to a normal shadow wound."/>
+         <property name="Cost" value="1 subterfuge, 1 shadow"/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Constant_Script" value="[2, ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_CURARE&quot;], [LOSESTATUS, &quot;UNLOCK_CURARE&quot;], [FAIL, &quot;You may not cure Curare while it is in remission.&quot;]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;Tactic&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [PAYSTAMINA, 1], [GAINSTATUS, &quot;UNLOCK_CURARE&quot;]]]"/>
+         <property name="Use_Script" value="[DO, [PAYSTAMINA, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000b" name="Monkshood">
          <property name="Type" value="Injury"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="Discard a card from your hand after playing any card. Monkshood may not be cured until you play a card. You may discard 2 cards to convert Monkshood to a normal shadow wound."/>
+         <property name="Description" value="After playing any card, discard a card from your hand. Monkshood may not be cured until you play a card. You may discard 2 cards to convert Monkshood to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
-         <property name="Script" value="[IF, [PLAYED], [DO, [PAYDISCARD, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]], [DO, [GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]]]"/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Constant_Script" value="[2, ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_MONKSHOOD&quot;], [LOSESTATUS, &quot;UNLOCK_MONKSHOOD&quot;], [FAIL, &quot;You may not cure Monkshood while it is in remission.&quot;]]], [0, [ON, [AND, [ISPLAYINGCARD], [EQUAL, CHARACTER, [OWNER, THIS]]], [PAYDISCARD, 1], [GAINSTATUS, &quot;UNLOCK_MONKSHOOD&quot;]]]"/>
+         <property name="Use_Script" value="[DO, [PAYDISCARD, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000c" name="Throat Slash">
          <property name="Type" value="Injury"/>
          <property name="Subtype" value="Standard"/>
          <property name="Description" value="At the end of your turn, take 1 standard wound."/>
-         <property name="Cost" value="2 subterfuge, 1 standard"/>
-         <property name="Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETNORMALWOUND, TARGET, &quot;Standard&quot;], THIS]]"/>
-         <property name="Constant" value="[0, [ONTURNEND, [OWNER, THIS], [DEALONLY, 1, &quot;Standard&quot;]]]"/>
+         <property name="Cost" value="3 subterfuge, 1 standard"/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETWOUND, TARGET, &quot;Standard&quot;], THIS]]"/>
+         <property name="Constant_Script" value="[0, [ONTURNEND, [OWNER, THIS], [DEALONLY, 1, &quot;Standard&quot;]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000d" name="Hide">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 1 subterfuge and draw a card. You may not play this while already in Stealth."/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 1 subterfuge and draw a card. This may not be played while already in Stealth."/>
          <property name="Cost" value=""/>
-         <property name="Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
-         <property name="Constant" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSUBTERFUGE, 1], [DRAW, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
+         <property name="Constant_Script" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSUBTERFUGE, 1], [DRAW, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000e" name="Sneak">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 2 subterfuge. You may not play this while already in Stealth."/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 2 subterfuge. This may not be played while already in Stealth."/>
          <property name="Cost" value=" "/>
-         <property name="Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
-         <property name="Constant" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSUBTERFUGE, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
+         <property name="Constant_Script" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSUBTERFUGE, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000f" name="Take Advantage">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 1 stamina. You may not play this while already in Stealth."/>
+         <property name="Description" value="Gain Stealth until your next turn, then gain 1 stamina. This may not be played while already in Stealth."/>
          <property name="Cost" value=""/>
-         <property name="Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
-         <property name="Constant" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSTAMINA, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
+         <property name="Constant_Script" value="[1, [ONTURNSTART, [OWNER, THIS], [GAINSTAMINA, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00010" name="Cloak">
@@ -156,8 +172,9 @@
          <property name="Subtype" value="Accessory"/>
          <property name="Description" value="At the start of your turn, gain 1 subterfuge. At the end of your turn, lose all subterfuge."/>
          <property name="Cost" value="3 weight"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, 1]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, 1]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00011" name="Toxic Shock">
@@ -165,8 +182,9 @@
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="When you receive a standard wound, convert it to a normal shadow wound and convert this injury to a normal shadow wound."/>
          <property name="Cost" value="1 shadow"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00012" name="Critical Strike">
@@ -174,8 +192,9 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="Your next attack this turn deals 1 additional wound of each type of wound it deals."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00013" name="Carrier's Venom">
@@ -183,8 +202,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 1 shadow wound to a target. Ignore the play cost of your next injury action."/>
          <property name="Cost" value="2 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00014" name="Aggressive Infection">
@@ -192,8 +212,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Pick a target with at least 1 shadow injury. Convert up to 3 normal standard wounds to normal shadow wounds."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00015" name="Carrier's Strike">
@@ -201,8 +222,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 2 standard wounds to a target. Ignore the play cost of your next injury action."/>
          <property name="Cost" value="2 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00016" name="Poisoned Dart">
@@ -210,8 +232,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Pick a target. Use a shadow injury from your hand on that target without replacing a normal shadow wound, but paying its play cost."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00017" name="Riposte">
@@ -219,8 +242,9 @@
          <property name="Subtype" value="Stealth"/>
          <property name="Description" value="Pick a target. Gain Stealth and gain 1 subterfuge each time they target you with an attack or spell until your next turn. You may not play this while already in Stealth."/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00018" name="Bait and Switch">
@@ -228,8 +252,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Pick a target with a shadow injury. Add one of their shadow injuries to your hand, gain its play cost, and give the target a shadow wound."/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00019" name="Lie In Wait">
@@ -237,8 +262,9 @@
          <property name="Subtype" value="Stealth"/>
          <property name="Description" value="Lose all your subterfuge. Gain Stealth until your next turn, then gain that much subterfuge. You may not play this while already in Stealth."/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001a" name="Carrier's Gift">
@@ -246,8 +272,9 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Remove up to 2 standard wounds from a target that is not yourself. Gain 1 subterfuge for each standard wound removed this way."/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001b" name="Carrier's Call">
@@ -255,16 +282,18 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 5 standard wounds to a target. May only be played if the target has received a new shadow injury this turn."/>
          <property name="Cost" value="3 subterfuge"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001c" name="Immunity Lock">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001c" name="Immunity Block">
          <property name="Type" value="Injury"/>
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="You may not convert or cure other shadow injuries. When you receive another shadow injury, convert Immunity Lock to a normal shadow wound."/>
          <property name="Cost" value="2 subterfuge, 1 shadow"/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 </cards></set>

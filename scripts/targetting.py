@@ -4,16 +4,16 @@ except:
     pass
 
 def target_token(current_state, current_token):
-    if not type(current_token) is Token:
-        raise Exception("TARGET cannot be a list head.")
+    if type(current_token) is not Token:
+        raise Exception("TARGET cannot be a list head. [%s]" % (current_token, ))
     return current_state["TARGET"]
 def checked_token(current_state, current_token):
     if not type(current_token) is Token:
-        raise Exception("CHECKED cannot be a list head.")
+        raise Exception("CHECKED cannot be a list head. [%s]" % (current_token, ))
     return current_state["CHECKED"]
 def targetcount_token(current_state, current_token):
     if not type(current_token) is Token:
-        raise Exception("TARGETCOUNT cannot be a list head.")
+        raise Exception("TARGETCOUNT cannot be a list head. [%s]" % (current_token, ))
     return len(current_state["TARGETS"]) if current_state.has_key("TARGETS") else (1 if current_state.has_key("TARGET") else 0)
 
 def each_target(current_state, current_token):
@@ -47,19 +47,34 @@ def cards_in_source(source):
         raise Exception("Failed to find valid source definition from %s" % (source, ))
 
 def choosex_token(current_state, current_token):
-    if type(current_token) is not list:
-        raise Exception("CHOOSEX must be list head.")
+    check_token_list(current_token, 4, 4)
     prompt = get_value_from(current_state, current_token[1])
     minimum = get_value_from(current_state, current_token[2])
     maximum = get_value_from(current_state, current_token[3])
     value = -1
-    while value < minimum or value > maximum:
+    while value is not None and (value < minimum or value > maximum):
         value = askInteger(prompt + "(minimum %d; maximum %d)" % (minimum, maximum), minimum)
-    return value
+    if value is not None:
+        return value
+    else:
+        current_state["FAIL"] = "Cancelled picking integer."
+
+def choose_token(current_state, current_token):
+    check_token_list(current_token, 3, 999)
+    prompt = get_value_from(current_state, current_token[1])
+    choices = []
+    for token in current_token[2:]:
+        choices.append(get_value_from(current_state, token))
+    colorList = ["#FFFFFF" for _ in choices]
+    customButtons = ["Cancel"]
+    picked = askChoice(prompt, choices, colorList, customButtons=customButtons)
+    if picked == 0 or picked == -1:
+        current_state["FAIL"] = "Cancelled making choice."
+    else:
+        return picked - 1
 
 def isenemy_token(current_state, current_token):
-    if type(current_token) is not list:
-        raise Exception("ISENEMY must be list head.")
+    check_token_list(current_token, 3, 3)
     candidate = get_value_from(current_state, current_token[1])
     myself = get_value_from(current_state, current_token[2])
     if candidate.Type == "Class" and myself.Type == "Class":
@@ -68,8 +83,7 @@ def isenemy_token(current_state, current_token):
     return False
 
 def ischaracter_token(current_state, current_token):
-    if type(current_token) is not list:
-        raise Exception("ISENEMY must be list head.")
+    check_token_list(current_token, 2, 2)
     candidate = get_value_from(current_state, current_token[1])
     if candidate.Type == "Class":
         return True
@@ -77,15 +91,13 @@ def ischaracter_token(current_state, current_token):
         return False
     
 def getenemy_token(current_state, current_token):
-    if type(current_token) is not list:
-        raise Exception("GETENEMY must be list head.")
+    check_token_list(current_token, 1, 1)
     return get_value_from(current_state, [Token("GETTARGET"),
                                           [Token("ISENEMY"), Token("CHECKED"), Token("CHARACTER")],
                                           Token("TABLE")])
     
 def getcharacter_token(current_state, current_token):
-    if type(current_token) is not list:
-        raise Exception("GETCHARACTER must be list head.")
+    check_token_list(current_token, 1, 1)
     return get_value_from(current_state, [Token("GETTARGET"),
                                           [Token("ISCHARACTER"), Token("CHECKED")],
                                           Token("TABLE")])

@@ -16,6 +16,7 @@
         <script src="scripts/baseActions.py" />
         <script src="scripts/script_base.py" />
         <script src="scripts/wounds.py" />
+        <script src="scripts/debug.py" />
         <script src="scripts/counters.py" />
         <script src="scripts/game_scripts.py" />
         <script src="scripts/targetting.py" />
@@ -40,27 +41,37 @@
         <property name="Subtype" type="String" hidden="False" ignoreText="False" />
         <property name="Description" type="String" hidden="False" ignoreText="False" />
         <property name="Cost" type="String" hidden="False" ignoreText="False" />
-        <property name="Script" type="String" hidden="True" ignoreText="True" />
-        <property name="Constant" type="String" hidden="True" ignoreText="True" />
+        <property name="Play_Script" type="String" hidden="True" ignoreText="True" />
+        <property name="Constant_Script" type="String" hidden="True" ignoreText="True" />
+        <property name="Use_Script" type="String" hidden="True" ignoreText="True" />
     </card>
     <table background="table/Dragonwallpaper2.png" boardPosition="-640,-400,1280,800"  name="Table" visibility="all" ordered="False" width="1280" height="800">
 	<cardaction menu="Use Card" default="True" shortcut="enter" execute="useCard" />
-	<cardaction menu="Print standard wound count" default="False" shortcut="enter" execute="printWounds" />
-	<cardaction menu="Print standard injury count" default="False" shortcut="enter" execute="printInjuries" />
-	<cardaction menu="Print burn wound count" default="False" shortcut="enter" execute="printWoundsBurn" />
-	<cardaction menu="Print burn injury count" default="False" shortcut="enter" execute="printInjuriesBurn" />
+	<cardaction menu="Punch" default="False" shortcut="enter" execute="tablePunch" />
 	<cardaction menu="Add Markers" default="False" shortcut="Alt+M" batchExecute="addMarker" />
 	<groupactions menu="Turns">
 		<groupaction menu="Declare Start of Turn" default="False" shortcut="F1" execute="sot" />
 		<groupaction menu="Declare End of Turn" default="False" shortcut="F12" execute="eot" />
+        <groupaction menu="Retreat" default="False" shortcut="Ctrl+R" execute="retreat" />
 	</groupactions>
+	<cardactions menu="Debug">
+		<cardaction menu="Get Play Script" default="False" execute="getPlayScript"/>
+		<cardaction menu="Get Constant Script" default="False" execute="getConstantScript"/>
+		<cardaction menu="Get Use Script" default="False" execute="getUseScript"/>
+		<cardaction menu="Set Play Script" default="False" execute="setPlayScript"/>
+		<cardaction menu="Set Constant Script" default="False" execute="setConstantScript"/>
+		<cardaction menu="Set Use Script" default="False" execute="setUseScript"/>
+	</cardactions>
 	</table>
     <player>
         <hand name="Hand" visibility="me" ordered="False" width="9" height="9" icon="counters/r0.bmp">
 			<cardaction menu="Play Card" default="True" shortcut="enter" execute="playCard" />
+            <groupaction menu="Punch" default="False" shortcut="Ctrl+P" execute="handPunch" />
+            <groupaction menu="Retreat" default="False" shortcut="Ctrl+R" execute="retreat" />
 		</hand>
         <group name="Deck" visibility="none" ordered="True" width="9" height="9" icon="counters/r0.bmp" collapsed="False">
             <groupaction menu="Draw" default="True" shortcut="Ctrl+D" execute="draw" />
+            <groupaction menu="Shuffle" default="False" shortcut="Ctrl+S" execute="shuffleDeck" />
         </group>
         <group name="Backpack" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
         <group name="Discard" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />

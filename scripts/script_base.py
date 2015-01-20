@@ -11,6 +11,12 @@ class Token(object):
     
     def __repr__(self):
         return self.name
+
+def check_token_list(current_token, min_len, max_len):
+    if not type(current_token) is list:
+        raise Exception(current_token.name + " must be list head.")
+    if not (min_len <= len(current_token) <= max_len):
+        raise Exception("Invalid list len for " + current_token.name + ". !%d <= %d <= %d" % (min_len, len(current_token), max_len))
     
 def get_list_from(string):
     acc = []
@@ -42,7 +48,7 @@ def get_next_token(string):
         return get_list_from(string)
     else:
         value = ""
-        while len(string) != 0 and string[0].isalnum():
+        while len(string) != 0 and (string[0].isalnum() or (len(value) == 0 and string[0] == "-")):
             value += string[0]
             string = string[1:]
         try:
@@ -73,6 +79,7 @@ assert(parse_tokens("[TOKEN, ANOTHER]") == [Token("TOKEN"), Token("ANOTHER")])
 assert(parse_tokens("[TOKEN, [ANOTHER]]") == [Token("TOKEN"), [Token("ANOTHER")]])
 assert(parse_tokens("[[TOKEN], [ANOTHER]]") == [[Token("TOKEN")], [Token("ANOTHER")]])
 assert(parse_tokens("1") == 1)
+assert(parse_tokens("-1") == -1)
 assert(parse_tokens("[1]") == [1])
 assert(parse_tokens("[TOKEN, [1]]") == [Token("TOKEN"), [1]])
 
@@ -97,7 +104,8 @@ def get_value_from(current_state, current_token):
         raise Exception("Invalid token %s in current state %s" % (current_token, current_state))
     
 def follow_script(initial_state, token_list):
-    current_state = initial_state.copy()
+    #current_state = initial_state.copy()
+    current_state = initial_state
     for token in token_list:
         value = get_value_from(current_state, token)
         if should_abort(current_state):
@@ -124,8 +132,7 @@ assert(follow_script({}, [1, 2, "True", True, Token("FAIL")]) == "Action failed.
 assert(follow_script({}, [1, 2, "True", True, [Token("FAIL"), "Really failed."]]) == "Really failed.")
 
 def if_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("IF requires a list token.")
+    check_token_list(current_token, 4, 4)
     if get_value_from(current_state, current_token[1]) == True:
         return get_value_from(current_state, current_token[2])
     else:
@@ -137,8 +144,7 @@ assert(follow_script({}, [[Token("IF"), False, Token("FAIL"), "Win"]]) == {}) # 
 assert(get_value_from({}, [Token("IF"), False, Token("FAIL"), "Win"]) == "Win") # We've returned the final state.
 
 def on_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("ON requires a list token.")
+    check_token_list(current_token, 3, 999)
     if get_value_from(current_state, current_token[1]) == True:
         tokens = current_token[2:]
         while not should_abort(current_state) and tokens:
@@ -148,8 +154,7 @@ def on_token(current_state, current_token):
         return None
     
 def do_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("DO requires a list token.")
+    check_token_list(current_token, 2, 999)
     tokens = current_token[1:]
     while not should_abort(current_state) and tokens:
         get_value_from(current_state, tokens[0])
@@ -164,8 +169,7 @@ assert(follow_script({}, [[Token("DO"), True, Token("FAIL")]]) == "Action failed
 assert(follow_script({}, [[Token("DO"), True, "Win"]]) == {}) # We've returned the final state.
 
 def not_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("NOT requires a list token.")
+    check_token_list(current_token, 2, 2)
     if get_value_from(current_state, current_token[1]) == False:
         return True
     else:
@@ -190,8 +194,7 @@ assert(get_value_from({}, Token("TRUE")) == True)
 assert(get_value_from({}, Token("FALSE")) == False)
 
 def and_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("AND requires a list token.")
+    check_token_list(current_token, 2, 999)
     for token in current_token[1:]:
         value = get_value_from(current_state, token)
         if not value:
@@ -211,8 +214,7 @@ comparisons = {Token("GT"): lambda x, y: x > y,
                Token("INEQUAL"): lambda x, y: x != y
                }
 def comparison_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("comparison (GT, LT, GTE, LTE, EQUAL, INEQUAL) requires a list token.")
+    check_token_list(current_token, 3, 3)
     left = get_value_from(current_state, current_token[1])
     right = get_value_from(current_state, current_token[2])
     return comparisons[current_token[0]](left, right)
@@ -238,8 +240,7 @@ assert(get_value_from({}, [Token("INEQUAL"), True, True]) == False)
 assert(get_value_from({}, [Token("INEQUAL"), True, False]) == True)
 
 def set_token(current_state, current_token):
-    if not type(current_token) is list:
-        raise Exception("SET requires a list token.")
+    check_token_list(current_token, 3, 3)
     token_name = current_token[1].name
     token_value = get_value_from(current_state, current_token[2])
     current_state[token_name] = token_value

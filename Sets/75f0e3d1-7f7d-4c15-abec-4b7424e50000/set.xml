@@ -7,48 +7,73 @@
      version="0.0.0.1">
 <cards>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50000" name="Standard Wound">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50000" name="Punch">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Deal 1 standard wound to a target. Ignore weapons for this attack. Can only be done once per turn."/>
+         <property name="Cost" value="SPECIAL"/>
+         <property name="Play_Script" value="[PUNCH]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value="[PUNCH]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50001" name="Retreat">
+         <property name="Type" value="Retreat"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Add your hand and discard to your deck. Shuffle your deck. Return all items from your backpack into play. Cannot do anything else this turn."/>
+         <property name="Cost" value="SPECIAL"/>
+         <property name="Play_Script" value="[RETREAT]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value="[RETREAT]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50002" name="Standard Wound">
          <property name="Type" value="Wound"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Standard Wound"/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50001" name="Mortal Wound">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50003" name="Mortal Wound">
          <property name="Type" value="Wound"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Mortal Wound"/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50002" name="Frost Wound">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50004" name="Frost Wound">
          <property name="Type" value="Wound"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Frost Wound"/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50003" name="Burn Wound">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50005" name="Burn Wound">
          <property name="Type" value="Wound"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Burn Wound"/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50004" name="Shadow Wound">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e50006" name="Shadow Wound">
          <property name="Type" value="Wound"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Shadow Wound"/>
          <property name="Cost" value=""/>
-         <property name="Script" value=""/>
-         <property name="Constant" value=""/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
     </card>
 </cards></set>

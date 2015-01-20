@@ -9,8 +9,7 @@ def can_pay(target, statname, current_state):
 
 def playerstat_token(statname):
     def _actual_token(current_state, current_token):
-        if type(current_token) is not list:
-            raise Exception(statname + " must be list head.")
+        check_token_list(current_token, 1, 2)
         if len(current_token) == 1:
             target = owner_this(current_state)
         else:
@@ -21,8 +20,7 @@ def playerstat_token(statname):
 
 def payxstat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("PAYX" + statname + " must be list head.")
+        check_token_list(current_token, 1, 2)
         if len(current_token) == 1:
             target = owner_this(current_state)
         else:
@@ -36,8 +34,7 @@ def payxstat_token(statname):
 
 def paystat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("PAY" + statname + " must be list head.")
+        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -51,8 +48,7 @@ def paystat_token(statname):
 
 def reducecoststat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("REDUCECOST" + statname + " must be list head.")
+        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -76,8 +72,7 @@ def reducecost_stat(statname, amount, target, current_state):
 
 def setstat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("SET" + statname + " must be list head.")
+        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -96,8 +91,7 @@ def set_stat(statname, amount, target, current_state):
 
 def gainstat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("GAIN" + statname + " must be list head.")
+        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -109,8 +103,7 @@ def gainstat_token(statname):
 
 def losestat_token(statname):
     def _actual_token(current_state, current_token):
-        if not type(current_token) is list:
-            raise Exception("SET" + statname + " must be list head.")
+        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
