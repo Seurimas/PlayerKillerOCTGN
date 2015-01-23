@@ -24,7 +24,7 @@
          <property name="Cost" value="1 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[GETTARGET], [DISCARD, THIS], [CURE, TARGET, [TYPE, CHECKED, &quot;Standard&quot;]], [CURE, TARGET, [TYPE, CHECKED, &quot;Standard&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30002" name="Healing Poultice">
@@ -34,7 +34,7 @@
          <property name="Cost" value="1 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[GETTARGET], [DISCARD, THIS], [CURE, TARGET, TRUE]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30003" name="Tactical Retreat">
@@ -122,7 +122,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="Draw 3 cards."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[DRAW, 3]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

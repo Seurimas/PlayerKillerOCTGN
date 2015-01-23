@@ -290,7 +290,17 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001c" name="Immunity Block">
          <property name="Type" value="Injury"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="You may not convert or cure other shadow injuries. When you receive another shadow injury, convert Immunity Lock to a normal shadow wound."/>
+         <property name="Description" value="You may not cure other shadow injuries. When you receive another shadow injury, convert Immunity Lock to a normal shadow wound."/>
+         <property name="Cost" value="2 subterfuge, 1 shadow"/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001d" name="Alpha Venom">
+         <property name="Type" value="Injury"/>
+         <property name="Subtype" value="Shadow"/>
+         <property name="Description" value="At the start of your turn, convert another random shadow injury to a normal shadow wound, if able. If you do, take a normal shadow wound."/>
          <property name="Cost" value="2 subterfuge, 1 shadow"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>

@@ -1,11 +1,11 @@
 def get_counter_value(target, statname):
-    return target.controller.__getattr__(statname.capitalize())
+    return target.controller.counters[statname.capitalize()].value
 
 def get_paid_value(target, statname, current_state):
     return current_state.get("pay", {}).get(target, {}).get(statname.capitalize(), 0)
 
 def can_pay(target, statname, current_state):
-    return get_counter_value(target, statname) >= get_paid_value(target, statname, current_state)
+    return target is not None and get_counter_value(target, statname) >= get_paid_value(target, statname, current_state)
 
 def playerstat_token(statname):
     def _actual_token(current_state, current_token):
@@ -120,7 +120,7 @@ def gain_stat(statname, amount, target, current_state):
     current_gain += amount
     target_sets[statname.capitalize()] = current_gain
     current_sets[target] = target_sets
-    current_state["set_stat"] = current_sets
+    current_state["gain_stat"] = current_sets
     
 def lose_stat(statname, amount, target, current_state):
     gain_stat(statname, amount, target, current_state)

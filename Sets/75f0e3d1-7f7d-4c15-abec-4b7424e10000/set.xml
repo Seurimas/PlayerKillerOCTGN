@@ -50,9 +50,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10004" name="Cauterize">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Fire"/>
-         <property name="Description" value="Remove up to 2 standard wounds from a target. If you remove 2, deal 1 burn wound to the target."/>
+         <property name="Description" value="Remove up to 2 normal standard wounds from a target. If you remove 2, deal 1 burn wound to the target."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value="[GETCHARACTER], [SET, NUMBER, [CHOOSEX, &quot;How many standard wounds?&quot;, 1, [IF, [GTE, [WOUNDS, TARGET, &quot;Standard&quot;], 2], 2, 1]], [PAYMANA, 1], [REMOVEWOUND, NUMBER, &quot;Standard&quot;, TARGET], [ON, [EQUAL, NUMBER, 2], [DEAL, 2, &quot;Burn&quot;, TARGET]]"/>
+         <property name="Play_Script" value="[GETCHARACTER], [SET, NUMBER, [CHOOSEX, &quot;How many standard wounds?&quot;, 1, [IF, [GTE, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], 2], 2, 1]]], [PAYMANA, 1], [REMOVENORMALWOUNDS, NUMBER, &quot;Standard&quot;, TARGET], [ON, [EQUAL, NUMBER, 2], [DEAL, 2, &quot;Burn&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -204,7 +204,7 @@
          <property name="Cost" value="2 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[PAYSTAMINA, 1], [GAINMANA, 1]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10014" name="Familiar">
@@ -232,7 +232,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="Gain 2 mana."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GAINMANA, 2]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

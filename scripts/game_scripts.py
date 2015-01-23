@@ -11,6 +11,7 @@ counters = ["HEALTH", "MANA", "SUBTERFUGE", "STAMINA"]
 status_counter_id = "00000000-0000-0000-0000-000000000001"
 
 def setupTokens():
+    notify("Setting up scripting tokens.")
     add_token_script(Token("GETTARGET"), gettarget_token_dual)
     add_token_script(Token("GETTARGETS"), gettarget_token_dual)
     add_token_script(Token("TARGETCOUNT"), targetcount_token)
@@ -24,6 +25,8 @@ def setupTokens():
     add_token_script(Token("DRAW"), draw_token)
     add_token_script(Token("CONSTANT"), constant_token)
     add_token_script(Token("DISCARD"), discard_token)
+    add_token_script(Token("ONTURNSTART"), on_turn_start_token)
+    add_token_script(Token("ONTURNEND"), on_turn_end_token)
     
     # Variables and references
     add_token_script(Token("CHOOSEX"), choosex_token)
@@ -56,12 +59,13 @@ def setupTokens():
         
     # Wound manipulation and injures
     add_token_script(Token("DEALT"), dealt_token)
+    add_token_script(Token("DEALEXTRA"), deal_extra)
     add_token_script(Token("INJURE"), injure_token)
     add_token_script(Token("REMOVENORMALWOUNDS"), remove_normal_wounds_token)
     add_token_script(Token("CURE"), cure_token)
     add_token_script(Token("INJURIES"), injuries_token)
     add_token_script(Token("THISTURN"), this_turn_token)
-    for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY"]:
+    for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY", "TAKEWOUNDS"]:
         def deal_with(deal_type):
             return lambda current_state, current_token: deal(current_state, current_token, deal_type=deal_type)
         add_token_script(Token(deal_type), deal_with(deal_type))
@@ -75,6 +79,13 @@ def add_event(current_state, event_type, event_value):
     current_events = current_state.get("events", [])
     current_events.append((event_type, event_value))
     current_state["events"] = current_events
+
+def my_class(myself):
+    for card in table:
+        if card.Type == "Class" and card.controller == myself:
+            return card
+    else:
+        raise Exception("%s's has no Class in play!" % (myself.name, ))
 
 def group_owner(group):
     controller = group.controller
@@ -110,7 +121,7 @@ def played_token(current_state, current_token):
     
 def variable_token(singleton):
     def _actual_token(current_state, current_token):
-        return current_state[singleton]
+        return current_state.get(singleton, None)
     return _actual_token
     
 def card_value_token(singleton):
@@ -119,11 +130,23 @@ def card_value_token(singleton):
             return current_state[singleton]
         else:
             target = get_value_from(current_state, current_token[1])
-            return target.__getattr__(singleton.capitalize())
+            if singleton == "TYPE":
+                if type(target) is Card:
+                    return target.Type
+                elif type(target) is tuple:
+                    return target[2]
+            elif singleton == "SUBTYPE":
+                return target.Subtype
+            else:
+                raise Exception("Invalid card value script: %s" % singleton)
     return _actual_token
 
 def owner_this(current_state):
-    return get_value_from(current_state, [Token("OWNER"), Token("THIS")])
+    this = get_value_from(current_state, Token("THIS"))
+    if this is not None:
+        return get_value_from(current_state, [Token("OWNER"), this])
+    else:
+        return my_class(me)
 
 def checkaction_token(current_state, current_token):
     check_token_list(current_token, 3, 3)
@@ -177,7 +200,7 @@ def draw_for_state(current_state, player, draw_count):
     else:
         drawn_count = current_state.get("drawn_count", 0)
         drawn_cards = current_state.get("drawn_cards", [])
-        drawn_cards.append(player.piles["Deck"][drawn_count])
+        drawn_cards.append((player, player.piles["Deck"][drawn_count]))
         drawn_count += 1
         current_state["drawn_cards"] = drawn_cards
         current_state["drawn_count"] = drawn_count
@@ -239,6 +262,15 @@ def this_turn_token(current_state, current_token):
         if value:
             return value
     return False
+
+this_turn = []
+def clear_turn():
+    global this_turn
+    this_turn = []
+
+def add_action_this_turn(action):
+    global this_turn
+    this_turn.append(action)
 
 def on_turn_start_token(current_state, current_token):
     check_token_list(current_token, 2, 3)

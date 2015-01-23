@@ -6,7 +6,7 @@ except:
 def target_token(current_state, current_token):
     if type(current_token) is not Token:
         raise Exception("TARGET cannot be a list head. [%s]" % (current_token, ))
-    return current_state["TARGET"]
+    return current_state.get("TARGET", None)
 def checked_token(current_state, current_token):
     if not type(current_token) is Token:
         raise Exception("CHECKED cannot be a list head. [%s]" % (current_token, ))
@@ -19,10 +19,13 @@ def targetcount_token(current_state, current_token):
 def each_target(current_state, current_token):
     if not type(current_token) is list:
         raise Exception("EACHTARGET requires arguments to be evaluated")
-    for target in current_state["TARGETS"]:
-        current_state["TARGET"] = target
-        value = get_value_from(current_state, current_token[1])
-        del current_state["TARGET"]
+    if current_state.has_key("TARGETS"):
+        for target in current_state.get("TARGETS", []):
+            current_state["TARGET"] = target
+            value = get_value_from(current_state, current_token[1])
+            del current_state["TARGET"]
+    else:
+        get_value_from(current_state, current_token[1])
 
 def valid_source(source):
     return source in [Token("TABLE"),

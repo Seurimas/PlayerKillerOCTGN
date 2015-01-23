@@ -40,9 +40,21 @@ def checkMovedCard(player, card, fromGroup, toGroup,
         return
     
 def draw(group):
-    if me.Stamina > 0 or confirm("You're trying to draw with no Stamina. Is it your turn?"):
-        card = group.top()
-        card.moveTo(me.hand)
+    character = my_class(me)
+    state = {"CHARACTER": character,
+             "TYPE": "Draw",
+             "SUBTYPE": ""}
+    state = applyWithPriorities(state, pre_priorities)
+    if type(state) is str:
+        return
+    state = follow_script(state, [[Token("PAYSTAMINA"), 1], [Token("DRAW"), 1]])
+    if type(state) is str:
+        notify("Failed: " + state)
+    else:
+        state = applyWithPriorities(state, post_priorities)
+        if type(state) is str:
+            return
+    activate_state_change(state, None)
 
 def shuffleDeck(group):
     group.shuffle()
@@ -85,9 +97,10 @@ def createDummyCard(card):
     card = table.create(card.model, getCardX(card), getCardY(card))
 #     card.moveToTable(getCardX(card), getCardY(card))
     mark_card_temporary(card)
+    return card
 
 def retreat(group):
-    character = group_owner(group)
+    character = my_class(me)
     state = {"CHARACTER": character,
              "TYPE": "Retreat",
              "SUBTYPE": ""}
@@ -101,6 +114,7 @@ def retreat(group):
         state = applyWithPriorities(state, post_priorities)
         if type(state) is str:
             return
+    activate_state_change(state, None)
 
 def applyWithPriorities(state, priorities):
     for priority in priorities:
@@ -149,13 +163,15 @@ def useCard(card, x = 0, y = 0):
         if type(state) is str:
             return
         if card.group == me.hand:
-            createDummyCard(card)
+            activate_state_change(state, createDummyCard(card))
             card.moveTo(me.piles["Discard"])
-        notify("%s" % state)
 
 def replace_this(state, card, types=False):
     old_state = {}
-    old_state["THIS"] = state["THIS"]
+    if state.has_key("THIS"):
+        old_state["THIS"] = state["THIS"]
+    else:
+        old_state["THIS"] = None
     state["THIS"] = card
     if types:
         old_state["TYPE"] = state["TYPE"]
@@ -171,14 +187,12 @@ def applyCard(priority, card, current_state):
     if len(card.Constant_Script) != 0:
         for effect in card.Constant_Script:
             if effect[0] == priority:
-                notify("Applying %s with priority %s [%s]" % (card.name, priority, effect[1:]))
                 old_state = replace_this(current_state, card)
-                result = follow_script(current_state, effect[1:])
-                notify("%s" % result) # FIXME: Need to actually set the result and state to correct values.
+                current_state = follow_script(current_state, effect[1:])
                 current_state.update(old_state)
-                return result
+                # Not returning here after all, because a card may have multiple effects with the same priority.
         else:
-            return current_state
+            return current_state # We'll always get here.
     else:
         return current_state
     
@@ -209,12 +223,23 @@ def sot(table):
             return
     notify("Start of " + me.name + "'s turn!")
     me.Stamina = 3
+    state = {"CHARACTER": my_class(me),
+             "TYPE": "TurnStart",
+             "SUBTYPE": ""}
+    state = applyWithPriorities(state, all_priorities)
+    activate_state_change(state)
     
 def mark_card_temporary(card):
-    card.highlight = "#00FFFF"
+    card.highlight = "#0000FF"
+    
+def mark_card_injury(card):
+    card.highlight = "#FF0000"
+    
+def mark_card_constant(card):
+    card.highlight = "#00FF00"
     
 def is_card_temporary(card):
-    return card.highlight is not None and card.highlight.upper() == "#00FFFF"
+    return card.highlight is not None and card.highlight.upper() == "#0000FF"
     
 def clear_table_for_me(table):
     mute()
@@ -231,6 +256,11 @@ def eot(table):
     if me.Stamina != 0:
         whisper("You must end your turn with 0 stamina.")
         return
+    state = {"CHARACTER": my_class(me),
+             "TYPE": "TurnEnd",
+             "SUBTYPE": ""}
+    state = applyWithPriorities(state, all_priorities)
+    activate_state_change(state)
     notify("End of " + me.name + "'s turn!")
     if len(me.hand) > MAX_HAND_SIZE:
         notify(me.name + " needs to discard down to " + str(MAX_HAND_SIZE))

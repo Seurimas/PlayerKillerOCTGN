@@ -182,7 +182,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="Draw a card. If it is an attack, you may play it immediately, paying its play cost."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value="[GETENEMY], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
+         <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

@@ -13,6 +13,7 @@
       tags="prototype duel fantasy"
       iconurl="http://www.google.com">
     <scripts>
+        <script src="scripts/activation.py" />
         <script src="scripts/baseActions.py" />
         <script src="scripts/script_base.py" />
         <script src="scripts/wounds.py" />
@@ -24,6 +25,7 @@
     <events>
        <event name="OnTableLoad" action="chkTwoSided" />
        <event name="OnTableLoad" action="setupTokens" />
+       <event name="OnTableLoad" action="setup_state_changes" />
        <event name="OnLoadDeck" action="checkDeck" />
        <event name="OnMoveCard" action="checkMovedCard" />
     </events>

@@ -25,7 +25,7 @@ PREVENT = "PREVENT"
 if __name__ == "__main__":
     print "Running tests."
 
-def add_wounds(current_state, target, new_wounds, deal_type="TAKE"):
+def add_wounds(current_state, target, new_wounds, deal_type="TAKEWOUNDS"):
     current_targets = current_state.get("dealt", {})
     target_wounds = current_targets.get(target, [])
     for old_wounds in target_wounds:
@@ -116,9 +116,8 @@ def deal_extra(current_state, current_token):
     wound_type = get_value_from(current_state, current_token[2])
 #     def deal_extra_at_end(current_state):
     events_which_deal_extra = filter(lambda event: deals_extra(event), current_state.get("events", []))
-    for event in events_which_deal_extra:
-        target = event[1][0]
-        add_wounds(current_state, target, (wound_type, wound_count), deal_type="DEALEXTRA")
+    for valid_target in set([event[1][0] for event in events_which_deal_extra]):
+        add_wounds(current_state, valid_target, (wound_type, wound_count), deal_type="DEALEXTRA")
 #     defer_til_end(current_state, deal_extra_at_end)
 
 def wounds_token_dual(current_state, current_token):
@@ -161,7 +160,7 @@ def convert_injury_token():
     check_token_list(current_token, 3, 3)
     injury = get_value_from(current_state, current_token[1])
     target_wound_type = get_value_from(current_state, current_token[2])
-    remove_wounds(current_state, target, (injury, 1), "CONVERTINJURY", target_wound_type)
+    remove_wounds(current_state, target, (injury, 1), "CONVERTINJURY", extra=target_wound_type)
     
 def get_normal_wounds_count(target, wound_type, current_state=None):
     if current_state is not None:

@@ -16,7 +16,7 @@ def check_token_list(current_token, min_len, max_len):
     if not type(current_token) is list:
         raise Exception(current_token.name + " must be list head.")
     if not (min_len <= len(current_token) <= max_len):
-        raise Exception("Invalid list len for " + current_token.name + ". !%d <= %d <= %d" % (min_len, len(current_token), max_len))
+        raise Exception("Invalid list len for " + current_token[0].name + ". !%d <= %d <= %d" % (min_len, len(current_token), max_len))
     
 def get_list_from(string):
     acc = []
@@ -94,14 +94,8 @@ def get_value_from(current_state, current_token):
         return token_scripts[current_token](current_state, current_token)
     elif type(current_token) is list:
         return token_scripts[current_token[0]](current_state, current_token)
-    elif type(current_token) is str:
-        return current_token
-    elif type(current_token) is int:
-        return current_token
-    elif type(current_token) is bool:
-        return current_token
     else:
-        raise Exception("Invalid token %s in current state %s" % (current_token, current_state))
+        return current_token
     
 def follow_script(initial_state, token_list):
     #current_state = initial_state.copy()
