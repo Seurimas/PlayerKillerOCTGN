@@ -46,7 +46,7 @@ def remove_wounds(current_state, target, removed_wounds, remove_type="REMOVE", e
             old_wounds[1] += removed_wounds[1]
             break
     else:
-        target_wounds.append(list(new_wounds))
+        target_wounds.append(list(removed_wounds))
     current_targets[target] = target_wounds
     current_state["remove"] = current_targets
     if extra is None:
@@ -56,7 +56,7 @@ def remove_wounds(current_state, target, removed_wounds, remove_type="REMOVE", e
     add_event(current_state, remove_type, event)
     
 def prevent_wounds(current_state, target, wound_type, wound_count):
-    actually_prevented = max(get_wounds_dealt(current_state, target, wound_type, preventable_only=True), wound_count)
+    actually_prevented = min(get_wounds_dealt(current_state, target, wound_type, preventable_only=True), wound_count)
     current_targets = current_state.get("dealt", {})
     target_wounds = current_targets.get(target, [])
     for old_wounds in target_wounds:
@@ -65,16 +65,28 @@ def prevent_wounds(current_state, target, wound_type, wound_count):
     current_targets[target] = target_wounds
     current_state["dealt"] = current_targets
     add_event(current_state, PREVENT, (target, wound_type, actually_prevented))
-    
+
+def prevent_token(current_state, current_token):
+    check_token_list(current_token, 3, 4)
+    if len(current_token) == 3:
+        target = owner_this(current_state)
+        wound_count = current_token[1]
+        wound_type = current_token[2]
+    else:
+        target = get_value_from(current_state, current_token[1])
+        wound_count = get_value_from(current_state, current_token[2])
+        wound_type = get_value_from(current_state, current_token[3])
+    prevent_wounds(current_state, target, wound_type, wound_count)
+
 def get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False):
     count = 0
     events = current_state.get("events", [])
     for event in events:
         if (not preventable_only) or event[0] in PREVENTABLE:
-            if event[1][0] == target and event[1][1] == wound_type:
+            if (target == Token("ANY") or event[1][0] == target) and type(event[1][1]) == type(wound_type) and event[1][1] == wound_type:
                 count += event[1][2]
         elif (not include_prevented) and event[0] == PREVENT:
-            if event[1][0] == target and event[1][1] == wound_type:
+            if (target == Token("ANY") or event[1][0] == target) and type(event[1][1]) == type(wound_type) and event[1][1] == wound_type:
                 count -= event[1][2]
     return count
     
@@ -93,13 +105,23 @@ def get_wounds_removed(current_state, target, wound_type, cured_only=False):
 
 def dealt_token(current_state, current_token):
     check_token_list(current_token, 2, 3)
-    if len(current_state) == 2:
+    if len(current_token) == 2:
         target = owner_this(current_state)
         wound_type = get_value_from(current_state, current_token[1])
     else:
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
     return get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False)
+
+def cured_token(current_state, current_token):
+    check_token_list(current_token, 2, 3)
+    if len(current_token) == 2:
+        target = owner_this(current_state)
+        wound_type = get_value_from(current_state, current_token[1])
+    else:
+        target = get_value_from(current_state, current_token[1])
+        wound_type = get_value_from(current_state, current_token[2])
+    return get_wounds_removed(current_state, target, wound_type, cured_only=True)
 
 def deal(current_state, current_token, deal_type="DEAL"):
     check_token_list(current_token, 4, 4)
@@ -146,17 +168,17 @@ def getwound_token(current_state, current_token):
     else:
         return None
     
-def injure_token():
+def injure_token(current_state, current_token):
     check_token_list(current_token, 3, 3)
     target_wound = get_value_from(current_state, current_token[1])
     injury = get_value_from(current_state, current_token[2])
     if type(target_wound) is not tuple:
         raise Exception("Expected wound representation, not %s" % (type(target_wound)))
     else:
-        remove_wounds(current_state, target, (target_wound[2], 1), "INJURED")
-        add_wounds(current_state, target, (injury, 1), "INJURE")
+        remove_wounds(current_state, target_wound[1], (target_wound[2], 1), "INJURED")
+        add_wounds(current_state, target_wound[1], (injury, 1), "INJURE")
     
-def convert_injury_token():
+def convert_injury_token(current_state, current_token):
     check_token_list(current_token, 3, 3)
     injury = get_value_from(current_state, current_token[1])
     target_wound_type = get_value_from(current_state, current_token[2])
@@ -215,6 +237,33 @@ def is_normal_wound_token(current_state, current_token):
     else:
         return False
 
+def choose_normal_wound_token(current_state, current_token):
+    check_token_list(current_token, 3, 4)
+    if len(current_token) == 3:
+        prompt = get_value_from(current_state, current_token[1])
+        target = owner_this(current_state)
+        wound_validator = current_token[2]
+    else:
+        prompt = get_value_from(current_state, current_token[1])
+        target = get_value_from(current_state, current_token[2])
+        wound_validator = current_state, current_token[3]
+    choices = []
+    wound_choices = []
+    for wound_type in wounds:
+        normal_count = get_normal_wounds_count(target, wound_type, current_state=current_state)
+        if normal_count != 0:
+            current_state["CHECKED"] = ("WOUND", target, wound_type)
+            if get_value_from(current_state, wound_validator):
+                choices.append("Normal %s Wound on %s (%s)" % (wound_type, target.name, target.controller.name))
+                wound_choices.append(wound_type)
+    colorsList = ["#FFFFFF" for _ in choices]
+    customButtons = ["Cancel"]
+    picked = askChoice(prompt, choices, colorsList, customButtons=customButtons)
+    if picked == -1 or picked == 0:
+        abort(current_state, "Cancelled picking cured wounds.")
+    else:
+        return ("WOUND", target, wound_choices[picked - 1])
+
 def cure_token(current_state, current_token):
     check_token_list(current_token, 2, 3)
     if len(current_token) == 2:
@@ -247,7 +296,7 @@ def cure_token(current_state, current_token):
     elif picked == -2:
         return False
     else:
-        remove_wounds(current_state, target, (wound_choices[picked - 1], 0), remove_type="CURE")
+        remove_wounds(current_state, target, (wound_choices[picked - 1], 1), remove_type="CURE")
         return True
 
 if __name__ == "__main__":

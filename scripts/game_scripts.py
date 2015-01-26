@@ -20,9 +20,13 @@ def setupTokens():
     add_token_script(Token("ISCHARACTER"), ischaracter_token)
     add_token_script(Token("GETCHARACTER"), getcharacter_token)
     
+    add_token_script(Token("ISATTACK"), is_attack_token)
+    add_token_script(Token("ISSPELL"), is_spell_token)
+    add_token_script(Token("ISPLAYINGCARD"), is_playing_card_token)
     add_token_script(Token("EACHTARGET"), each_target)
     add_token_script(Token("BLOCKDRAW"), block_draw_token)
     add_token_script(Token("DRAW"), draw_token)
+    add_token_script(Token("PAYDISCARD"), pay_discard_token)
     add_token_script(Token("CONSTANT"), constant_token)
     add_token_script(Token("DISCARD"), discard_token)
     add_token_script(Token("ONTURNSTART"), on_turn_start_token)
@@ -43,6 +47,7 @@ def setupTokens():
     # Counters and markers
     add_token_script(Token("WOUNDS"), wounds_token_dual)
     add_token_script(Token("NORMALWOUNDS"), wounds_token_dual)
+    add_token_script(Token("CHOOSENORMALWOUND"), choose_normal_wound_token)
     add_token_script(Token("GETWOUND"), getwound_token)
     add_token_script(Token("STATUS"), status_token)
     add_token_script(Token("GAINSTATUS"), gain_status_token)
@@ -60,9 +65,11 @@ def setupTokens():
     # Wound manipulation and injures
     add_token_script(Token("DEALT"), dealt_token)
     add_token_script(Token("DEALEXTRA"), deal_extra)
+    add_token_script(Token("PREVENT"), prevent_token)
     add_token_script(Token("INJURE"), injure_token)
     add_token_script(Token("REMOVENORMALWOUNDS"), remove_normal_wounds_token)
     add_token_script(Token("CURE"), cure_token)
+    add_token_script(Token("CURED"), cured_token)
     add_token_script(Token("INJURIES"), injuries_token)
     add_token_script(Token("THISTURN"), this_turn_token)
     for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY", "TAKEWOUNDS"]:
@@ -163,14 +170,21 @@ def constant_token(current_state, current_token):
         constants.append(get_value_from(current_state, current_token[1]))
     current_state["constants"] = constants
 
+def is_discarded(current_state, checked_card):
+    return checked_card in current_state.get("discards", [])
+
+def discard_card_in_state(current_state, discarded):
+    discards = current_state.get("discards", [])
+    discards.append(discarded)
+    current_state["discards"] = discards
+
 def discard_token(current_state, current_token):
     check_token_list(current_token, 1, 2)
-    discards = current_state.get("discards", [])
     if len(current_token) == 1:
-        discards.append(get_value_from(current_state, Token("THIS")))
+        discarded = get_value_from(current_state, Token("THIS"))
     else:
-        discards.append(get_value_from(current_state, current_token[1]))
-    current_state["discards"] = discards
+        discarded = get_value_from(current_state, current_token[1])
+    discard_card_in_state(current_state, discarded)
 
 def draw_token(current_state, current_token):
     check_token_list(current_token, 2, 3)
@@ -205,6 +219,39 @@ def draw_for_state(current_state, player, draw_count):
         current_state["drawn_cards"] = drawn_cards
         current_state["drawn_count"] = drawn_count
         return drawn_cards
+    
+def pay_discard_token(current_state, current_token):
+    check_token_list(current_token, 2, 2)
+    player = get_value_from(current_state, current_token[1]).controller
+    player_hand = player.hand
+    choices = []
+    choice_cards = []
+    for card in player_hand:
+        if not is_discarded(current_state, card):
+            choices.append(card.name)
+            choice_cards.append(card)
+    colorList = ["#FFFFFF" for _ in choices]
+    customButtons = ["Cancel"]
+    picked = askChoice("Which card will you discard?", choices, colorList, customButtons=customButtons)
+    if picked <= 0:
+        abort(current_state, "Cancelled discard choice.")
+    else:
+        discard_card_in_state(current_state, choice_cards[picked - 1])
+    
+def force_discard_token(current_state, current_token):
+    check_token_list(current_token, 2, 2)
+    player = get_value_from(current_state, current_token[1]).controller
+    player_hand = player.hand
+    choice_cards = []
+    for card in player_hand:
+        if not is_discarded(current_state, card):
+            choice_cards.append(card)
+    if len(choice_cards) != 0:
+        discarded = rnd(0, len(choice_cards) - 1)
+        discard_card_in_state(current_state, discarded)
+        return discarded
+    else:
+        return None
 
 def hasStatus(target, status):
     return target.markers[(status, status_counter_id)] != 0
@@ -255,7 +302,9 @@ def this_turn_token(current_state, current_token):
     check_token_list(current_token, 2, 2)
     validator = current_token[1]
     so_far_this_turn = current_state.get("this_turn", [])
+    notify("Checking this turn.")
     for action in so_far_this_turn:
+        notify("Previous action: %s" % action)
         dummy_state = current_state.copy()
         dummy_state.update(action)
         value = get_value_from(dummy_state, validator)
@@ -291,6 +340,18 @@ def on_turn_end_token(current_state, current_token):
         x = owner_this(current_state)
         y = current_token[1]
     return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "TurnEnd"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
+
+def is_playing_card_token(current_state, current_token):
+    check_token_list(current_token, 1, 1)
+    return current_state.has_key("PLAYEDCARD")
+
+def is_attack_token(current_state, current_token):
+    check_token_list(current_token, 1, 1)
+    return current_state["TYPE"] == "Attack" or current_state["TYPE"] == "Punch"
+
+def is_spell_token(current_state, current_token):
+    check_token_list(current_token, 1, 1)
+    return current_state["TYPE"] == "Spell"
 
 if __name__ == "__main__":
     from targetting import *

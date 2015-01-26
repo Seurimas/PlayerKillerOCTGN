@@ -135,7 +135,7 @@ def gettarget_token_dual(current_state, current_token):
         if is_valid:
             valid_cards.append(card)
     del current_state["CHECKED"]
-    choices = [card.name for card in valid_cards]
+    choices = ["%s (%s)" % (card.name, card.controller.name) for card in valid_cards]
     colorsList = ["#FFFFFF" for _ in valid_cards]
     customButtons = ["Cancel"]
     picked = 0

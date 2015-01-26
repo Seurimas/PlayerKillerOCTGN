@@ -15,3 +15,15 @@ def setConstantScript(card, x=0, y=0):
     
 def setUseScript(card, x=0, y=0):
     card.Use_Script = askString("New script:", "%s" % (card.Use_Script, ))
+    
+def feedConstants(card, x=0, y=0):
+    state_str = askString("State:", "{}")
+    state = eval(state_str)
+    state["CHARACTER"] = me
+    state["THIS"] = None
+    for x in range(-2, 5):
+        state = applyCard(x, card, state)
+        if type(state) is str:
+            whisper("FAILED: %s" % state)
+            return
+    whisper("Result: %s" % state)

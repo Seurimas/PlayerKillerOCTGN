@@ -127,7 +127,7 @@ assert(follow_script({}, [1, 2, "True", True, [Token("FAIL"), "Really failed."]]
 
 def if_token(current_state, current_token):
     check_token_list(current_token, 4, 4)
-    if get_value_from(current_state, current_token[1]) == True:
+    if get_value_from(current_state, current_token[1]):
         return get_value_from(current_state, current_token[2])
     else:
         return get_value_from(current_state, current_token[3])
@@ -139,7 +139,7 @@ assert(get_value_from({}, [Token("IF"), False, Token("FAIL"), "Win"]) == "Win") 
 
 def on_token(current_state, current_token):
     check_token_list(current_token, 3, 999)
-    if get_value_from(current_state, current_token[1]) == True:
+    if get_value_from(current_state, current_token[1]):
         tokens = current_token[2:]
         while not should_abort(current_state) and tokens:
             get_value_from(current_state, tokens[0])
@@ -182,8 +182,14 @@ def false_token(current_state, current_token):
         raise Exception("FALSE cannot be a head token")
     return False
 
+def any_token(current_state, current_token):
+    if not type(current_token) is Token:
+        raise Exception("ANY cannot be a head token")
+    return current_token
+
 add_token_script(Token("TRUE"), true_token)
 add_token_script(Token("FALSE"), false_token)
+add_token_script(Token("ANY"), any_token)
 assert(get_value_from({}, Token("TRUE")) == True)
 assert(get_value_from({}, Token("FALSE")) == False)
 
@@ -199,6 +205,21 @@ add_token_script(Token("AND"), and_token)
 assert(get_value_from({}, [Token("AND"), True, True]) == True)
 assert(get_value_from({}, [Token("AND"), True, False]) == False)
 assert(get_value_from({}, [Token("AND"), False, True]) == False)
+assert(get_value_from({}, [Token("AND"), False, False]) == False)
+
+def or_token(current_state, current_token):
+    check_token_list(current_token, 2, 999)
+    for token in current_token[1:]:
+        value = get_value_from(current_state, token)
+        if value:
+            return value
+    return False
+
+add_token_script(Token("OR"), or_token)
+assert(get_value_from({}, [Token("OR"), True, True]) == True)
+assert(get_value_from({}, [Token("OR"), True, False]) == True)
+assert(get_value_from({}, [Token("OR"), False, True]) == True)
+assert(get_value_from({}, [Token("OR"), False, False]) == False)
 
 comparisons = {Token("GT"): lambda x, y: x > y,
                Token("LT"): lambda x, y: x < y,
@@ -241,4 +262,11 @@ def set_token(current_state, current_token):
     return token_value
 
 add_token_script(Token("SET"), set_token)
-assert(follow_script({}, [[Token("SET"), Token("VARIABLE"), 1]]) == {"VARIABLE": 1})
+
+def get_token(current_state, current_token):
+    check_token_list(current_token, 2, 2)
+    token_name = current_token[1].name
+    return current_state[token_name]
+
+add_token_script(Token("GET"), set_token)
+assert(get_value_from({"VARIABLE": 1}, [Token("SET"), Token("VARIABLE"), 1]) == 1)

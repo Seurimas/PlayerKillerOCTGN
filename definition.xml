@@ -63,6 +63,7 @@
 		<cardaction menu="Set Play Script" default="False" execute="setPlayScript"/>
 		<cardaction menu="Set Constant Script" default="False" execute="setConstantScript"/>
 		<cardaction menu="Set Use Script" default="False" execute="setUseScript"/>
+		<cardaction menu="Try Constants" default="False" execute="feedConstants"/>
 	</cardactions>
 	</table>
     <player>

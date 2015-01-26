@@ -13,7 +13,7 @@
          <property name="Description" value="The first time you attack each turn, draw a card."/>
          <property name="Cost" value="20 weight, 10 health"/>
          <property name="Play_Script" value="[GAINWEIGHT, 20]"/>
-         <property name="Constant_Script" value="[ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]]], [DRAW, 1]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]]], [DRAW, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -133,7 +133,7 @@
          <property name="Description" value="When you start you turn, you must either not draw or take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Mortal&quot;], [INJURE, [GETWOUND, TARGET, &quot;Mortal&quot;], THIS]]"/>
-         <property name="Constant_Script" value="[-1, [ONTURNSTART, [IF, [CHOOSE, &quot;You are half-blinded. Do you open your eye (draw a card and take 1 standard wound) or keep it shut (don't draw).&quot;, &quot;Open eye&quot;, &quot;Keep it shut&quot;], [BLOCKDRAW], [TAKEWOUND, 1, &quot;Standard&quot;]]]]"/>
+         <property name="Constant_Script" value="[-1, [ONTURNSTART, [IF, [CHOOSE, &quot;You are half-blinded. Do you open your eye (draw a card and take 1 standard wound) or keep it shut (don't draw).&quot;, &quot;Open eye&quot;, &quot;Keep it shut&quot;], [BLOCKDRAW, 1], [TAKEWOUNDS, 1, &quot;Standard&quot;]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -190,9 +190,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20012" name="Sunder">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Deal 1 standard wound to a target. The target then randomly discards 1 card from their hand."/>
+         <property name="Description" value="Name a type of card (Spell, Attack, or Tactic). Pick a target to randomly discard 1 card from their hand. If you named the type of that card, deal 2 standard wounds to that target. Otherwise, deal 1 standard wound to that target."/>
          <property name="Cost" value="1 stamina"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 1], [SET, SUNDERED, [CHOOSE, &quot;What type of action are you sundering?&quot;, &quot;Attack&quot;, &quot;Spell&quot;, &quot;Tactic&quot;]], [IF, [EQUAL, [TYPE, [FORCEDISCARD, TARGET]], [GET, SUNDERED]], [DEAL, 2, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Standard&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

@@ -34,13 +34,16 @@ def handle_counters(current_state, dummy_card): # Useless dummy card.
     for target, counters in current_state.get("gain_stat", {}).items():
         for statname, value in counters.items():
             target.controller.counters[statname].value += value
+            notify("%s gains %d %s" % (target.controller.name, value, statname))
     for target, counters in current_state.get("pay", {}).items():
         for statname, value in counters.items():
             if value > 0:
                 target.controller.counters[statname].value -= value
+                notify("%s pays %d %s" % (target.controller.name, value, statname))
     for target, counters in current_state.get("set_stat", {}).items():
         for statname, value in counters.items():
             target.controller.counters[statname].value = value
+            notify("%s %s set to %d" % (target.controller.name, statname, value))
                 
 def handle_injure(current_state, dummy_card): # We want the dummy card!
     mute()
@@ -54,7 +57,7 @@ def handle_injure(current_state, dummy_card): # We want the dummy card!
                 mark_card_injury(wound_type)
                 wound_type.setController(target.controller)
                 target.controller.counters["Health"].value -= always_one
-                notify("%s received %s" % (target, wound_type))
+                notify("%s received %s" % (target.controller.name, wound_type))
                 
 def handle_constant(current_state, dummy_card): # We want the dummy card!
     mute()
@@ -73,7 +76,7 @@ def handle_damage(current_state, dummy_card): # Dummy card useless here.
             if type(wound_type) is str: # Normal wound
                 target.markers[wounds_markers[wound_type]] += wound_count
                 target.controller.counters["Health"].value -= wound_count
-            notify("%s received %s %s" % (target, wound_count, wound_type))
+            notify("%s received %s %s" % (target.controller.name, wound_count, wound_type))
 
 def handle_cure(current_state, dummy_card): # Dummy card useless here.
     mute()
@@ -83,10 +86,10 @@ def handle_cure(current_state, dummy_card): # Dummy card useless here.
                 wound_type = wounds[0]
                 wound_count = wounds[1]
                 if type(wound_type) is str: # Normal wound
-                    target.markers[wound_markers[wound_type]] -= wound_count
-                    notify("%s lost %s %s" % (target, wound_count, wound_type))
+                    target.markers[wounds_markers[wound_type]] -= wound_count
+                    notify("%s lost %s %s" % (target.controller.name, wound_count, wound_type))
                 elif type(wound_type) is Card:
-                    notify("%s cured %s" % (target, wound_type.name))
+                    notify("%s cured %s" % (target.controller.name, wound_type.name))
                     wound_type.moveTo(me.piles["Discard"])
                 else:
                     raise Exception("Invalid wound type: %s (%s)" % (wound_type, type(wound_type)))
@@ -95,7 +98,7 @@ def handle_cure(current_state, dummy_card): # Dummy card useless here.
                 injury = wounds[0]
                 always_one = wounds[1]
                 wound_type = wounds[2]
-                notify("%s convert %s to a normal %s wound" % (target, injury, wound_type))
+                notify("%s convert %s to a normal %s wound" % (target.controller.name, injury, wound_type))
                 if type(injury) is Card:
                     wound_type.moveTo(me.piles["Discard"])
                 else:
@@ -115,9 +118,9 @@ def handle_discard(current_state, dummy_card):
     for discarded in current_state.get("discards", []):
         notify("%s was discarded" % (discarded.name))
         if discarded.Type == "Item":
-            discarded.moveTo(discarded.owner.pile("Backpack"))
+            discarded.moveTo(discarded.owner.piles["Backpack"])
         else:
-            discarded.moveTo(discarded.owner.pile("Discard"))
+            discarded.moveTo(discarded.owner.piles["Discard"])
             
 if __name__ == "__main__":
     setup_state_changes()

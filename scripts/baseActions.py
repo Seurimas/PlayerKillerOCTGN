@@ -119,6 +119,8 @@ def retreat(group):
 def applyWithPriorities(state, priorities):
     for priority in priorities:
         for modifier_card in table:
+            if is_card_temporary(modifier_card):
+                continue
             if type(state) is dict:
                 state = applyCard(priority, modifier_card, state)
                 if should_abort(state):
@@ -139,6 +141,8 @@ def useCard(card, x = 0, y = 0):
              "TYPE": card.Type,
              "SUBTYPE": card.Subtype}
     base_state = state
+    if card.group == me.hand:
+        state["PLAYEDCARD"] = card
     state = applyWithPriorities(state, pre_priorities)
     if type(state) is str:
         return
@@ -165,6 +169,8 @@ def useCard(card, x = 0, y = 0):
         if card.group == me.hand:
             activate_state_change(state, createDummyCard(card))
             card.moveTo(me.piles["Discard"])
+        else:
+            activate_state_change(state)
 
 def replace_this(state, card, types=False):
     old_state = {}
@@ -189,10 +195,12 @@ def applyCard(priority, card, current_state):
             if effect[0] == priority:
                 old_state = replace_this(current_state, card)
                 current_state = follow_script(current_state, effect[1:])
+                if type(current_state) is str:
+                    return current_state # Fail early.
                 current_state.update(old_state)
                 # Not returning here after all, because a card may have multiple effects with the same priority.
         else:
-            return current_state # We'll always get here.
+            return current_state # We'll get here if we don't fail.
     else:
         return current_state
     
@@ -222,11 +230,19 @@ def sot(table):
             whisper(player.name + "'s turn has not ended. All players must be at 0 stamina.")
             return
     notify("Start of " + me.name + "'s turn!")
-    me.Stamina = 3
     state = {"CHARACTER": my_class(me),
              "TYPE": "TurnStart",
              "SUBTYPE": ""}
-    state = applyWithPriorities(state, all_priorities)
+    state = applyWithPriorities(state, pre_priorities)
+    if type(state) is str:
+        notify("Failed: " + state)
+        return
+    gain_stat("STAMINA", 3, state["CHARACTER"], state)
+    draw_for_state(state, me, 1)
+    state = applyWithPriorities(state, post_priorities)
+    if type(state) is str:
+        notify("Failed: " + state)
+        return
     activate_state_change(state)
     
 def mark_card_temporary(card):
@@ -259,7 +275,12 @@ def eot(table):
     state = {"CHARACTER": my_class(me),
              "TYPE": "TurnEnd",
              "SUBTYPE": ""}
+    notify("%s is controlled by %s" % (state["CHARACTER"], state["CHARACTER"].controller))
     state = applyWithPriorities(state, all_priorities)
+    if type(state) is str:
+        notify("Failed: " + state)
+        return
+    notify("%s" % state)
     activate_state_change(state)
     notify("End of " + me.name + "'s turn!")
     if len(me.hand) > MAX_HAND_SIZE:
