@@ -1,6 +1,7 @@
 change_handlers = []
 
 def setup_state_changes():
+    change_handlers.append(handle_retreat) # Done!
     change_handlers.append(handle_damage) # Done!
     change_handlers.append(handle_cure) # Done!
     change_handlers.append(handle_injure) # Done!
@@ -19,6 +20,17 @@ def activate_state_change(current_state, dummy_card=None):
         
 def handle_turn_state(current_state, dummy_card):
     add_action_this_turn(current_state)
+    
+def handle_retreat(current_state, dummy_card):
+    mute()
+    for retreater in current_state.get("retreat", []):
+        for card in retreater.piles["Discard"]:
+            card.moveTo(retreater.piles["Deck"])
+        for card in retreater.hand:
+            card.moveTo(retreater.piles["Deck"])
+        retreater.piles["Deck"].shuffle()
+        for card in retreater.piles["Backpack"]:
+            playCard(card)
         
 def handle_status(current_state, dummy_card): # Dummy card useless here.
     mute()
@@ -27,7 +39,7 @@ def handle_status(current_state, dummy_card): # Dummy card useless here.
             addStatus(target, status)
         else:
             loseStatus(target, status)
-        notify("%s %s set to %s" % (target, status, value))
+        notify("%s (%s) %s set to %s" % (target.name, target.controller.name, status, value))
         
 def handle_counters(current_state, dummy_card): # Useless dummy card.
     mute()
@@ -112,7 +124,7 @@ def handle_draw(current_state, dummy_card): # Ignore the dummy card still.
         card = drawn_card[1]
         card.moveTo(player.hand)
         notify("%s drew a card." % (player.name, ))
-        
+
 def handle_discard(current_state, dummy_card):
     mute()
     for discarded in current_state.get("discards", []):
@@ -121,6 +133,6 @@ def handle_discard(current_state, dummy_card):
             discarded.moveTo(discarded.owner.piles["Backpack"])
         else:
             discarded.moveTo(discarded.owner.piles["Discard"])
-            
+
 if __name__ == "__main__":
     setup_state_changes()

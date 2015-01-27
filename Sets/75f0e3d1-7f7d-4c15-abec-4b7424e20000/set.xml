@@ -63,7 +63,7 @@
          <property name="Description" value="Attacks deal 1 additional standard wound. Finesse attacks cost 1 less stamina to play (minimum 0)."/>
          <property name="Cost" value="6 weight"/>
          <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard]]], [-1, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Finesse&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTSTAMINA, 1]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard&quot;]]], [-1, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Finesse&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTSTAMINA, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -143,7 +143,7 @@
          <property name="Description" value="At the start of your turn, take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Mortal&quot;], [INJURE, [GETWOUND, TARGET, &quot;Mortal&quot;], THIS]]"/>
-         <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUND, 1, &quot;Standard&quot;]]]"/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUNDS, 1, &quot;Standard&quot;, [OWNER, THIS]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -177,13 +177,13 @@
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20011" name="Readied Strike">
-         <property name="Type" value="Tactic"/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20011" name="Slash">
+         <property name="Type" value="Attack"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Draw a card. If it is an attack, you may play it immediately, paying its play cost."/>
+         <property name="Description" value="Deal 1 standard wound to a target. May not be played the same turn as you punch."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[ON, [THISTURN, [EQUAL, SUBTYPE, &quot;Punch&quot;]], [FAIL, &quot;You have punched this turn and may not Slash.&quot;]], [GETENEMY], [DEAL, 1, &quot;Standard&quot;, TARGET], [CONSTANT]"/>
+         <property name="Constant_Script" value="[0, [ONTURNEND, [DISCARD]]], [0, [ON, [EQUAL, SUBTYPE, &quot;Punch&quot;], [FAIL, &quot;You have Slashed with your weapon this turn and may not punch.&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -252,7 +252,7 @@
          <property name="Subtype" value="Brutal"/>
          <property name="Description" value="Deal 2 mortal wounds to a target with 5 or more health or 3 mortal wounds to a target with 4 or less health."/>
          <property name="Cost" value="2 stamina"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 2], [IF, [LTE, [HEALTH, TARGET], 4], [DO, [DEAL, 3, &quot;Mortal&quot;, TARGET]], [DEAL, 2, &quot;Mortal&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

@@ -107,7 +107,7 @@ def retreat(group):
     state = applyWithPriorities(state, pre_priorities)
     if type(state) is str:
         return
-    state = follow_script(state, [Token("RETREAT")])
+    state = follow_script(state, [[Token("RETREAT")]])
     if type(state) is str:
         notify("Failed: " + state)
     else:
@@ -116,10 +116,29 @@ def retreat(group):
             return
     activate_state_change(state, None)
 
-def applyWithPriorities(state, priorities):
+def handPunch(group):
+    character = my_class(me)
+    state = {"CHARACTER": character,
+             "TYPE": "Attack",
+             "SUBTYPE": "Punch"}
+    state = applyWithPriorities(state, pre_priorities, ignore_weapons=True)
+    if type(state) is str:
+        return
+    state = follow_script(state, [[Token("PUNCH")]])
+    if type(state) is str:
+        notify("Failed: " + state)
+    else:
+        state = applyWithPriorities(state, post_priorities, ignore_weapons=True)
+        if type(state) is str:
+            return
+    activate_state_change(state, None)
+
+def applyWithPriorities(state, priorities, ignore_weapons=False):
     for priority in priorities:
         for modifier_card in table:
             if is_card_temporary(modifier_card):
+                continue
+            if ignore_weapons and modifier_card.Subtype == "Weapon":
                 continue
             if type(state) is dict:
                 state = applyCard(priority, modifier_card, state)
@@ -148,6 +167,7 @@ def useCard(card, x = 0, y = 0):
         return
     if card.group == me.hand:
         pay_stat("STAMINA", 1, character, state)
+        discard_card_in_state(state, card)
         if len(card.Play_Script) != 0:
             state = follow_script(state, card.Play_Script)
         else:
@@ -168,7 +188,7 @@ def useCard(card, x = 0, y = 0):
             return
         if card.group == me.hand:
             activate_state_change(state, createDummyCard(card))
-            card.moveTo(me.piles["Discard"])
+#             card.moveTo(me.piles["Discard"])
         else:
             activate_state_change(state)
 
@@ -229,6 +249,8 @@ def sot(table):
         if player.Stamina != 0:
             whisper(player.name + "'s turn has not ended. All players must be at 0 stamina.")
             return
+    me.setActivePlayer()
+    clear_turn()
     notify("Start of " + me.name + "'s turn!")
     state = {"CHARACTER": my_class(me),
              "TYPE": "TurnStart",
@@ -263,10 +285,6 @@ def clear_table_for_me(table):
         if is_card_temporary(card):
             if card.controller == me:
                 card.moveTo(me.piles['Discard'])
-            else:
-                notify(card.name + " is not my card")
-        else:
-            notify(card.name + " is not temporary")
     
 def eot(table):
     if me.Stamina != 0:
@@ -283,6 +301,7 @@ def eot(table):
     notify("%s" % state)
     activate_state_change(state)
     notify("End of " + me.name + "'s turn!")
+    players[1].setActivePlayer()
     if len(me.hand) > MAX_HAND_SIZE:
         notify(me.name + " needs to discard down to " + str(MAX_HAND_SIZE))
     clear_table_for_me(table)

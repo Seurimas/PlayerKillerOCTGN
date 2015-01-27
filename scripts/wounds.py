@@ -1,8 +1,16 @@
 try:
-    from script_base import add_token_script, follow_script, get_value_from, Token
+    from script_base import add_token_script, follow_script, get_value_from, Token, token_func
     from game_scripts import defer_til_end, add_event, owner_this
 except:
-    pass
+    def token_func(min_len, max_len):
+        def actual_decorator(func):
+            def decorated_function(current_state, current_token):
+                check_token_list(current_token, min_len, max_len)
+                return func(current_state, current_token)
+            decorated_function.list_head_min = min_len
+            decorated_function.list_head_max = max_len
+            return decorated_function
+        return actual_decorator
 
 wounds = ("Standard",
           "Shadow",
@@ -66,8 +74,8 @@ def prevent_wounds(current_state, target, wound_type, wound_count):
     current_state["dealt"] = current_targets
     add_event(current_state, PREVENT, (target, wound_type, actually_prevented))
 
+@token_func(3, 4)
 def prevent_token(current_state, current_token):
-    check_token_list(current_token, 3, 4)
     if len(current_token) == 3:
         target = owner_this(current_state)
         wound_count = current_token[1]
@@ -103,8 +111,8 @@ def get_wounds_removed(current_state, target, wound_type, cured_only=False):
         count += event[1][2]
     return count
 
+@token_func(2, 3)
 def dealt_token(current_state, current_token):
-    check_token_list(current_token, 2, 3)
     if len(current_token) == 2:
         target = owner_this(current_state)
         wound_type = get_value_from(current_state, current_token[1])
@@ -113,8 +121,8 @@ def dealt_token(current_state, current_token):
         wound_type = get_value_from(current_state, current_token[2])
     return get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False)
 
+@token_func(2, 3)
 def cured_token(current_state, current_token):
-    check_token_list(current_token, 2, 3)
     if len(current_token) == 2:
         target = owner_this(current_state)
         wound_type = get_value_from(current_state, current_token[1])
@@ -124,26 +132,33 @@ def cured_token(current_state, current_token):
     return get_wounds_removed(current_state, target, wound_type, cured_only=True)
 
 def deal(current_state, current_token, deal_type="DEAL"):
-    check_token_list(current_token, 4, 4)
     wound_count = get_value_from(current_state, current_token[1])
     wound_type = get_value_from(current_state, current_token[2])
-    target = get_value_from(current_state, current_token[3])
+    if deal_type == "TAKEWOUNDS" and len(current_token) == 3:
+        target = owner_this(current_state)
+    else:
+        target = get_value_from(current_state, current_token[3])
     add_wounds(current_state, target, (wound_type, wound_count), deal_type=deal_type)
     
+@token_func(3, 3)
 def deal_extra(current_state, current_token):
     def deals_extra(event):
-        return event[0] in ["DEAL", "DEALALWAYS"]
-    check_token_list(current_token, 3, 3)
+        return event[0] in ["DEAL"]
+    def deals_extra_always(event):
+        return event[0] in ["DEALALWAYS"]
     wound_count = get_value_from(current_state, current_token[1])
     wound_type = get_value_from(current_state, current_token[2])
 #     def deal_extra_at_end(current_state):
-    events_which_deal_extra = filter(lambda event: deals_extra(event), current_state.get("events", []))
+    events_which_deal_extra = filter(deals_extra, current_state.get("events", []))
+    events_which_deal_extra_always = filter(deals_extra_always, current_state.get("events", []))
     for valid_target in set([event[1][0] for event in events_which_deal_extra]):
         add_wounds(current_state, valid_target, (wound_type, wound_count), deal_type="DEALEXTRA")
+    for valid_target in set([event[1][0] for event in events_which_deal_extra_always]):
+        add_wounds(current_state, valid_target, (wound_type, wound_count), deal_type="DEALEXTRAALWAYS")
 #     defer_til_end(current_state, deal_extra_at_end)
 
+@token_func(2, 3)
 def wounds_token_dual(current_state, current_token):
-    check_token_list(current_token, 2, 3)
     target = None
     wound_type = None
     if len(current_token) == 2:
@@ -159,8 +174,8 @@ def wounds_token_dual(current_state, current_token):
         injuries = 0
     return normal_wounds + injuries
 
+@token_func(3, 3)
 def getwound_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     target = get_value_from(current_state, current_token[1])
     wound_type = get_value_from(current_state, current_token[2])
     if target.markers[wounds_markers[wound_type]] != 0:
@@ -168,8 +183,8 @@ def getwound_token(current_state, current_token):
     else:
         return None
     
+@token_func(3, 3)
 def injure_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     target_wound = get_value_from(current_state, current_token[1])
     injury = get_value_from(current_state, current_token[2])
     if type(target_wound) is not tuple:
@@ -178,8 +193,8 @@ def injure_token(current_state, current_token):
         remove_wounds(current_state, target_wound[1], (target_wound[2], 1), "INJURED")
         add_wounds(current_state, target_wound[1], (injury, 1), "INJURE")
     
+@token_func(3, 3)
 def convert_injury_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     injury = get_value_from(current_state, current_token[1])
     target_wound_type = get_value_from(current_state, current_token[2])
     remove_wounds(current_state, target, (injury, 1), "CONVERTINJURY", extra=target_wound_type)
@@ -203,8 +218,8 @@ def get_injuries_count(wound_type, target, current_state=None):
                     injuries += 1
     return injuries
 
+@token_func(2, 3)
 def injuries_token(current_state, current_token):
-    check_token_list(current_token, 2, 3)
     if len(current_token) == 2:
         target = owner_this(current_state)
         wound_type = get_value_from(current_state, current_token[1])
@@ -214,9 +229,14 @@ def injuries_token(current_state, current_token):
     injuries = get_injuries_count(wound_type, target)
     return injuries
 
+@token_func(2, 4)
 def remove_normal_wounds_token(current_state, current_token):
-    check_token_list(current_token, 3, 4)
-    if len(current_token) == 3:
+    if len(current_token) == 2:
+        wound = get_value_from(current_state, current_token[1])
+        target = wound[1]
+        wound_type = wound[2]
+        wound_count = 1
+    elif len(current_token) == 3:
         target = owner_this(current_state)
         wound_count = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
@@ -226,8 +246,8 @@ def remove_normal_wounds_token(current_state, current_token):
         wound_type = get_value_from(current_state, current_token[3])
     remove_wounds(current_state, target, (wound_type, wound_count), "REMOVENORMALWOUNDS")
 
+@token_func(1, 2)
 def is_normal_wound_token(current_state, current_token):
-    check_token_list(current_token, 1, 2)
     if len(current_token) == 2:
         wound = get_value_from(current_state, current_token[1])
     else:
@@ -237,8 +257,8 @@ def is_normal_wound_token(current_state, current_token):
     else:
         return False
 
+@token_func(3, 4)
 def choose_normal_wound_token(current_state, current_token):
-    check_token_list(current_token, 3, 4)
     if len(current_token) == 3:
         prompt = get_value_from(current_state, current_token[1])
         target = owner_this(current_state)
@@ -246,7 +266,7 @@ def choose_normal_wound_token(current_state, current_token):
     else:
         prompt = get_value_from(current_state, current_token[1])
         target = get_value_from(current_state, current_token[2])
-        wound_validator = current_state, current_token[3]
+        wound_validator = current_token[3]
     choices = []
     wound_choices = []
     for wound_type in wounds:
@@ -264,14 +284,14 @@ def choose_normal_wound_token(current_state, current_token):
     else:
         return ("WOUND", target, wound_choices[picked - 1])
 
+@token_func(2, 3)
 def cure_token(current_state, current_token):
-    check_token_list(current_token, 2, 3)
     if len(current_token) == 2:
         target = owner_this(current_state)
         wound_validator = current_token[1]
     else:
         target = get_value_from(current_state, current_token[1])
-        wound_validator = current_state, current_token[2]
+        wound_validator = current_token[2]
     choices = []
     wound_choices = []
     for wound_type in wounds:
@@ -330,10 +350,10 @@ if __name__ == "__main__":
     assert(get_wounds_dealt(test_val, "Someone", "Standard", preventable_only=True, include_prevented=False) == 0)
     deal_extra(test_val, [Token("DEALEXTRA"), 1, "Standard"])
     assert(test_val == {"dealt": {"Someone":[["Standard", 2]]},  "events": [("DEALALWAYS", ("Someone", "Standard", 1)),
-                                                                            ("DEALEXTRA", ("Someone", "Standard", 1)),
+                                                                            ("DEALEXTRAALWAYS", ("Someone", "Standard", 1)),
                                                                             ]})
     assert(get_wounds_dealt(test_val, "Someone", "Standard", preventable_only=False, include_prevented=False) == 2)
-    assert(get_wounds_dealt(test_val, "Someone", "Standard", preventable_only=True, include_prevented=False) == 1)
+    assert(get_wounds_dealt(test_val, "Someone", "Standard", preventable_only=True, include_prevented=False) == 0)
     
     test_val = follow_script({}, [[Token("DEALALWAYSONLY"), 1, "Standard", "Someone"]])
     assert(test_val == {"dealt": {"Someone":[["Standard", 1]]},  "events": [("DEALALWAYSONLY", ("Someone", "Standard", 1))]})

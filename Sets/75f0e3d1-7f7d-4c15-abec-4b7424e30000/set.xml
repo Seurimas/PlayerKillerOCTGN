@@ -24,7 +24,7 @@
          <property name="Cost" value="1 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value="[GETTARGET], [DISCARD, THIS], [CURE, TARGET, [TYPE, CHECKED, &quot;Standard&quot;]], [CURE, TARGET, [TYPE, CHECKED, &quot;Standard&quot;]]"/>
+         <property name="Use_Script" value="[GETCHARACTER], [DISCARD, THIS], [CURE, TARGET, [EQUAL, [TYPE, CHECKED], &quot;Standard&quot;]], [CURE, TARGET, [EQUAL, [TYPE, CHECKED], &quot;Standard&quot;]]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30002" name="Healing Poultice">
@@ -34,7 +34,7 @@
          <property name="Cost" value="1 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value="[GETTARGET], [DISCARD, THIS], [CURE, TARGET, TRUE]"/>
+         <property name="Use_Script" value="[GETCHARACTER], [DISCARD, THIS], [CURE, TARGET, TRUE]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30003" name="Tactical Retreat">
@@ -42,7 +42,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="Draw 1 card. Return 1 item from the discard pile into play."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[DRAW, 1], [GETTARGET, [EQUAL, &quot;Item&quot;, [TYPE, CHECKED]], BACKPACK], [PLAY, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -52,7 +52,7 @@
          <property name="Subtype" value="Armor"/>
          <property name="Description" value="You have 2 more health."/>
          <property name="Cost" value="2 weight"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GAINHEALTH, 2]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -74,7 +74,7 @@
          <property name="Cost" value="2 weight"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[DISCARD, THIS], [REMOVENORMALWOUNDS, [CHOOSENORMALWOUND, &quot;Which wound are you converting?&quot;, [OWNER, THIS], [NOT, [EQUAL, TYPE, &quot;Standard&quot;]]]], [TAKEWOUNDS, 1, &quot;Standard&quot;]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30007" name="Restoration Salve">
@@ -130,7 +130,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000c" name="Winter Technique">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Your next attack this turn deals 1 additional frost wound."/>
+         <property name="Description" value="Your next attack deals 1 additional frost wound."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
@@ -140,7 +140,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000d" name="Summer Technique">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Your next attack this turn deals 1 additional burn wound."/>
+         <property name="Description" value="Your next attack deals 1 additional burn wound."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>

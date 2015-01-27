@@ -4,7 +4,7 @@
       name="Player-Killer" 
       id="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
       octgnVersion="0.0.0.1" 
-      version="0.0.0.1"
+      version="0.0.0.2"
       markersize="16" 
       setsurl="http://www.google.com"
       gameurl="http://www.google.com"
@@ -64,7 +64,9 @@
 		<cardaction menu="Set Constant Script" default="False" execute="setConstantScript"/>
 		<cardaction menu="Set Use Script" default="False" execute="setUseScript"/>
 		<cardaction menu="Try Constants" default="False" execute="feedConstants"/>
+		<cardaction menu="Check Card" default="False" execute="check_card"/>
 	</cardactions>
+	<groupaction menu="(DEBUG) Check All Scripts - MAY TAKE LONG TIME" default="False" execute="check_scripts"/>
 	</table>
     <player>
         <hand name="Hand" visibility="me" ordered="False" width="9" height="9" icon="counters/r0.bmp">

@@ -1,3 +1,16 @@
+try:
+    from token_func import script_base
+except:
+    def token_func(min_len, max_len):
+        def actual_decorator(func):
+            def decorated_function(current_state, current_token):
+                check_token_list(current_token, min_len, max_len)
+                return func(current_state, current_token)
+            decorated_function.list_head_min = min_len
+            decorated_function.list_head_max = max_len
+            return decorated_function
+        return actual_decorator
+
 def get_counter_value(target, statname):
     return target.controller.counters[statname.capitalize()].value
 
@@ -8,8 +21,8 @@ def can_pay(target, statname, current_state):
     return target is not None and get_counter_value(target, statname) >= get_paid_value(target, statname, current_state)
 
 def playerstat_token(statname):
+    @token_func(1, 2)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 1, 2)
         if len(current_token) == 1:
             target = owner_this(current_state)
         else:
@@ -19,8 +32,8 @@ def playerstat_token(statname):
     return _actual_token
 
 def payxstat_token(statname):
+    @token_func(1, 2)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 1, 2)
         if len(current_token) == 1:
             target = owner_this(current_state)
         else:
@@ -33,8 +46,8 @@ def payxstat_token(statname):
     return _actual_token
 
 def paystat_token(statname):
+    @token_func(2, 3)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -47,8 +60,8 @@ def paystat_token(statname):
     return _actual_token
 
 def reducecoststat_token(statname):
+    @token_func(2, 3)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -71,8 +84,8 @@ def reducecost_stat(statname, amount, target, current_state):
     pay_stat(statname, -amount, target, current_state)
 
 def setstat_token(statname):
+    @token_func(2, 3)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -90,8 +103,8 @@ def set_stat(statname, amount, target, current_state):
     current_state["set_stat"] = current_sets
 
 def gainstat_token(statname):
+    @token_func(2, 3)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])
@@ -102,8 +115,8 @@ def gainstat_token(statname):
     return _actual_token
 
 def losestat_token(statname):
+    @token_func(2, 3)
     def _actual_token(current_state, current_token):
-        check_token_list(current_token, 2, 3)
         if len(current_token) == 2:
             target = owner_this(current_state)
             amount = get_value_from(current_state, current_token[1])

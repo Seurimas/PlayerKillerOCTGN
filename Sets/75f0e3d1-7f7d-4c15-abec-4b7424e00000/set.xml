@@ -103,7 +103,7 @@
          <property name="Description" value="The first time you attack each turn, take 1 standard wound. Deadly Sumac may not be cured until you attack. You may take 2 standard wounds to convert Deadly Sumac to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
          <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
-         <property name="Constant_Script" value="[2, [ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_SUMAC&quot;], [LOSESTATUS, &quot;UNLOCK_SUMAC&quot;], [FAIL, &quot;You may not cure Deadly Sumac while it is in remission.&quot;]]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]]], [TAKEWOUND, 1, &quot;Standard&quot;, [OWNER, THIS]], [GAINSTATUS, &quot;UNLOCK_SUMAC&quot;]]]"/>
+         <property name="Constant_Script" value="[2, [ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_SUMAC&quot;], [LOSESTATUS, &quot;UNLOCK_SUMAC&quot;], [FAIL, &quot;You may not cure Deadly Sumac while it is in remission.&quot;]]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Attack&quot;]]]], [TAKEWOUNDS, 1, &quot;Standard&quot;, [OWNER, THIS]], [GAINSTATUS, &quot;UNLOCK_SUMAC&quot;]]]"/>
          <property name="Use_Script" value="[DO, [TAKEWOUNDS, 2, &quot;Standard&quot;, [OWNER, THIS]], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
@@ -112,7 +112,7 @@
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="Tactics cost 1 additional stamina to play. Curare may not be cured until you play a tactic. You may spend 2 stamina to convert Curare to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [PAYSUBTERFUGE, 1], [INJURE, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]]"/>
          <property name="Constant_Script" value="[2, [ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_CURARE&quot;], [LOSESTATUS, &quot;UNLOCK_CURARE&quot;], [FAIL, &quot;You may not cure Curare while it is in remission.&quot;]]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;Tactic&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [PAYSTAMINA, 1], [GAINSTATUS, &quot;UNLOCK_CURARE&quot;]]]"/>
          <property name="Use_Script" value="[DO, [PAYSTAMINA, 2], [CONVERTINJURY, THIS, &quot;Shadow&quot;]]"/>
     </card>
@@ -132,7 +132,7 @@
          <property name="Subtype" value="Standard"/>
          <property name="Description" value="At the end of your turn, take 1 standard wound."/>
          <property name="Cost" value="3 subterfuge, 1 standard"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [PAYSUBTERFUGE, 2], [INJURE, [GETWOUND, TARGET, &quot;Standard&quot;], THIS]]"/>
+         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [PAYSUBTERFUGE, 3], [INJURE, [GETWOUND, TARGET, &quot;Standard&quot;], THIS]]"/>
          <property name="Constant_Script" value="[0, [ONTURNEND, [DEALONLY, 1, &quot;Standard&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
@@ -200,10 +200,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00013" name="Carrier's Venom">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Subterfuge"/>
-         <property name="Description" value="Deal 1 shadow wound to a target. Ignore the play cost of your next injury action."/>
+         <property name="Description" value="Deal 1 shadow wound to a target. Ignore the subterfuge play cost of your next injury action."/>
          <property name="Cost" value="2 subterfuge"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 1, &quot;Standard&quot;, TARGET], [CONSTANT]"/>
+         <property name="Constant_Script" value="[-1, [ON, [AND, [EQUAL, TYPE, &quot;Injury&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTSUBTERFUGE, 10], [DISCARD]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 

@@ -13,10 +13,21 @@ class Token(object):
         return self.name
 
 def check_token_list(current_token, min_len, max_len):
-    if not type(current_token) is list:
+    if not type(current_token) is list and min_len != 0:
         raise Exception(current_token.name + " must be list head.")
-    if not (min_len <= len(current_token) <= max_len):
+    elif type(current_token) is list and not (min_len <= len(current_token) <= max_len):
         raise Exception("Invalid list len for " + current_token[0].name + ". !%d <= %d <= %d" % (min_len, len(current_token), max_len))
+    
+# Decorator
+def token_func(min_len, max_len):
+    def actual_decorator(func):
+        def decorated_function(current_state, current_token):
+            check_token_list(current_token, min_len, max_len)
+            return func(current_state, current_token)
+        decorated_function.list_head_min = min_len
+        decorated_function.list_head_max = max_len
+        return decorated_function
+    return actual_decorator
     
 def get_list_from(string):
     acc = []
@@ -106,6 +117,45 @@ def follow_script(initial_state, token_list):
             return get_abort_reason(current_state)
     return current_state
 
+def check_token(token, errors):
+    if type(token) is Token:
+        if token_scripts.has_key(token):
+            if hasattr(token_scripts[token], "list_head_min"):
+                if token_scripts[token].list_head_min != 0:
+                    errors.append("Found token %s as non-list head. Should be list head." % token.name)
+        else:
+            errors.append("Did not find script for %s" % token.name)
+    elif type(token) is list:
+        if type(token[0]) is int:
+            for sub_token in token[1:]:
+                check_token(sub_token, errors)
+        else:
+            if token_scripts.has_key(token[0]):
+                if hasattr(token_scripts[token[0]], "list_head_min") and hasattr(token_scripts[token[0]], "list_head_max"):
+                    if len(token) < token_scripts[token[0]].list_head_min:
+                        errors.append("Found token list for %s with len %d (min %d)" % (token[0], len(token), token_scripts[token[0]].list_head_min))
+                    if len(token) > token_scripts[token[0]].list_head_max:
+                        errors.append("Found token list for %s with len %d (max %d)" % (token[0], len(token), token_scripts[token[0]].list_head_max))
+                else:
+                    errors.append("Did not have list constraints for %s" % (token[0]))
+                for sub_token in token[1:]:
+                    check_token(sub_token, errors)
+            else:
+                errors.append("Did not find script for list head %s" % token[0])
+
+def check_script(script):
+    errors = []
+    if type(script) is str:
+        try:
+            script_tokens, remainder = get_list_from(script)
+            script = script_tokens
+        except:
+#             errors.append("!!FAILED TO PARSE: %s" % script)
+            raise
+    for token in script:
+        check_token(token, errors)
+    return errors
+
 def abort(current_state, reason):
     current_state["FAIL"] = reason
 
@@ -115,6 +165,7 @@ def should_abort(current_state):
 def get_abort_reason(current_state):
     return current_state["FAIL"]
 
+@token_func(0, 2)
 def fail_token(current_state, current_token):
     if type(current_token) is Token:
         current_state["FAIL"] = "Action failed."
@@ -125,8 +176,8 @@ add_token_script(Token("FAIL"), fail_token)
 assert(follow_script({}, [1, 2, "True", True, Token("FAIL")]) == "Action failed.")
 assert(follow_script({}, [1, 2, "True", True, [Token("FAIL"), "Really failed."]]) == "Really failed.")
 
+@token_func(4, 4)
 def if_token(current_state, current_token):
-    check_token_list(current_token, 4, 4)
     if get_value_from(current_state, current_token[1]):
         return get_value_from(current_state, current_token[2])
     else:
@@ -137,8 +188,8 @@ assert(follow_script({}, [[Token("IF"), True, Token("FAIL"), "Win"]]) == "Action
 assert(follow_script({}, [[Token("IF"), False, Token("FAIL"), "Win"]]) == {}) # We've returned the final state.
 assert(get_value_from({}, [Token("IF"), False, Token("FAIL"), "Win"]) == "Win") # We've returned the final state.
 
+@token_func(3, 9999)
 def on_token(current_state, current_token):
-    check_token_list(current_token, 3, 999)
     if get_value_from(current_state, current_token[1]):
         tokens = current_token[2:]
         while not should_abort(current_state) and tokens:
@@ -147,6 +198,7 @@ def on_token(current_state, current_token):
     else:
         return None
     
+@token_func(2, 9999)
 def do_token(current_state, current_token):
     check_token_list(current_token, 2, 999)
     tokens = current_token[1:]
@@ -162,8 +214,8 @@ add_token_script(Token("DO"), do_token)
 assert(follow_script({}, [[Token("DO"), True, Token("FAIL")]]) == "Action failed.")
 assert(follow_script({}, [[Token("DO"), True, "Win"]]) == {}) # We've returned the final state.
 
+@token_func(2, 2)
 def not_token(current_state, current_token):
-    check_token_list(current_token, 2, 2)
     if get_value_from(current_state, current_token[1]) == False:
         return True
     else:
@@ -193,8 +245,8 @@ add_token_script(Token("ANY"), any_token)
 assert(get_value_from({}, Token("TRUE")) == True)
 assert(get_value_from({}, Token("FALSE")) == False)
 
+@token_func(2, 9999)
 def and_token(current_state, current_token):
-    check_token_list(current_token, 2, 999)
     for token in current_token[1:]:
         value = get_value_from(current_state, token)
         if not value:
@@ -207,8 +259,8 @@ assert(get_value_from({}, [Token("AND"), True, False]) == False)
 assert(get_value_from({}, [Token("AND"), False, True]) == False)
 assert(get_value_from({}, [Token("AND"), False, False]) == False)
 
+@token_func(2, 9999)
 def or_token(current_state, current_token):
-    check_token_list(current_token, 2, 999)
     for token in current_token[1:]:
         value = get_value_from(current_state, token)
         if value:
@@ -228,8 +280,9 @@ comparisons = {Token("GT"): lambda x, y: x > y,
                Token("EQUAL"): lambda x, y: x == y,
                Token("INEQUAL"): lambda x, y: x != y
                }
+
+@token_func(3, 3)
 def comparison_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     left = get_value_from(current_state, current_token[1])
     right = get_value_from(current_state, current_token[2])
     return comparisons[current_token[0]](left, right)
@@ -254,8 +307,8 @@ assert(get_value_from({}, [Token("EQUAL"), True, False]) == False)
 assert(get_value_from({}, [Token("INEQUAL"), True, True]) == False)
 assert(get_value_from({}, [Token("INEQUAL"), True, False]) == True)
 
+@token_func(3, 3)
 def set_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     token_name = current_token[1].name
     token_value = get_value_from(current_state, current_token[2])
     current_state[token_name] = token_value
@@ -263,10 +316,10 @@ def set_token(current_state, current_token):
 
 add_token_script(Token("SET"), set_token)
 
+@token_func(2, 2)
 def get_token(current_state, current_token):
-    check_token_list(current_token, 2, 2)
     token_name = current_token[1].name
     return current_state[token_name]
 
-add_token_script(Token("GET"), set_token)
+add_token_script(Token("GET"), get_token)
 assert(get_value_from({"VARIABLE": 1}, [Token("SET"), Token("VARIABLE"), 1]) == 1)

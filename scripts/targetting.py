@@ -1,7 +1,15 @@
 try:
-    from script_base import add_token_script, follow_script, get_value_from, Token
+    from script_base import add_token_script, follow_script, get_value_from, Token, token_func
 except:
-    pass
+    def token_func(min_len, max_len):
+        def actual_decorator(func):
+            def decorated_function(current_state, current_token):
+                check_token_list(current_token, min_len, max_len)
+                return func(current_state, current_token)
+            decorated_function.list_head_min = min_len
+            decorated_function.list_head_max = max_len
+            return decorated_function
+        return actual_decorator
 
 def target_token(current_state, current_token):
     if type(current_token) is not Token:
@@ -16,6 +24,7 @@ def targetcount_token(current_state, current_token):
         raise Exception("TARGETCOUNT cannot be a list head. [%s]" % (current_token, ))
     return len(current_state["TARGETS"]) if current_state.has_key("TARGETS") else (1 if current_state.has_key("TARGET") else 0)
 
+@token_func(2, 2)
 def each_target(current_state, current_token):
     if not type(current_token) is list:
         raise Exception("EACHTARGET requires arguments to be evaluated")
@@ -49,8 +58,8 @@ def cards_in_source(source):
     else:
         raise Exception("Failed to find valid source definition from %s" % (source, ))
 
+@token_func(4, 4)
 def choosex_token(current_state, current_token):
-    check_token_list(current_token, 4, 4)
     prompt = get_value_from(current_state, current_token[1])
     minimum = get_value_from(current_state, current_token[2])
     maximum = get_value_from(current_state, current_token[3])
@@ -62,8 +71,8 @@ def choosex_token(current_state, current_token):
     else:
         current_state["FAIL"] = "Cancelled picking integer."
 
+@token_func(3, 999)
 def choose_token(current_state, current_token):
-    check_token_list(current_token, 3, 999)
     prompt = get_value_from(current_state, current_token[1])
     choices = []
     for token in current_token[2:]:
@@ -76,8 +85,8 @@ def choose_token(current_state, current_token):
     else:
         return picked - 1
 
+@token_func(3, 3)
 def isenemy_token(current_state, current_token):
-    check_token_list(current_token, 3, 3)
     candidate = get_value_from(current_state, current_token[1])
     myself = get_value_from(current_state, current_token[2])
     if candidate.Type == "Class" and myself.Type == "Class":
@@ -85,26 +94,35 @@ def isenemy_token(current_state, current_token):
             return True
     return False
 
+@token_func(2, 2)
 def ischaracter_token(current_state, current_token):
-    check_token_list(current_token, 2, 2)
     candidate = get_value_from(current_state, current_token[1])
     if candidate.Type == "Class":
         return True
     else:
         return False
     
+@token_func(1, 1)
 def getenemy_token(current_state, current_token):
-    check_token_list(current_token, 1, 1)
     return get_value_from(current_state, [Token("GETTARGET"),
                                           [Token("ISENEMY"), Token("CHECKED"), Token("CHARACTER")],
                                           Token("TABLE")])
     
+@token_func(1, 1)
 def getcharacter_token(current_state, current_token):
-    check_token_list(current_token, 1, 1)
     return get_value_from(current_state, [Token("GETTARGET"),
                                           [Token("ISCHARACTER"), Token("CHECKED")],
                                           Token("TABLE")])
 
+@token_func(1, 2)
+def is_target_token(current_state, current_token):
+    if len(current_token) == 2:
+        checked = get_value_from(current_token[1])
+    else:
+        checked = owner_this(current_state)
+    return checked in current_state.get("TARGETS", []) or checked == current_state.get("TARGET", 8675309)
+
+@token_func(3, 5)
 def gettarget_token_dual(current_state, current_token):
     if not type(current_token) is list:
         raise Exception(current_token + " must be list head")
