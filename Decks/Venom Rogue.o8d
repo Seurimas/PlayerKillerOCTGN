@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+<section name="Class" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00000">Rogue</card>
+</section>
+<section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00004">Dodging</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00005">Dripping Dagger</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00006">Smoke Bomb</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30000">Healing Elixir</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Poultice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Restoration Salve</card>
+</section>
+<section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00001">Sneak Attack</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00002">Slice</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00003">Haemorrhage</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e0000c">Throat Slash</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e0000d">Hide</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e0000e">Sneak</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">One Step Back</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30004">Bruised But Not Beaten</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00011">Toxic Shock</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30009">Two Steps Forward</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20016">Martial Poise</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20017">Violent Disposition</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00012">Carrier's Venom</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00014">Carrier's Strike</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e00015">Shadowed Sight</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e00019">Omega Venom</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e0001a">Alpha Venom</card>
+</section>
+</deck>

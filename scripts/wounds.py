@@ -26,8 +26,9 @@ wounds_markers = {"Standard":("Standard Wound", "7ae6b4f2-afee-423a-bc18-70a236b
          }
 
 PREVENTABLE = ["DEAL", "DEALONLY", "DEALEXTRA"]
+DEALT = PREVENTABLE + ["DEALALWAYS", "DEALALWAYSONLY", "DEALEXTRAALWAYS"]
 CURED = ["CURE"]
-REMOVED = ["CURE", "REMOVENORMALWOUNDS", "INJURED", "CONVERTINJURY"]
+REMOVED = ["CURE", "REMOVENORMALWOUNDS", "AFFLICTED", "CONVERTAFFLICTION"]
 PREVENT = "PREVENT"
 
 if __name__ == "__main__":
@@ -50,11 +51,14 @@ def remove_wounds(current_state, target, removed_wounds, remove_type="REMOVE", e
     current_targets = current_state.get("remove", {})
     target_wounds = current_targets.get(target, [])
     for old_wounds in target_wounds:
-        if old_wounds[0] == removed_wounds[0]:
+        if wounds_equal(old_wounds[0], removed_wounds[0]) and extra == None:
             old_wounds[1] += removed_wounds[1]
             break
     else:
-        target_wounds.append(list(removed_wounds))
+        if extra is None:
+            target_wounds.append(list(removed_wounds))
+        else:
+            target_wounds.append(list(removed_wounds) + [extra])
     current_targets[target] = target_wounds
     current_state["remove"] = current_targets
     if extra is None:
@@ -86,15 +90,20 @@ def prevent_token(current_state, current_token):
         wound_type = get_value_from(current_state, current_token[3])
     prevent_wounds(current_state, target, wound_type, wound_count)
 
+def wounds_equal(wound1, wound2):
+    return (type(wound1) == type(wound2) and wound1 == wound2) or wound1 == Token("ANY") or wound2 == Token("ANY")
+
 def get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False):
     count = 0
     events = current_state.get("events", [])
     for event in events:
-        if (not preventable_only) or event[0] in PREVENTABLE:
-            if (target == Token("ANY") or event[1][0] == target) and type(event[1][1]) == type(wound_type) and event[1][1] == wound_type:
+        if event[0] not in DEALT:
+            continue # Not a dealt-wounds event.
+        elif (not preventable_only) or event[0] in PREVENTABLE:
+            if (target == Token("ANY") or event[1][0] == target) and wounds_equal(event[1][1], wound_type):
                 count += event[1][2]
         elif (not include_prevented) and event[0] == PREVENT:
-            if (target == Token("ANY") or event[1][0] == target) and type(event[1][1]) == type(wound_type) and event[1][1] == wound_type:
+            if (target == Token("ANY") or event[1][0] == target) and wounds_equal(event[1][1], wound_type):
                 count -= event[1][2]
     return count
     
@@ -106,7 +115,7 @@ def get_wounds_removed(current_state, target, wound_type, cured_only=False):
             continue
         if not event[1][0] == target:
             continue
-        if not event[1][1] == wound_type:
+        if not wounds_equal(event[1][1], wound_type):
             continue
         count += event[1][2]
     return count
@@ -130,6 +139,19 @@ def cured_token(current_state, current_token):
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
     return get_wounds_removed(current_state, target, wound_type, cured_only=True)
+
+@token_func(2, 2)
+def each_cured_token(current_state, current_token):
+    wound_validator = current_token[1]
+    events = current_state.get("events", [])
+    for event in events:
+        if not event[0] in REMOVED:
+            continue
+        if type(event[1][1]) is Card: # Affliction
+            current_state["CHECKED"] = event[1][1]
+        elif type(event[1][1]) is str: # Wound
+            current_state["CHECKED"] = ("WOUND", event[1][0], event[1][1])
+        get_value_from(current_state, wound_validator)
 
 def deal(current_state, current_token, deal_type="DEAL"):
     wound_count = get_value_from(current_state, current_token[1])
@@ -169,10 +191,10 @@ def wounds_token_dual(current_state, current_token):
         wound_type = get_value_from(current_state, current_token[2])
     normal_wounds = get_normal_wounds_count(target, wound_type, current_state=current_state)
     if current_token[0] == Token("WOUNDS"):
-        injuries = get_injuries_count(wound_type, target)
+        afflictions = get_afflictions_count(wound_type, target)
     elif current_token[0] == Token("NORMALWOUNDS"):
-        injuries = 0
-    return normal_wounds + injuries
+        afflictions = 0
+    return normal_wounds + afflictions
 
 @token_func(3, 3)
 def getwound_token(current_state, current_token):
@@ -183,21 +205,36 @@ def getwound_token(current_state, current_token):
     else:
         return None
     
-@token_func(3, 3)
-def injure_token(current_state, current_token):
-    target_wound = get_value_from(current_state, current_token[1])
-    injury = get_value_from(current_state, current_token[2])
+@token_func(3, 4)
+def afflict_token_dual(current_state, current_token):
+    if len(current_token) == 3:
+        target_wound = get_value_from(current_state, current_token[1])
+        affliction = get_value_from(current_state, current_token[2])
+    else:
+        target = get_value_from(current_state, current_token[1])
+        wound_type = get_value_from(current_state, current_token[2])
+        affliction = get_value_from(current_state, current_token[3])
+        if target.markers[wounds_markers[wound_type]] != 0:
+            target_wound = ("WOUND", target, wound_type)
+        else:
+            abort(current_state, "Target has no %s wounds" % wound_type)
+            return
     if type(target_wound) is not tuple:
         raise Exception("Expected wound representation, not %s" % (type(target_wound)))
     else:
-        remove_wounds(current_state, target_wound[1], (target_wound[2], 1), "INJURED")
-        add_wounds(current_state, target_wound[1], (injury, 1), "INJURE")
+        if current_token[0].name == "AFFLICT" and get_afflictions_count(affliction, target_wound[1], current_state):
+            abort(current_state, "That target already has %s" % affliction.name)
+        if type(target_wound) is tuple:
+            remove_wounds(current_state, target_wound[1], (target_wound[2], 1), "AFFLICTED")
+            add_wounds(current_state, target_wound[1], (affliction, 1), "AFFLICT")
+        elif type(target_wound) is Card:
+            add_wounds(current_state, target_wound, (affliction, 1), "AFFLICT")
     
 @token_func(3, 3)
-def convert_injury_token(current_state, current_token):
-    injury = get_value_from(current_state, current_token[1])
+def convert_affliction_token(current_state, current_token):
+    affliction = get_value_from(current_state, current_token[1])
     target_wound_type = get_value_from(current_state, current_token[2])
-    remove_wounds(current_state, target, (injury, 1), "CONVERTINJURY", extra=target_wound_type)
+    remove_wounds(current_state, card_owner(affliction), (affliction, 1), "CONVERTAFFLICTION", extra=target_wound_type)
     
 def get_normal_wounds_count(target, wound_type, current_state=None):
     if current_state is not None:
@@ -206,28 +243,28 @@ def get_normal_wounds_count(target, wound_type, current_state=None):
         just_removed = 0
     return target.markers[wounds_markers[wound_type]] - just_removed
 
-def get_injuries_count(wound_type, target, current_state=None):
-    injuries = 0
+def get_afflictions_count(wound_type, target, current_state=None):
+    afflictions = 0
     for card in table:
-        if card.Type == "Injury" and card.controller == target.controller:
+        if card.Type == "Affliction" and card.controller == target.controller:
             if type(wound_type) is str and card.Subtype == wound_type:
                 if current_state == None or not get_wounds_removed(current_state, target, card):
-                    injuries += 1
+                    afflictions += 1
             elif type(wound_type) is Card and wound_type.name == card.name:
                 if current_state == None or not get_wounds_removed(current_state, target, card):
-                    injuries += 1
-    return injuries
+                    afflictions += 1
+    return afflictions
 
 @token_func(2, 3)
-def injuries_token(current_state, current_token):
+def afflictions_token(current_state, current_token):
     if len(current_token) == 2:
         target = owner_this(current_state)
         wound_type = get_value_from(current_state, current_token[1])
     else:
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
-    injuries = get_injuries_count(wound_type, target)
-    return injuries
+    afflictions = get_afflictions_count(wound_type, target)
+    return afflictions
 
 @token_func(2, 4)
 def remove_normal_wounds_token(current_state, current_token):
@@ -301,11 +338,12 @@ def cure_token(current_state, current_token):
             if get_value_from(current_state, wound_validator):
                 choices.append("Normal %s Wound on %s (%s)" % (wound_type, target.name, target.controller.name))
                 wound_choices.append(wound_type)
-        elif get_injuries_count(wound_type, target, current_state) != 0:
+#         elif get_afflictions_count(wound_type, target, current_state) != 0:
+        if get_afflictions_count(wound_type, target, current_state) != 0:
             for card in table:
                 current_state["CHECKED"] = card
-                if card.Type == "Injury" and card.controller == target.controller and get_value_from(current_state, wound_validator):
-                    if get_injuries_count(card, target, current_state) != 0: # Make sure we haven't already cured the injury.
+                if card.Type == "Affliction" and card.controller == target.controller and get_value_from(current_state, wound_validator):
+                    if get_afflictions_count(card, target, current_state) != 0: # Make sure we haven't already cured the affliction.
                         choices.append("%s on %s" % (card.name, card.controller.name))
                         wound_choices.append(card)
     colorsList = ["#FFFFFF" for _ in choices]

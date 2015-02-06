@@ -37,7 +37,10 @@ def feedConstants(card, x=0, y=0):
             return
     whisper("Result: %s" % state)
     
-set_sizes = [0x1d, 0x27, 0x18, 0x12]
+set_sizes = [0x1a, # Rogue card count
+             0x2b, # Mage card count
+             0x1b, # Fighter card count
+             0x0e] # General card count
 
 def check_scripts(group, x=0, y=0):
     mute()

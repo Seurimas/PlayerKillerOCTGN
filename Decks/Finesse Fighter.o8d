@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+<section name="Class" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20000">Fighter</card>
+</section>
+<section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20005">Longsword</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20007">Kite Shield</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20008">Scalemail</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30000">Healing Elixir</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Poultice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Restoration Salve</card>
+</section>
+<section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20004">Multi Strike</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000e">True Strike</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20010">Quick Strike</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20011">Deft Strike</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20012">Slash</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20013">Sunder</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">One Step Back</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30004">Bruised But Not Beaten</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30007">Limping</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30008">Staggered</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20014">Berserker's Fury</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20016">Martial Poise</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20017">Violent Disposition</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20018">Masterful Strike</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000a">Exhaustion</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000b">Weariness</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000c">Burst of Energy</card>
+</section>
+</deck>

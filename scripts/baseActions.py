@@ -4,17 +4,51 @@ flipModY = -Card.height()
 MAX_HAND_SIZE = 7
 
 post_priorities = [0, 1, 2, 3]
-pre_priorities = [-2, -1]
+pre_priorities = [-3, -2, -1]
 all_priorities = pre_priorities + post_priorities
 
 def checkDeck(player, groups):
     mute()
     if player != me: return
     notify("Checking deck of " + me.name)
+    current_state = {"TYPE":"DeckLoad"}
+    for card in me.hand:
+        if card.Type == "Item":
+            card.moveToBottom(me.piles["Backpack"])
+        elif card.Type == "Class":
+            script_tokens, remainder = get_list_from(card.Play_Script)
+            current_state = follow_script(current_state, script_tokens)
+            if type(current_state) is str:
+                notify("Checking deck of %s failed because: %s" % (me.name, current_state))
+                return
+            break
+    else:
+        notify("Checked deck of %s failed because: No Class card in hand." % (me.name, ))
+    for card in me.piles["Backpack"]:
+        if card.Type != "Item":
+            card.moveToBottom(me.piles["Deck"])
+        else:
+            script_tokens, remainder = get_list_from(card.Play_Script)
+            current_state = follow_script(current_state, script_tokens)
+            if type(current_state) is str:
+                notify("Checking deck of %s failed because: %s" % (me.name, current_state))
+                return
+    if current_state["WEIGHT"] < 0:
+        notify("Checked deck of %s failed because: %s over weight!" % (me.name, -current_state["WEIGHT"]))
+    notify("%s" % (current_state))
+    activate_state_change(current_state)
+    type_counts = {}
+    for card in me.piles["Deck"]:
+        try:
+            type_counts[card.Type] += 1
+        except KeyError:
+            type_counts[card.Type] = 1
+    for card_type in type_counts:
+        whisper("Your deck contains %d %s" % (type_counts[card_type], card_type))
 
 desiredLocations = {"Class":(0, 0),
                     "Item":(75, 0),
-                    "Injury":(0, 100),
+                    "Affliction":(0, 100),
                     "Tactic":(0, 200),
                     "Attack":(0, 300),
                     "Spell":(0, 400)}
@@ -31,6 +65,25 @@ def getCardX(card):
 
 def getCardY(card):
     return desiredLocations.get(card.Type)[1] * flipBoard + flipModY
+
+def rearrange_afflictions(player):
+    aff_i = 1
+    if player != me: return
+    for card in table:
+        if card.Type == "Affliction" and card.controller == player:
+            x = -aff_i * card.width() * flipBoard + flipModX
+            y = flipModY
+            card.moveToTable(x, y)
+            aff_i += 1
+            
+def rearrange_items(player):
+    item_i = 1
+    for card in table:
+        if card.Type == "Item" and card.controller == player:
+            x = (desiredLocations["Item"][0] + item_i * card.width()) * flipBoard + flipModX
+            y = flipModY
+            card.moveToTable(x, y)
+            item_i += 1
 
 def checkMovedCard(player, card, fromGroup, toGroup,
                    oldIndex, index,
@@ -92,6 +145,7 @@ def playCard(card, x = 0, y = 0):
         useCard(card)
     else:
         card.moveToTable(getCardX(card), getCardY(card))
+        rearrange_items(card.controller)
 
 def createDummyCard(card):
     card = table.create(card.model, getCardX(card), getCardY(card))
@@ -142,9 +196,8 @@ def applyWithPriorities(state, priorities, ignore_weapons=False):
                 continue
             if type(state) is dict:
                 state = applyCard(priority, modifier_card, state)
-                if should_abort(state):
-                    notify("%s caused failure: %s" % (modifier_card.name, state["FAIL"]))
-                    state = state["FAIL"]
+                if type(state) is str:
+                    notify("%s caused failure: %s" % (modifier_card.name, state))
     return state
 
 def useCard(card, x = 0, y = 0):
@@ -180,7 +233,6 @@ def useCard(card, x = 0, y = 0):
     else:
         state = state
     if type(state) is str:
-        notify(str(base_state))
         notify("Failed: " + state)
     else:
         state = applyWithPriorities(state, post_priorities)
@@ -202,6 +254,8 @@ def replace_this(state, card, types=False):
     if types:
         old_state["TYPE"] = state["TYPE"]
         old_state["SUBTYPE"] = state["SUBTYPE"]
+        old_state["PLAYEDCARD"] = state["PLAYEDCARD"]
+        state["PLAYEDCARD"] = card
         state["TYPE"] = card.Type
         state["SUBTYPE"] = card.Subtype
     return old_state
@@ -249,7 +303,8 @@ def sot(table):
         if player.Stamina != 0:
             whisper(player.name + "'s turn has not ended. All players must be at 0 stamina.")
             return
-    me.setActivePlayer()
+    if not me.isActivePlayer:
+        me.setActivePlayer()
     clear_turn()
     notify("Start of " + me.name + "'s turn!")
     state = {"CHARACTER": my_class(me),
@@ -270,7 +325,7 @@ def sot(table):
 def mark_card_temporary(card):
     card.highlight = "#0000FF"
     
-def mark_card_injury(card):
+def mark_card_affliction(card):
     card.highlight = "#FF0000"
     
 def mark_card_constant(card):
@@ -298,10 +353,10 @@ def eot(table):
     if type(state) is str:
         notify("Failed: " + state)
         return
-    notify("%s" % state)
     activate_state_change(state)
     notify("End of " + me.name + "'s turn!")
-    players[1].setActivePlayer()
+    if len(players) != 1:
+        players[1].setActivePlayer()
     if len(me.hand) > MAX_HAND_SIZE:
         notify(me.name + " needs to discard down to " + str(MAX_HAND_SIZE))
     clear_table_for_me(table)

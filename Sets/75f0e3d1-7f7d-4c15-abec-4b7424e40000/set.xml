@@ -48,7 +48,7 @@
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40004" name="Goblin Fever">
-         <property name="Type" value="Injury"/>
+         <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Shadow"/>
          <property name="Description" value="Standard wounds may not be cured. Convert this wound to a normal standard wound at the end of your turn."/>
          <property name="Cost" value="1 standard"/>

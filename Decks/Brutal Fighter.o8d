@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+<section name="Class" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20000">Fighter</card>
+</section>
+<section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20006">Cleaving Axe</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e20009">Platemail</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30000">Healing Elixir</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Poultice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Restoration Salve</card>
+</section>
+<section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20001">Mutilate</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20002">Power Attack</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20003">Dismember</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000a">"My Hand!"</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000b">"My Leg!"</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000c">"My Eye!"</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000d">Heavy Bleeding</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000e">True Strike</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e2000f">Behead</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20013">Sunder</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">One Step Back</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30004">Bruised But Not Beaten</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20014">Berserker's Fury</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20015">Executioner's Call</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e20016">Martial Poise</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e2001b">Arkon's Ruling</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e3000c">Burst of Energy</card>
+</section>
+</deck>

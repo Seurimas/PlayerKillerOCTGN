@@ -50,11 +50,11 @@ def cards_in_source(source):
     elif source == Token("HAND"):
         return me.hand
     elif source == Token("DISCARD"):
-        return me.pile["Discard"]
-    elif source == Token("Deck"):
-        return me.pile["Deck"]
-    elif source == Token("Backpack"):
-        return me.pile["Backpack"]
+        return me.piles["Discard"]
+    elif source == Token("DECK"):
+        return me.piles["Deck"]
+    elif source == Token("BACKPACK"):
+        return me.piles["Backpack"]
     else:
         raise Exception("Failed to find valid source definition from %s" % (source, ))
 
@@ -84,6 +84,18 @@ def choose_token(current_state, current_token):
         current_state["FAIL"] = "Cancelled making choice."
     else:
         return picked - 1
+
+@token_func(2, 2)
+def choose_type_token(current_state, current_token):
+    prompt = get_value_from(current_state, current_token[1])
+    choices = ["Attack", "Spell", "Affliction", "Tactic"]
+    colorList = ["#FFFFFF" for _ in choices]
+    customButtons = ["Cancel"]
+    picked = askChoice(prompt, choices, colorList, customButtons=customButtons)
+    if picked == 0 or picked == -1:
+        current_state["FAIL"] = "Cancelled making type choice."
+    else:
+        return choices[picked - 1]
 
 @token_func(3, 3)
 def isenemy_token(current_state, current_token):
@@ -117,10 +129,10 @@ def getcharacter_token(current_state, current_token):
 @token_func(1, 2)
 def is_target_token(current_state, current_token):
     if len(current_token) == 2:
-        checked = get_value_from(current_token[1])
+        checked = get_value_from(current_state, current_token[1])
     else:
         checked = owner_this(current_state)
-    return checked in current_state.get("TARGETS", []) or checked == current_state.get("TARGET", 8675309)
+    return checked in current_state.get("TARGETS", []) or checked == current_state.get("TARGET", None)
 
 @token_func(3, 5)
 def gettarget_token_dual(current_state, current_token):
@@ -128,9 +140,9 @@ def gettarget_token_dual(current_state, current_token):
         raise Exception(current_token + " must be list head")
     elif len(current_token) != 5 and current_token[0] == Token("GETTARGETS"):
         raise Exception("GETTARGETS requires 4 arguments: minimum target count, maximum target count, target selector, source definition")
-    elif len(current_token) != 3 and current_token[0] == Token("GETTARGET"):
-        raise Exception("GETTARGET requires 2 arguments: target selector, source definition")
-    if current_token[0] == Token("GETTARGET"):
+    elif len(current_token) != 3 and (current_token[0] == Token("GETTARGET") or current_token[0] == Token("CHOOSETARGET")):
+        raise Exception("%s requires 2 arguments: target selector, source definition" % current_token[0])
+    if current_token[0] == Token("GETTARGET") or current_token[0] == Token("CHOOSETARGET"):
         min_count = 1
         max_count = 1
         target_validator = current_token[1]
@@ -175,6 +187,8 @@ def gettarget_token_dual(current_state, current_token):
         current_state["TARGETS"] = picked_cards
     elif current_token[0] == Token("GETTARGET"):
         current_state["TARGET"] = picked_cards[0]
+    elif current_token[0] == Token("CHOOSETARGET"):
+        return picked_cards[0]
     return picked_cards
 
 if __name__ == "__main__":

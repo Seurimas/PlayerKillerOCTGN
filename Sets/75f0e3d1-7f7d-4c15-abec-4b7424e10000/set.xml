@@ -11,7 +11,7 @@
          <property name="Type" value="Class"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="At the start of your turn, gain 1 mana."/>
-         <property name="Cost" value="15 weight, 10 health"/>
+         <property name="Cost" value="15 weight, 15 health"/>
          <property name="Play_Script" value="[GAINWEIGHT, 15]"/>
          <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINMANA, 1]]]"/>
          <property name="Use_Script" value=""/>
@@ -42,7 +42,7 @@
          <property name="Subtype" value="Fire"/>
          <property name="Description" value="Remove 1 standard wound from a target if able. If you do, deal 2 burn wounds to that target. Otherwise, deal 1  burn wound and 1 standard wound."/>
          <property name="Cost" value="3 mana"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 3], [IF, [GT, [WOUNDS, TARGET, &quot;Standard&quot;], 0], [DO, [REMOVENORMALWOUNDS, 1, &quot;Standard&quot;, TARGET], [DEAL, 2, &quot;Burn&quot;, TARGET]], [DO, [DEAL, 1, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Burn&quot;, TARGET]]]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 3], [IF, [GT, [WOUNDS, TARGET, &quot;Standard&quot;], 0], [DO, [REMOVENORMALWOUNDS, TARGET, 1, &quot;Standard&quot;], [DEAL, 2, &quot;Burn&quot;, TARGET]], [DO, [DEAL, 1, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Burn&quot;, TARGET]]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -52,7 +52,7 @@
          <property name="Subtype" value="Fire"/>
          <property name="Description" value="Remove up to 2 normal standard wounds from a target. If you remove 2, deal 1 burn wound to the target."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value="[GETCHARACTER], [SET, NUMBER, [CHOOSEX, &quot;How many standard wounds?&quot;, 1, [IF, [GTE, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], 2], 2, 1]]], [PAYMANA, 1], [REMOVENORMALWOUNDS, [GET, NUMBER], &quot;Standard&quot;, TARGET], [ON, [EQUAL, [GET, NUMBER], 2], [DEAL, 2, &quot;Burn&quot;, TARGET]]"/>
+         <property name="Play_Script" value="[GETCHARACTER], [SET, NUMBER, [CHOOSEX, &quot;How many standard wounds?&quot;, 1, [IF, [GTE, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], 2], 2, 1]]], [PAYMANA, 1], [REMOVENORMALWOUNDS, TARGET, [GET, NUMBER], &quot;Standard&quot;], [ON, [EQUAL, [GET, NUMBER], 2], [DEAL, 2, &quot;Burn&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -62,7 +62,7 @@
          <property name="Subtype" value="Fire"/>
          <property name="Description" value="Convert all normal burn wounds on a target to standard wounds. If you are not the target, gain 1 mana for each burn wound converted this way."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value="[GETCHARACTER], [PAYMANA, 1], [SET, NUMBER, [NORMALWOUNDS, TARGET, &quot;Burn&quot;]], [REMOVENORMALWOUNDS, TARGET, [GET, NUMBER], &quot;Burn&quot;], [TAKEWOUNDS, TARGET, [GET, NUMBER], &quot;Standard&quot;], [ON, [NOT, [EQUAL, TARGET, CHARACTER]], [GAINMANA, [GET, NUMBER]]]"/>
+         <property name="Play_Script" value="[GETCHARACTER], [PAYMANA, 1], [SET, NUMBER, [NORMALWOUNDS, TARGET, &quot;Burn&quot;]], [REMOVENORMALWOUNDS, TARGET, [GET, NUMBER], &quot;Burn&quot;], [TAKEWOUNDS, [GET, NUMBER], &quot;Standard&quot;, TARGET], [ON, [NOT, [EQUAL, TARGET, CHARACTER]], [GAINMANA, [GET, NUMBER]]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -87,7 +87,7 @@
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10008" name="Shiver">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10008" name="Frostbite">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
          <property name="Description" value="Remove 1 standard wound from a target. If you do, deal 1 frost wounds to the target."/>
@@ -102,8 +102,8 @@
          <property name="Subtype" value="Wand"/>
          <property name="Description" value="Spells deal 2 additional standard wound."/>
          <property name="Cost" value="8 weight"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Spell&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 2, &quot;Standard&quot;]]]"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 8]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 2, &quot;Standard&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -112,8 +112,8 @@
          <property name="Subtype" value="Wand"/>
          <property name="Description" value="Spells deal 1 additional burn wound. This does not apply to spells which deal frost wounds."/>
          <property name="Cost" value="5 weight"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Spell&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [EQUAL, 0, [DEALT, ANY, &quot;Frost&quot;]]], [DEALEXTRA, 1, &quot;Burn&quot;]]]"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 5]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]], [EQUAL, 0, [DEALT, ANY, &quot;Frost&quot;]]], [DEALEXTRA, 1, &quot;Burn&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -122,8 +122,8 @@
          <property name="Subtype" value="Wand"/>
          <property name="Description" value="Spells deal 1 additional frost wound. This does not apply to spells which deal burn wounds."/>
          <property name="Cost" value="5 weight"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Spell&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [EQUAL, 0, [DEALT, ANY, &quot;Burn&quot;]]], [DEALEXTRA, 1, &quot;Frost&quot;]]]"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 5]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]], [EQUAL, 0, [DEALT, ANY, &quot;Burn&quot;]]], [DEALEXTRA, 1, &quot;Frost&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -133,7 +133,7 @@
          <property name="Description" value="When you are the target of an attack, the attacker takes 1 burn wound. Keep in play until the start of your next turn."/>
          <property name="Cost" value="2 mana"/>
          <property name="Play_Script" value="[PAYMANA, 2], [CONSTANT]"/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [ISTARGET]], [TAKEWOUNDS, 1, &quot;Burn&quot;, CHARACTER]], [ONTURNSTART, [DISCARD, THIS]]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [ISTARGET]], [TAKEWOUNDS, 1, &quot;Burn&quot;, CHARACTER]], [ONTURNSTART, [DISCARD, THIS]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -143,36 +143,36 @@
          <property name="Description" value="When you are the target of an attack, the attacker takes 1 frost wound. Keep in play until the start of your next turn."/>
          <property name="Cost" value="2 mana"/>
          <property name="Play_Script" value="[PAYMANA, 2], [CONSTANT]"/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;Attack&quot;], [ISTARGET]], [TAKEWOUNDS, 1, &quot;Frost&quot;, CHARACTER]], [ONTURNSTART, [DISCARD, THIS]]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [ISTARGET]], [TAKEWOUNDS, 1, &quot;Frost&quot;, CHARACTER]], [ONTURNSTART, [DISCARD, THIS]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000e" name="Wildfire">
-         <property name="Type" value="Injury"/>
+         <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Burn"/>
-         <property name="Description" value="At the end of any turn, take 1 standard wound if you were dealt any burn wounds that turn. You may have any number of Wildfire injuries."/>
+         <property name="Description" value="At the end of any turn, take 1 standard wound if you were dealt any burn wounds that turn. You may have any number of Wildfire afflictions."/>
          <property name="Cost" value="1 mana, 1 burn"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Burn&quot;], [PAYMANA, 1], [INJURE, [GETWOUND, TARGET, &quot;Burn&quot;], THIS]]"/>
-         <property name="Constant_Script" value="[0, [ONTURNEND, [ON, [THISTURN, [DEALT, [OWNER, THIS], &quot;Burn&quot;]], [TAKEWOUNDS, 1, &quot;Standard&quot;]]]]"/>
+         <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Burn&quot;], [DO, [PAYMANA, 1], [AFFLICTMANY, [GETWOUND, TARGET, &quot;Burn&quot;], THIS]], [FAIL, &quot;That target does not have any burn wounds.&quot;]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, TYPE, &quot;TurnEnd&quot;], [THISTURN, [DEALT, [OWNER, THIS], &quot;Burn&quot;]]], [TAKEWOUNDS, 1, &quot;Standard&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1000f" name="Frozen">
-         <property name="Type" value="Injury"/>
+         <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Frost"/>
          <property name="Description" value="At the start of your turn, lose 1 stamina. You may have any number of Frozen wounds, but only ever lose 1 stamina a turn from them."/>
          <property name="Cost" value="3 mana, 1 frost"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Frost&quot;], [PAYMANA, 3], [INJURE, [GETWOUND, TARGET, &quot;Frost&quot;], THIS]]"/>
+         <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Frost&quot;], [DO, [PAYMANA, 3], [AFFLICTMANY, [GETWOUND, TARGET, &quot;Frost&quot;], THIS]], [FAIL, &quot;That target does not have any frost wounds.&quot;]]"/>
          <property name="Constant_Script" value="[0, [ONTURNSTART, [ON, [NOT, [STATUS, &quot;Frozen&quot;]], [LOSESTAMINA, 1], [GAINSTATUS, &quot;Frozen&quot;]]], [ONTURNEND, [LOSESTATUS, &quot;Frozen&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10010" name="Arcane Shock">
-         <property name="Type" value="Injury"/>
+         <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Standard"/>
          <property name="Description" value="At the start of your turn, if you have any non-standard wounds then take 1 standard wound."/>
          <property name="Cost" value="1 mana, 1 standard"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [PAYMANA, 1], [INJURE, [GETWOUND, TARGET, &quot;Standard&quot;], THIS]]"/>
+         <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [DO, [PAYMANA, 1], [AFFLICT, [GETWOUND, TARGET, &quot;Standard&quot;], THIS]], [FAIL, &quot;That target does not have any standard wounds.&quot;]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -182,7 +182,7 @@
          <property name="Subtype" value="Potion"/>
          <property name="Description" value="Discard: gain 2 mana."/>
          <property name="Cost" value="1 weight"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[PAYWEIGHT, 1]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value="[DISCARD, THIS], [GAINMANA, 2]"/>
     </card>
@@ -192,8 +192,8 @@
          <property name="Subtype" value="Accessory"/>
          <property name="Description" value="The first spell you cast this turn costs 1 less mana."/>
          <property name="Cost" value="4 weight"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value="[-1, [ON, [AND, [EQUAL, TYPE, &quot;Spell&quot;], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Spell&quot;]]]], [REDUCECOSTMANA, 1]]]"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 4]"/>
+         <property name="Constant_Script" value="[-1, [ON, [AND, [ISSPELL], [NOT, [ISATTACK]], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [EQUAL, TYPE, &quot;Spell&quot;]]]], [REDUCECOSTMANA, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -202,12 +202,22 @@
          <property name="Subtype" value="Armor"/>
          <property name="Description" value="1 stamina: Gain 1 mana."/>
          <property name="Cost" value="2 weight"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[PAYWEIGHT, 2]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value="[PAYSTAMINA, 1], [GAINMANA, 1]"/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10014" name="Familiar">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10014" name="Spellsword's Blade">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Weapon"/>
+         <property name="Description" value="You may spend 1 mana when attacking to treat that attack as a spell as well (gaining all spell-related effects)."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 3]"/>
+         <property name="Constant_Script" value="[-2, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [ON, [EQUAL, 0, [CHOOSE, &quot;Spend 1 mana to treat this attack as a spell as well?&quot;, &quot;Yes&quot;, &quot;No&quot;]], [PAYMANA, 1], [MAKEMESPELL]]]]"/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10015" name="Familiar">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Pet"/>
          <property name="Description" value="Summon an ally FAMILIAR with 3 health and 1 stamina. It may spend its stamina to give you 1 mana or attack to deal 1 standard wound."/>
@@ -217,17 +227,17 @@
          <property name="Use_Script" value="[ON, [STATUS, THIS, &quot;FINISHED&quot;], [FAIL, &quot;Your familiar has already acted this turn.&quot;]], [IF, [CHOOSE, &quot;What do you want your familiar to do?&quot;, &quot;Attack&quot;, &quot;Give mana&quot;], [GAINMANA, 1], [DO, [GETENEMY], [DEALONLY, 1, &quot;Standard&quot;, TARGET]]], [GAINSTATUS, THIS, &quot;FINISHED&quot;]"/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10015" name="Mana Shield">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10016" name="Mana Shield">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Wall"/>
-         <property name="Description" value="Keep in play. On being dealt at least 2 standard wounds, prevent 2 standard wounds and discard this card."/>
+         <property name="Description" value="Keep in play. On being dealt any standard wounds, prevent 2 standard wounds and discard this card."/>
          <property name="Cost" value="1 mana"/>
          <property name="Play_Script" value="[PAYMANA, 1], [CONSTANT]"/>
-         <property name="Constant_Script" value="[1,  [ON, [GTE, [DEALT, [OWNER, THIS], &quot;Standard&quot;], 2], [DO, [DISCARD], [PREVENT, 2, &quot;Standard&quot;]]]]"/>
+         <property name="Constant_Script" value="[1,  [ON, [GTE, [DEALT, [OWNER, THIS], &quot;Standard&quot;], 1], [DO, [DISCARD], [PREVENT, 2, &quot;Standard&quot;]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10016" name="Focus Energy">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10017" name="Focus Energy">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value=""/>
          <property name="Description" value="Gain 2 mana."/>
@@ -237,37 +247,47 @@
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10017" name="Mana Burn">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10018" name="Mana Burn">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Deal 1 standard wound to a target for each 2 mana that target has. The target loses 1 mana for each standard wound dealt this way."/>
+         <property name="Description" value="Deal 1 standard wound to a target for each 2 mana that target has. The target loses 1 mana for each of these wounds. This spell cannot deal additional wounds."/>
          <property name="Cost" value="2 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 2], [SET, NUMBER, [DIVFLOOR, [MANA, TARGET], 2]], [DEAL, [GET, NUMBER], &quot;Standard&quot;, TARGET], [LOSEMANA, TARGET, [GET, NUMBER]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10018" name="Excessive Heat">
-         <property name="Type" value="Injury"/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10019" name="Spellstorm">
+         <property name="Type" value="Tactic"/>
+         <property name="Subtype" value="Stance"/>
+         <property name="Description" value="When you cast a spell, draw a card. Keep in play until you play a non-spell card."/>
+         <property name="Cost" value=""/>
+         <property name="Play_Script" value="[CONSTANT]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]]], [DRAW, 1]]], [0, [ON, [AND, [NOT, [ISSPELL]], [ISPLAYINGCARD], [EQUAL, CHARACTER, [OWNER, THIS]]], [DISCARD]]]"/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001a" name="Excessive Heat">
+         <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Burn"/>
          <property name="Description" value="At the end of your turn, convert 1 standard wound to a burn wound."/>
          <property name="Cost" value="1 mana, 1 burn"/>
-         <property name="Play_Script" value="[GETENEMY], [ON, [NORMALWOUNDS, TARGET, &quot;Burn&quot;], [PAYMANA, 1], [INJURE, [GETWOUND, TARGET, &quot;Burn&quot;], THIS]]"/>
+         <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Burn&quot;], [DO, [PAYMANA, 1], [AFFLICT, [GETWOUND, TARGET, &quot;Burn&quot;], THIS]], [FAIL, &quot;That target does not have any burn wounds.&quot;]]"/>
          <property name="Constant_Script" value="[2, [ONTURNEND, [ON, [NORMALWOUNDS, &quot;Standard&quot;], [REMOVENORMALWOUNDS, [OWNER, THIS], 1, &quot;Standard&quot;], [TAKEWOUNDS, 1, &quot;Burn&quot;]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10019" name="Frostbite">
-         <property name="Type" value="Injury"/>
-         <property name="Subtype" value="Frost"/>
-         <property name="Description" value="At the end of your turn, convert 1 standard wound to a frost wound."/>
-         <property name="Cost" value="1 mana, 1 frost"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001b" name="Shortsword">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Weapon"/>
+         <property name="Description" value="Attacks deal 1 additional standard wound."/>
+         <property name="Cost" value="4 weight"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 4]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard&quot;]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001a" name="Incinerate">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001c" name="Incinerate">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Fire"/>
          <property name="Description" value="Deal 2 burn wounds to a target if they have 3 or fewer burn wounds. Otherwise, deal 3 burn wounds."/>
@@ -277,133 +297,153 @@
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001b" name="Snowflake">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001d" name="Snowflake">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
          <property name="Description" value="Deal 1 frost wound to a target. You may play your next Frost spell for 1 less stamina."/>
          <property name="Cost" value="3 mana"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 3], [DEAL, 1, &quot;Frost&quot;, TARGET], [CONSTANT]"/>
+         <property name="Constant_Script" value="[-1, [ON, [AND, [EQUAL, CHARACTER, [OWNER, THIS]], [CHECKACTION, &quot;Spell&quot;, &quot;Frost&quot;]], [REDUCECOSTSTAMINA, 1], [DISCARD, THIS]]], [0, [ONTURNEND, [DISCARD]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001c" name="Combustion">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001e" name="Combustion">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Fire"/>
          <property name="Description" value="Pick a target with at least X burn wounds. Deal X standard wounds to that target."/>
          <property name="Cost" value="X mana"/>
-         <property name="Play_Script" value="[GETENEMY], [SET, NUMBER, [CHOOSEX, &quot;How strong is this combustion?&quot;, 1, [WOUNDS, TARGET, &quot;Burn&quot;]]], [PAYMANA, [GET, NUMBER]], [DEAL, [GET, NUMBER], &quot;Burn&quot;, TARGET]"/>
+         <property name="Play_Script" value="[GETENEMY], [SET, NUMBER, [CHOOSEX, &quot;How strong is this combustion?&quot;, 1, [WOUNDS, TARGET, &quot;Burn&quot;]]], [PAYMANA, [GET, NUMBER]], [DEAL, [GET, NUMBER], &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001d" name="Force Blast">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001f" name="Force Blast">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Force"/>
          <property name="Description" value="Deal 3 standard wounds to a target. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 1], [DEALONLY, 3, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001e" name="Force Push">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10020" name="Force Push">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Force"/>
          <property name="Description" value="Deal 2 standard wound to a target. Draw a card. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 1], [DEALONLY, 2, &quot;Standard&quot;, TARGET], [DRAW, 1]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1001f" name="Force Pulse">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10021" name="Force Pulse">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Force"/>
          <property name="Description" value="Deal 2 standard wound to any number of targets. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 1], [DEALONLY, 2, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10020" name="Concussion">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10022" name="Concussion">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Force"/>
          <property name="Description" value="Discard any number of Force spells from your hand. Deal that many standard wounds to a target. This spell cannot deal additional wounds."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 1], [SET, NUMBER, [PAYDISCARDX, 1, 20, [AND, [EQUAL, TYPE, &quot;Spell&quot;], [EQUAL, SUBTYPE, &quot;Force&quot;]]]], [DEALONLY, [GET, NUMBER], &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10021" name="Creeping Cold">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10023" name="Creeping Cold">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
-         <property name="Description" value="Pick a target with at least 1 frost injury. Give that target another copy of one of their Frost injuries, without replacing any other wound."/>
-         <property name="Cost" value="3 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Description" value="Pick a target with at least 1 frost affliction that may be afflicted multiple times. Afflict the target with that frost affliction again, replacing a normal wound but ignoring its play cost."/>
+         <property name="Cost" value="2 mana"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 2], [ON, [LTE, [AFFLICTIONS, TARGET, &quot;Frost&quot;], 0], [FAIL, &quot;Target has no Frost afflictions to duplicate.&quot;]], [SET, NEWAFFLICTION, [COPY, [CHOOSETARGET, [AND, [EQUAL, [OWNER, CHECKED], TARGET], [EQUAL, [TYPE, CHECKED], &quot;Affliction&quot;], [EQUAL, [SUBTYPE, CHECKED], &quot;Frost&quot;]], TABLE]]], [AFFLICTMANY, [GETWOUND, TARGET, &quot;Frost&quot;], [GET, NEWAFFLICTION]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10022" name="Transfer Heat">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10024" name="Frostburn">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
-         <property name="Description" value="Convert all of your standard wounds to burn wounds. Deal as many frost wounds as standard wounds converted this way to a target."/>
-         <property name="Cost" value="3 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Description" value="Deal 1 frost wound and 1 burn wound to a target."/>
+         <property name="Cost" value="2 mana"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 2], [DEAL, 1, &quot;Frost&quot;, TARGET], [DEAL, 1, &quot;Burn&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10023" name="Immediate Recall">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10025" name="Odracir's Temper">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Play a spell from your discard."/>
+         <property name="Description" value="Gain 1 mana after each attack. Keep in play until you cast a spell."/>
+         <property name="Cost" value=""/>
+         <property name="Play_Script" value="[CONSTANT]"/>
+         <property name="Constant_Script" value="[1, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [GAINMANA, 1]]], [1, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]]], [DISCARD]]]"/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10026" name="Forked Tongue">
+         <property name="Type" value="Spell"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Play a spell from your discard you cast this turn, ignoring its mana play cost."/>
          <property name="Cost" value="1 mana"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[PAYMANA, 1], [GETTARGET, [EQUAL, &quot;Spell&quot;, [TYPE, CHECKED]], DISCARD], [ON, [NOT, [THISTURN, [EQUAL, CHECKED, TARGET]]], [FAIL, &quot;You did not play that spell this turn.&quot;]], [REDUCECOSTMANA, 999], [PLAY, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10024" name="Imperfect Spellbook">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10027" name="Immediate Recall">
+         <property name="Type" value="Spell"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Play a spell from your discard, paying its play cost."/>
+         <property name="Cost" value="1 mana"/>
+         <property name="Play_Script" value="[PAYMANA, 1], [GETTARGET, [EQUAL, &quot;Spell&quot;, [TYPE, CHECKED]], DISCARD], [PLAY, TARGET]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10028" name="Imperfect Spellbook">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Accessory"/>
          <property name="Description" value="1 stamina: Discard a spell from your hand to play a spell from your discard."/>
          <property name="Cost" value="7 weight"/>
-         <property name="Play_Script" value=""/>
+         <property name="Play_Script" value="[PAYWEIGHT, 7]"/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[PAYSTAMINA, 1], [PAYDISCARDX, 1, 1, [EQUAL, TYPE, &quot;Spell&quot;]],[GETTARGET, [EQUAL, &quot;Spell&quot;, [TYPE, CHECKED]], DISCARD], [PLAY, TARGET]"/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10025" name="Wand of Swiftness">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10029" name="Wand of Swiftness">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Wand"/>
          <property name="Description" value="When you cast a spell, draw a card."/>
          <property name="Cost" value="3 weight"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[PAYWEIGHT, 3]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISSPELL], [EQUAL, CHARACTER, [OWNER, THIS]]], [DRAW, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10026" name="Icicle">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1002a" name="Icicle">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
          <property name="Description" value="Deal 2 frost wounds to a target. You may play your next Frost spell this turn for 1 less stamina."/>
          <property name="Cost" value="4 mana"/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[GETENEMY], [PAYMANA, 4], [DEAL, 2, &quot;Frost&quot;, TARGET], [CONSTANT]"/>
+         <property name="Constant_Script" value="[-1, [ON, [AND, [EQUAL, CHARACTER, [OWNER, THIS]], [CHECKACTION, &quot;Spell&quot;, &quot;Frost&quot;]], [REDUCECOSTSTAMINA, 1], [DISCARD, THIS]]], [0, [ONTURNEND, [DISCARD]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e10027" name="Blizzard">
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e1002b" name="Blizzard">
          <property name="Type" value="Spell"/>
          <property name="Subtype" value="Frost"/>
          <property name="Description" value="Keep in play. Reduce the play cost of your Frost spells by 1 mana. Discard when you did not cast any Frost spells in a turn."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value=""/>
-         <property name="Constant_Script" value=""/>
+         <property name="Play_Script" value="[CONSTANT]"/>
+         <property name="Constant_Script" value="[-1, [ON, [AND, [CHECKACTION, &quot;Spell&quot;, &quot;Frost&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTMANA, 1]]], [0, [ONTURNEND, [ON, [NOT, [THISTURN, [CHECKACTION, &quot;Spell&quot;, &quot;Frost&quot;]]], [DISCARD]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 </cards></set>

@@ -278,17 +278,33 @@ comparisons = {Token("GT"): lambda x, y: x > y,
                Token("GTE"): lambda x, y: x >= y,
                Token("LTE"): lambda x, y: x <= y,
                Token("EQUAL"): lambda x, y: x == y,
-               Token("INEQUAL"): lambda x, y: x != y
+               Token("INEQUAL"): lambda x, y: x != y,
+               Token("MAX"): lambda x, y: x if x > y else y,
+               Token("MIN"): lambda x, y: x if x < y else y,
                }
 
 @token_func(3, 3)
 def comparison_token(current_state, current_token):
     left = get_value_from(current_state, current_token[1])
     right = get_value_from(current_state, current_token[2])
+    if type(left) != type(right):
+        return False
     return comparisons[current_token[0]](left, right)
 
 for comparison in comparisons.keys():
     add_token_script(comparison, comparison_token)
+
+operators = {Token("DIVFLOOR"): lambda x, y: x // y,
+             }
+
+@token_func(3, 3)
+def operator_token(current_state, current_token):
+    left = get_value_from(current_state, current_token[1])
+    right = get_value_from(current_state, current_token[2])
+    return operators[current_token[0]](left, right)
+
+for operator in operators.keys():
+    add_token_script(operator, operator_token)
     
 assert(get_value_from({}, [Token("GT"), 0, 1]) == False)
 assert(get_value_from({}, [Token("GT"), 1, 0]) == True)

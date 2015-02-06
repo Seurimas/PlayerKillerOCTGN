@@ -68,7 +68,7 @@
 	</cardactions>
 	<groupaction menu="(DEBUG) Check All Scripts - MAY TAKE LONG TIME" default="False" execute="check_scripts"/>
 	</table>
-    <player>
+    <player summary="{#Stamina} Stamina/ {#Health} HP/ {#Mana} Mana/ {#Subterfuge} Subterfuge">
         <hand name="Hand" visibility="me" ordered="False" width="9" height="9" icon="counters/r0.bmp">
 			<cardaction menu="Play Card" default="True" shortcut="enter" execute="playCard" />
             <groupaction menu="Punch" default="False" shortcut="Ctrl+P" execute="handPunch" />
@@ -81,7 +81,7 @@
         <group name="Backpack" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
         <group name="Discard" visibility="all" ordered="False" width="9" height="9" icon="counters/r0.bmp" collapsed="False" />
         <counter name="Stamina" default="0" reset="False" icon="counters/stamina.bmp" />
-        <counter name="Health" default="10" reset="False" icon="counters/health.bmp" />
+        <counter name="Health" default="15" reset="False" icon="counters/health.bmp" />
         <counter name="Mana" default="0" reset="False" icon="counters/mana.bmp" />
         <counter name="Subterfuge" default="0" reset="False" icon="counters/subterfuge.bmp"/>
     </player>

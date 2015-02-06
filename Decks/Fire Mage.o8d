@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<deck game="87821418-5d9a-4be5-ad28-ed2e189fe9fb" sleeveid="0">
+<section name="Class" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10000">Mage</card>
+</section>
+<section name="Items" shared="False"><card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000a">Wand of Fire</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30000">Healing Elixir</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30001">Healing Poultice</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10012">Wizard's Hat</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e30006">Restoration Salve</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10013">Gleaming Wizard's Robes</card>
+</section>
+<section name="Main Deck" shared="False"><card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10001">Magic Missile</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10002">Fireball</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10003">Searing Pain</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10004">Cauterize</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10005">Consume Flame</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000c">Firewall</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1000e">Wildfire</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30002">One Step Back</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30004">Bruised But Not Beaten</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e10015">Familiar</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10016">Mana Shield</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10017">Focus Energy</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e30009">Two Steps Forward</card>
+<card qty="1" id="75f0e3d1-7f7d-4c15-abec-4b7424e1001a">Excessive Heat</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1001c">Incinerate</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e1001e">Combustion</card>
+<card qty="2" id="75f0e3d1-7f7d-4c15-abec-4b7424e10027">Immediate Recall</card>
+</section>
+</deck>

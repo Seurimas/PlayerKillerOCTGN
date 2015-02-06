@@ -4,14 +4,15 @@ def setup_state_changes():
     change_handlers.append(handle_retreat) # Done!
     change_handlers.append(handle_damage) # Done!
     change_handlers.append(handle_cure) # Done!
-    change_handlers.append(handle_injure) # Done!
+    change_handlers.append(handle_afflict) # Done!
     change_handlers.append(handle_draw) # Done!
     change_handlers.append(handle_discard) # Done!
     change_handlers.append(handle_constant) # Done!
     change_handlers.append(handle_counters) # Done!
     change_handlers.append(handle_status) # Done!
     change_handlers.append(handle_turn_state) # Done!
-    notify("Setting up activation scripts!")
+    change_handlers.append(handle_gain_health) # Done!
+    whisper("Setting up activation scripts!")
 
 def activate_state_change(current_state, dummy_card=None):
     if type(current_state) is dict:
@@ -21,9 +22,16 @@ def activate_state_change(current_state, dummy_card=None):
 def handle_turn_state(current_state, dummy_card):
     add_action_this_turn(current_state)
     
+def handle_gain_health(current_state, dummy_card):
+    if current_state.has_key("GAINHEALTH"):
+        me.health += current_state.get("GAINHEALTH", 0)
+    
 def handle_retreat(current_state, dummy_card):
     mute()
     for retreater in current_state.get("retreat", []):
+        if retreater.isActivePlayer:
+            retreater.Stamina = 0
+            eot(table)
         for card in retreater.piles["Discard"]:
             card.moveTo(retreater.piles["Deck"])
         for card in retreater.hand:
@@ -57,18 +65,20 @@ def handle_counters(current_state, dummy_card): # Useless dummy card.
             target.controller.counters[statname].value = value
             notify("%s %s set to %d" % (target.controller.name, statname, value))
                 
-def handle_injure(current_state, dummy_card): # We want the dummy card!
+def handle_afflict(current_state, dummy_card): # We want the dummy card!
     mute()
     for target, wound_sets in current_state.get("dealt", {}).items():
         for wounds in wound_sets:
             wound_type = wounds[0]
             always_one = wounds[1]
-            if type(wound_type) is Card: # Injury
+            if type(wound_type) is Card: # Affliction
                 if wound_type == current_state["THIS"]:
                     wound_type = dummy_card # Swap out the dummy card.
-                mark_card_injury(wound_type)
+                mark_card_affliction(wound_type)
                 wound_type.setController(target.controller)
-                target.controller.counters["Health"].value -= always_one
+                remoteCall(target.controller, "rearrange_afflictions", [target.controller])
+                if target.Type == "Class":
+                    target.controller.counters["Health"].value -= always_one
                 notify("%s received %s" % (target.controller.name, wound_type))
                 
 def handle_constant(current_state, dummy_card): # We want the dummy card!
@@ -87,7 +97,8 @@ def handle_damage(current_state, dummy_card): # Dummy card useless here.
             wound_count = wounds[1]
             if type(wound_type) is str: # Normal wound
                 target.markers[wounds_markers[wound_type]] += wound_count
-                target.controller.counters["Health"].value -= wound_count
+                if target.Type == "Class":
+                    target.controller.counters["Health"].value -= wound_count
             notify("%s received %s %s" % (target.controller.name, wound_count, wound_type))
 
 def handle_cure(current_state, dummy_card): # Dummy card useless here.
@@ -99,23 +110,24 @@ def handle_cure(current_state, dummy_card): # Dummy card useless here.
                 wound_count = wounds[1]
                 if type(wound_type) is str: # Normal wound
                     target.markers[wounds_markers[wound_type]] -= wound_count
-                    notify("%s lost %s %s" % (target.controller.name, wound_count, wound_type))
+                    notify("%s cured %s %s" % (target.controller.name, wound_count, wound_type))
                 elif type(wound_type) is Card:
                     notify("%s cured %s" % (target.controller.name, wound_type.name))
                     wound_type.moveTo(me.piles["Discard"])
                 else:
                     raise Exception("Invalid wound type: %s (%s)" % (wound_type, type(wound_type)))
-                target.controller.counters["Health"].value += wound_count
-            else: # ConvertInjury
-                injury = wounds[0]
+                if target.Type == "Class":
+                    target.controller.counters["Health"].value += wound_count
+            else: # ConvertAffliction
+                affliction = wounds[0]
                 always_one = wounds[1]
                 wound_type = wounds[2]
-                notify("%s convert %s to a normal %s wound" % (target.controller.name, injury, wound_type))
-                if type(injury) is Card:
-                    wound_type.moveTo(me.piles["Discard"])
+                notify("%s convert %s to a normal %s wound" % (target.controller.name, affliction.name, wound_type))
+                target.markers[wounds_markers[wound_type]] += always_one
+                if type(affliction) is Card:
+                    affliction.moveTo(me.piles["Discard"])
                 else:
-                    raise Exception("Invalid injury type: %s (%s)" % (wound_type, type(wound_type)))
-                target.markers[wounds_markers[wound_type]] += wound_count
+                    raise Exception("Invalid affliction type: %s (%s)" % (affliction, type(affliction)))
 
 def handle_draw(current_state, dummy_card): # Ignore the dummy card still.
     mute()
