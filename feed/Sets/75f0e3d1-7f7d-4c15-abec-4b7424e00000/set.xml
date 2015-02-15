@@ -22,7 +22,7 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 4 standard wounds to a target if that target has any shadow afflictions. Otherwise, deal 2 shadow wounds."/>
          <property name="Cost" value="3 subterfuge"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [AFFLICTIONS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 3, &quot;Standard&quot;, TARGET], [DEAL, 2, &quot;Shadow&quot;, TARGET]]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [AFFLICTIONS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 4, &quot;Standard&quot;, TARGET], [DEAL, 3, &quot;Shadow&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -32,7 +32,7 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Deal 2 standard wound to a target."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 2, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -40,9 +40,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00003" name="Haemorrhage">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Subterfuge"/>
-         <property name="Description" value="Deal 3 standard wounds to a target if that target has any shadow wounds. Otherwise, deal 1 shadow wound."/>
+         <property name="Description" value="Deal 3 standard wounds to a target if that target has any shadow wounds. Otherwise, deal 2 shadow wound."/>
          <property name="Cost" value="2 subterfuge"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [IF, [GT, [WOUNDS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 2, &quot;Standard&quot;, TARGET], [DEAL, 1, &quot;Shadow&quot;, TARGET]]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [IF, [GT, [WOUNDS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 3, &quot;Standard&quot;, TARGET], [DEAL, 2, &quot;Shadow&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -180,10 +180,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00011" name="Toxic Shock">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="When you are dealt any shadow wounds, you are dealt an additional standard wound. Toxic Shock may not be cured until you are dealt a shadow wound. You may take a shadow wound to convert Toxic Shock to a normal shadow wound."/>
+         <property name="Description" value="When you are dealt any shadow wounds, take 1 standard wound. Toxic Shock may not be cured until you are dealt a shadow wound. You may take a shadow wound to convert Toxic Shock to a normal shadow wound."/>
          <property name="Cost" value="1 subterfuge, 1 shadow"/>
          <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Shadow&quot;], [DO, [PAYSUBTERFUGE, 1], [AFFLICT, [GETWOUND, TARGET, &quot;Shadow&quot;], THIS]], [FAIL, &quot;That target does not have any shadow wounds.&quot;]]"/>
-         <property name="Constant_Script" value="[2, [ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_SHOCK&quot;], [LOSESTATUS, &quot;UNLOCK_SHOCK&quot;], [FAIL, &quot;You may not cure Toxic Shock while it is in remission.&quot;]]]], [1, [ON, [GTE, [DEALT, [OWNER, THIS], &quot;Shadow&quot;], 1], [DEALEXTRA, 1, &quot;Standard&quot;]]]"/>
+         <property name="Constant_Script" value="[2, [ON, [CURED, THIS], [IF, [STATUS, &quot;UNLOCK_SHOCK&quot;], [LOSESTATUS, &quot;UNLOCK_SHOCK&quot;], [FAIL, &quot;You may not cure Toxic Shock while it is in remission.&quot;]]]], [1, [ON, [GTE, [DEALT, [OWNER, THIS], &quot;Shadow&quot;], 1], [TAKEWOUNDS, 1, &quot;Standard&quot;]]]"/>
          <property name="Use_Script" value="[DO, [TAKEWOUNDS, 1, &quot;Shadow&quot;], [CONVERTAFFLICTION, THIS, &quot;Shadow&quot;]]"/>
     </card>
 
@@ -270,7 +270,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0001a" name="Alpha Venom">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="When afflicting with Alpha Venom, the afflicter picks another of your shadow afflictions. You may not cure that affliction."/>
+         <property name="Description" value="When afflicting with Alpha Venom, the afflicter picks another of your shadow afflictions. You may not cure or convert that affliction."/>
          <property name="Cost" value="2 subterfuge, 1 shadow"/>
          <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [AFFLICT, TARGET, &quot;Shadow&quot;, THIS], [SET, ALPHA, [CHOOSETARGET, [AND, [EQUAL, [OWNER, CHECKED], TARGET], [EQUAL, [TYPE, CHECKED], &quot;Affliction&quot;], [EQUAL, [SUBTYPE, CHECKED], &quot;Shadow&quot;]], TABLE]], [GAINSTATUS, [GET, ALPHA], &quot;ALPHA_VENOM&quot;]"/>
          <property name="Constant_Script" value="[2, [EACHCURED, [ON, [STATUS, CHECKED, &quot;ALPHA_VENOM&quot;], [FAIL, &quot;The Alpha venom prevents you from curing this affliction.&quot;]]]], [2, [EACHCURED, [ON, [EQUAL, CHECKED, THIS], [EACH, [AND, [EQUAL, [OWNER, CHECKED], [OWNER, THIS]], [STATUS, &quot;ALPHA_VENOM&quot;]], TABLE, [LOSESTATUS, CHECKED, &quot;ALPHA_VENOM&quot;]]]]]"/>

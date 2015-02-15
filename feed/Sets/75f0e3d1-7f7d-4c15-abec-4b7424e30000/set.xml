@@ -120,10 +120,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000b" name="Weariness">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Standard"/>
-         <property name="Description" value="At the start of your turn, take 1 standard wound. Convert Weariness to a normal standard wound when you retreat."/>
+         <property name="Description" value="At the start of your turn, take 1 standard wound. Cure Weariness when you retreat."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [AFFLICT, [GETWOUND, TARGET, &quot;Standard&quot;], THIS], [FAIL, &quot;That target does not have any standard wounds.&quot;]]"/>
-         <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUNDS, 1, &quot;Standard&quot;]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;RETREAT&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [CONVERTAFFLICTION, THIS, &quot;Standard&quot;]]]"/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUNDS, 1, &quot;Standard&quot;]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;RETREAT&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [CURE, THIS]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -147,13 +147,13 @@
          <property name="Use_Script" value=""/>
     </card>
 
-    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000e" name="Special Care">
-         <property name="Type" value="Tactic"/>
-         <property name="Subtype" value=""/>
-         <property name="Description" value="Cure an affliction."/>
-         <property name="Cost" value=""/>
-         <property name="Play_Script" value="[GETCHARACTER], [CURE, TARGET, [EQUAL, TYPE, &quot;Affliction&quot;]"/>
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000e" name="Combatbelt">
+         <property name="Type" value="Item"/>
+         <property name="Subtype" value="Accessory"/>
+         <property name="Description" value="1 stamina, discard: Return 1 item from the discard pile into play."/>
+         <property name="Cost" value="3 weight"/>
+         <property name="Play_Script" value="[PAYWEIGHT, 3]"/>
          <property name="Constant_Script" value=""/>
-         <property name="Use_Script" value=""/>
+         <property name="Use_Script" value="[DISCARD], [PAYSTAMINA, 1], [GETTARGET, [EQUAL, &quot;Item&quot;, [TYPE, CHECKED]], BACKPACK], [PLAY, TARGET]"/>
     </card>
 </cards></set>

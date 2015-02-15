@@ -50,7 +50,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20004" name="Multi Strike">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Finesse"/>
-         <property name="Description" value="Deal 1 standard wound to any number of targets or 2 standard wounds to one target."/>
+         <property name="Description" value="Deal 2 wounds to any number of targets."/>
          <property name="Cost" value="2 additional stamina"/>
          <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 2], [DEAL, 2, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
@@ -60,10 +60,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20005" name="Longsword">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Weapon"/>
-         <property name="Description" value="Attacks deal 1 additional standard wound. Finesse attacks cost 1 less stamina to play (minimum 0)."/>
+         <property name="Description" value="Attacks deal 1 additional standard wound. You may discard a card from hand to reduce the stamina cost of Finesse attacks by 1."/>
          <property name="Cost" value="6 weight"/>
          <property name="Play_Script" value="[PAYWEIGHT, 6]"/>
-         <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard&quot;]]], [-1, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Finesse&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTSTAMINA, 1]]]"/>
+         <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard&quot;]]], [-1, [ON, [AND, [CHECKACTION, &quot;Attack&quot;, &quot;Finesse&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [REDUCECOSTSTAMINA, [PAYDISCARDX, 0, 1, TRUE]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -152,7 +152,7 @@
          <property name="Subtype" value="Finesse"/>
          <property name="Description" value="Deal 1 standard wounds to a target. Wounds from this attack may not be prevented."/>
          <property name="Cost" value="1 additional stamina"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 1], [DEALALWAYS, 2, &quot;Standard&quot;, TARGET]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 1], [DEALALWAYS, 1, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -250,9 +250,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20018" name="Masterful Strike">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Finesse"/>
-         <property name="Description" value="Deal 2 standard wounds to a target. Draw two cards."/>
+         <property name="Description" value="Deal 3 standard wounds to a target. Draw a card."/>
          <property name="Cost" value="2 additional stamina"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 2], [DEAL, 3, &quot;Standard&quot;, TARGET], [DRAW, 1], [DRAW, 1]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSTAMINA, 2], [DEAL, 3, &quot;Standard&quot;, TARGET], [DRAW, 1]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
