@@ -32,21 +32,30 @@ def setupTokens():
     add_token_script(Token("ISPLAYINGCARD"), is_playing_card_token)
     add_token_script(Token("MAKEMESPELL"), make_me_spell_token)
     
+    # Pet and NPC effects
+    add_token_script(Token("PET"), pet_token)
+    add_token_script(Token("ATTACK"), attack_token)
+    
+    # Item effects.
     add_token_script(Token("GAINWEIGHT"), gain_weight_token)
     add_token_script(Token("PAYWEIGHT"), pay_weight_token)
     add_token_script(Token("GAINHEALTH"), gain_health_token)
+    
+    # Draw and card effects
     add_token_script(Token("BLOCKDRAW"), block_draw_token)
     add_token_script(Token("DRAW"), draw_token)
-    add_token_script(Token("RETREAT"), retreat_token)
-    add_token_script(Token("PUNCH"), punch_token)
-    add_token_script(Token("PLAY"), play_token)
     add_token_script(Token("PAYDISCARD"), pay_discard_token)
     add_token_script(Token("PAYDISCARDX"), pay_discardx_token)
     add_token_script(Token("FORCEDISCARD"), force_discard_token)
-    add_token_script(Token("CONSTANT"), constant_token)
     add_token_script(Token("DISCARD"), discard_token)
+    add_token_script(Token("PLAY"), play_token)
+    add_token_script(Token("CONSTANT"), constant_token)
     add_token_script(Token("EACH"), each_token)
     add_token_script(Token("COPY"), copy_token)
+    
+    # Default action effects
+    add_token_script(Token("RETREAT"), retreat_token)
+    add_token_script(Token("PUNCH"), punch_token)
     
     # Targetting
     add_token_script(Token("EACHTARGET"), each_target)
@@ -116,16 +125,33 @@ def play_token(current_state, current_token):
     else:
         play_card_anywhere(played_card, current_state)
         
+@token_func(3, 999)
+def attack_token(current_state, current_token):
+    attacker = get_value_from(current_state, current_token[1])
+    attack_script = current_token[2:]
+    old_state = replace_this(current_state, attacker, types=True) # Replace types to store them in old_state
+    current_state["CHARACTER"] = attacker
+    current_state["TYPE"] = "Attack"
+    del current_state["SUBTYPE"]
+    current_state = applyWithPriorities(current_state, pre_priorities)
+    if type(current_state) is str:
+        return current_state
+    current_state = follow_script(current_state, attack_script)
+    if type(current_state) is str:
+        notify("Failed: " + current_state)
+    else:
+        current_state = applyWithPriorities(current_state, post_priorities)
+        if type(current_state) is str:
+            return current_state
+        current_state.update(old_state)
+        return current_state
+        
 def play_card_anywhere(card, state):
     if type(card.Play_Script) is str:
         script_tokens, remainder = get_list_from(card.Play_Script)
         card.Play_Script = script_tokens
     character = card_owner(card)
-    old_state = replace_this(state, card, types=True) 
-#     state = {"CHARACTER": character,
-#              "THIS": card,
-#              "TYPE": card.Type,
-#              "SUBTYPE": card.Subtype}
+    old_state = replace_this(state, card, types=True)
     state["PLAYEDCARD"] = card
     state = applyWithPriorities(state, pre_priorities)
     if type(state) is str:
@@ -169,6 +195,9 @@ def group_owner(group):
         raise Exception("Group %s's own has no Class in play!" % (group.name, ))
 
 def card_owner(card):
+    npc_owner = get_npc_owner(card)
+    if npc_owner is not None:
+        return npc_owner
     controller = card.controller
     for card in table:
         if card.Type == "Class" and card.controller == controller:
@@ -244,6 +273,20 @@ def constant_token(current_state, current_token):
         constants.append(get_value_from(current_state, current_token[1]))
     current_state["constants"] = constants
 
+@token_func(3, 4)
+def pet_token(current_state, current_token):
+    pets = current_state.get("pets", [])
+    if len(current_token) == 3:
+        pet = get_value_from(current_state, Token("THIS"))
+        health = get_value_from(current_state, current_token[1])
+        stamina = get_value_from(current_state, current_token[2])
+    else:
+        pet = get_value_from(current_state, current_token[1])
+        health = get_value_from(current_state, current_token[2])
+        stamina = get_value_from(current_state, current_token[3])
+    pets.append((pet, health, stamina))
+    current_state["pets"] = pets
+
 def is_discarded(current_state, checked_card):
     return checked_card in current_state.get("discards", [])
 
@@ -294,11 +337,11 @@ def retreat_token(current_state, current_token):
     current_state["retreat"] = retreats
     draw_for_state(current_state, retreater, 4)
     if get_value_from(current_state, [Token("THISTURN"), [Token("NOT"), [Token("EQUAL"), Token("TYPE"), "TurnStart"]]]):
-        if not confirm("You're trying to retreat but have performed some action this turn. Retreat takes your entire turn, free actions included. Continue anyways (not a legal play)?"):
+        if not confirm("You're trying to retreat but have performed some action this turn. Retreat takes your entire turn, free actions included. Continue anyways (possibly not a legal play)?"):
             abort(current_state, "Retreat takes your entire turn. You may not do anything else in a turn.")
         else:
             notify("%s is retreating, despite having acted this turn. This may not be a legal play." % (me.name,))
-    
+
 @token_func(1, 1)
 def punch_token(current_state, current_token):
     puncher = owner_this(current_state)
@@ -379,6 +422,7 @@ def pay_discardx_token(current_state, current_token):
             return picked_count
         else:
             i = picked - 1
+            picked_count += 1
             discard_card_in_state(current_state, choice_cards[i])
             choices.remove(choices[i])
             choice_cards.remove(choice_cards[i])
@@ -417,9 +461,6 @@ def status_token(current_state, current_token):
     counter_status = hasStatus(target, status)
     return counter_status
 
-def addStatus(target, status):
-    target.markers[status, status_counter_id] = 1
-
 @token_func(2, 3)
 def gain_status_token(current_state, current_token):
     if len(current_token) == 2:
@@ -431,10 +472,6 @@ def gain_status_token(current_state, current_token):
     statuses = current_state.get("status", [])
     statuses.append((target, status, True))
     current_state["status"] = statuses
-
-
-def loseStatus(target, status):
-    target.markers[status, status_counter_id] = 0
 
 @token_func(2, 3)
 def lose_status_token(current_state, current_token):
@@ -460,15 +497,6 @@ def this_turn_token(current_state, current_token):
         if value:
             return value
     return False
-
-this_turn = []
-def clear_turn():
-    global this_turn
-    this_turn = []
-
-def add_action_this_turn(action):
-    global this_turn
-    this_turn.append(action)
 
 @token_func(2, 3)
 def on_turn_start_token(current_state, current_token):
@@ -535,13 +563,20 @@ def pay_weight_token(current_state, current_token):
     value = get_value_from(current_state, current_token[1])
     current_state["WEIGHT"] -= value
     
-@token_func(2, 2)
+@token_func(2, 3)
 def gain_health_token(current_state, current_token):
-    value = get_value_from(current_state, current_token[1])
-    if current_state.has_key("GAINHEALTH"):
-        current_state["GAINHEALTH"] += value
+    if len(current_token) == 3:
+        target = get_value_from(current_state, current_token[2])
+        value = get_value_from(current_state, current_token[2])
     else:
-        current_state["GAINHEALTH"] = value 
+        target = owner_this(current_state)
+        value = get_value_from(current_state, current_token[1])
+    notify("Gaining %d health" % value)
+    gained_healths = current_state.get("GAINHEALTH", {})
+    gained_health = gained_healths.get(target, 0)
+    gained_health += value
+    gained_healths[target] = gained_health
+    current_state["GAINHEALTH"] = gained_healths
 
 if __name__ == "__main__":
     from targetting import *

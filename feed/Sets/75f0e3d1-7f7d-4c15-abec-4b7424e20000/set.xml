@@ -12,7 +12,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="The first time you attack each turn, draw a card."/>
          <property name="Cost" value="20 weight, 15 health"/>
-         <property name="Play_Script" value="[GAINWEIGHT, 20]"/>
+         <property name="Play_Script" value="[GAINWEIGHT, 20], [GAINHEALTH, 15]"/>
          <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]], [NOT, [THISTURN, [ISATTACK]]]], [DRAW, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
@@ -140,10 +140,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e2000d" name="Heavy Bleeding">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Mortal"/>
-         <property name="Description" value="At the start of your turn, take 1 standard wound."/>
+         <property name="Description" value="When you start you turn, you must either lose 1 stamina or take 1 standard wound."/>
          <property name="Cost" value="1 mortal"/>
          <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Mortal&quot;], [AFFLICT, [GETWOUND, TARGET, &quot;Mortal&quot;], THIS], [FAIL, &quot;That target does not have any mortal wounds.&quot;]]"/>
-         <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUNDS, 1, &quot;Standard&quot;]]]"/>
+         <property name="Constant_Script" value="[-1, [ONTURNSTART, [IF, [CHOOSE, &quot;You are bleeding heavily. Do you fight the pain (take 1 standard wound) or go slow (lose 1 stamina).&quot;, &quot;Take Wound&quot;, &quot;Lose 1 Stamina&quot;], [LOSESTAMINA, 1], [TAKEWOUNDS, 1, &quot;Standard&quot;]]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -210,7 +210,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20014" name="Berserker's Fury">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stance"/>
-         <property name="Description" value="Your attacks deal 1 additional standard wound. Keep in play until you cure a wound or afflict anyone."/>
+         <property name="Description" value="Until you cure a wound or afflict anyone: Your attacks deal 1 additional standard wound."/>
          <property name="Cost" value=" "/>
          <property name="Play_Script" value="[CONSTANT]"/>
          <property name="Constant_Script" value="[0, [ON, [AND, [ISATTACK], [EQUAL, CHARACTER, [OWNER, THIS]]], [DEALEXTRA, 1, &quot;Standard&quot;]]], [1, [ON, [AND, [OR, [EQUAL, TYPE, &quot;Affliction&quot;], [GT, [CURED, ANY], 0]], [EQUAL, CHARACTER, [OWNER, THIS]]], [DISCARD]]]"/>
@@ -240,7 +240,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e20017" name="Violent Disposition">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stance"/>
-         <property name="Description" value="Your attacks deal 1 additional standard wound. Keep in play until one of your attacks deals 3 or fewer wounds."/>
+         <property name="Description" value="Until one of your attacks deals 3 or fewer wounds: Your attacks deal 1 additional standard wound."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value="[CONSTANT]"/>
          <property name="Constant_Script" value="[0, [ON, [AND, [EQUAL, CHARACTER, [OWNER, THIS]], [ISATTACK]], [DEALEXTRA, 1, &quot;Standard&quot;]]], [3, [ON, [AND, [EQUAL, CHARACTER, [OWNER, THIS]], [ISATTACK], [LTE, [DEALT, ANY, ANY], 3]], [DISCARD]]]"/>

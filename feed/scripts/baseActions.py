@@ -7,15 +7,13 @@ post_priorities = [0, 1, 2, 3]
 pre_priorities = [-3, -2, -1]
 all_priorities = pre_priorities + post_priorities
 
-def checkDeck(player, groups):
-    mute()
-    if player != me: return
-    notify("Checking deck of " + me.name)
-    current_state = {"TYPE":"DeckLoad"}
+
+def setup_class(current_state):
     for card in me.hand:
         if card.Type == "Item":
             card.moveToBottom(me.piles["Backpack"])
         elif card.Type == "Class":
+            card.moveToTable(getCardX(card), getCardY(card))
             script_tokens, remainder = get_list_from(card.Play_Script)
             current_state = follow_script(current_state, script_tokens)
             if type(current_state) is str:
@@ -24,10 +22,15 @@ def checkDeck(player, groups):
             break
     else:
         notify("Checked deck of %s failed because: No Class card in hand." % (me.name, ))
+    return current_state
+
+def setup_items(current_state):
     for card in me.piles["Backpack"]:
         if card.Type != "Item":
             card.moveToBottom(me.piles["Deck"])
         else:
+            card.moveToTable(getCardX(card), getCardY(card))
+            rearrange_items(card.controller)
             script_tokens, remainder = get_list_from(card.Play_Script)
             current_state = follow_script(current_state, script_tokens)
             if type(current_state) is str:
@@ -35,6 +38,15 @@ def checkDeck(player, groups):
                 return
     if current_state["WEIGHT"] < 0:
         notify("Checked deck of %s failed because: %s over weight!" % (me.name, -current_state["WEIGHT"]))
+    return current_state
+
+def checkDeck(player, groups):
+    mute()
+    if player != me: return
+    notify("Checking deck of " + me.name)
+    current_state = {"TYPE":"DeckLoad"}
+    current_state = setup_class(current_state)
+    current_state = setup_items(current_state)
     notify("%s" % (current_state))
     activate_state_change(current_state)
     type_counts = {}
@@ -43,6 +55,10 @@ def checkDeck(player, groups):
             type_counts[card.Type] += 1
         except KeyError:
             type_counts[card.Type] = 1
+    me.piles["Deck"].shuffle()
+    for _ in range(5):
+        drawn = me.piles["Deck"].top()
+        drawn.moveTo(me.hand)
     for card_type in type_counts:
         whisper("Your deck contains %d %s" % (type_counts[card_type], card_type))
 
@@ -128,15 +144,7 @@ def chkTwoSided():
         whisper("You are the flipped side!")
     
 def playCard(card, x = 0, y = 0):
-    if card.Type == "Class":
-        card.moveToTable(getCardX(card), getCardY(card))
-        for card in me.piles["Backpack"]:
-            playCard(card)
-        me.piles["Deck"].shuffle()
-        for _ in range(5):
-            drawn = me.piles["Deck"].top()
-            drawn.moveTo(me.hand)
-    elif card.Type != "Item":
+    if card.Type != "Item":
         if me.Stamina <= 0:
             notify("Are you sure it's your turn?")
             if not confirm("You're trying to play a card with no Stamina. Is it your turn?"):
@@ -321,18 +329,41 @@ def sot(table):
         notify("Failed: " + state)
         return
     activate_state_change(state)
-    
+
+TEMP_HILITE = "#0000FF"
+AFF_HILITE = "#FF0000"
+CONST_HILITE = "#00FF00"
+NPC_HILITE = "#FF00FF"
+PET_HILITE = "#FFFFFF"
+
 def mark_card_temporary(card):
-    card.highlight = "#0000FF"
+    card.highlight = TEMP_HILITE
     
 def mark_card_affliction(card):
-    card.highlight = "#FF0000"
+    card.highlight = AFF_HILITE
     
 def mark_card_constant(card):
-    card.highlight = "#00FF00"
+    card.highlight = CONST_HILITE
+    
+def mark_card_monster(card):
+    card.highlight = NPC_HILITE
+    add_unique_npc_marker(card)
+    
+def mark_card_pet(card):
+    card.highlight = PET_HILITE
+    add_unique_npc_marker(card)
     
 def is_card_temporary(card):
     return card.highlight is not None and card.highlight.upper() == "#0000FF"
+    
+def is_card_pet(card):
+    return card.highlight is not None and card.highlight.upper() == "#FFFFFF"
+        
+def is_card_monster(card):
+    return card.highlight is not None and card.highlight.upper() == "#FF00FF"
+    
+def is_card_npc(card):
+    return is_card_pet(card) or is_card_monster(card)
     
 def clear_table_for_me(table):
     mute()
@@ -357,6 +388,6 @@ def eot(table):
     notify("End of " + me.name + "'s turn!")
     if len(players) != 1:
         players[1].setActivePlayer()
-    if len(me.hand) > MAX_HAND_SIZE:
-        notify(me.name + " needs to discard down to " + str(MAX_HAND_SIZE))
+#     if len(me.hand) > MAX_HAND_SIZE:
+#         notify(me.name + " needs to discard down to " + str(MAX_HAND_SIZE))
     clear_table_for_me(table)

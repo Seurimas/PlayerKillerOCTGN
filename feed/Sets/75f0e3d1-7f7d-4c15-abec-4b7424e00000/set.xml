@@ -12,7 +12,7 @@
          <property name="Subtype" value=""/>
          <property name="Description" value="At the start of your turn, gain 1 subterfuge or 2 if in Stealth. At the end of your turn, lose all subterfuge."/>
          <property name="Cost" value="15 weight, 15 health"/>
-         <property name="Play_Script" value="[GAINWEIGHT, 15]"/>
+         <property name="Play_Script" value="[GAINWEIGHT, 15], [GAINHEALTH, 15]"/>
          <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, [IF, [STATUS, &quot;Stealth&quot;], 2, 1]]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
          <property name="Use_Script" value=""/>
     </card>
@@ -20,9 +20,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00001" name="Sneak Attack">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Subterfuge"/>
-         <property name="Description" value="Deal 4 standard wounds to a target if that target has any shadow afflictions. Otherwise, deal 2 shadow wounds."/>
+         <property name="Description" value="Deal 4 standard wounds to a target if that target has any shadow afflictions. Otherwise, deal 2 shadow wounds and 1 standard wound."/>
          <property name="Cost" value="3 subterfuge"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [AFFLICTIONS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 4, &quot;Standard&quot;, TARGET], [DEAL, 3, &quot;Shadow&quot;, TARGET]]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 3], [IF, [GT, [AFFLICTIONS, TARGET, &quot;Shadow&quot;], 0], [DEAL, 4, &quot;Standard&quot;, TARGET], [DO, [DEAL, 2, &quot;Shadow&quot;, TARGET], [DEAL, 1, &quot;Standard&quot;, TARGET]]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -30,9 +30,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00002" name="Slice">
          <property name="Type" value="Attack"/>
          <property name="Subtype" value="Subterfuge"/>
-         <property name="Description" value="Deal 2 standard wound to a target."/>
+         <property name="Description" value="Deal 1 standard wound to a target."/>
          <property name="Cost" value="1 subterfuge"/>
-         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 2, &quot;Standard&quot;, TARGET]"/>
+         <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 1], [DEAL, 1, &quot;Standard&quot;, TARGET]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -50,7 +50,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00004" name="Dodging">
          <property name="Type" value="Item"/>
          <property name="Subtype" value="Armor"/>
-         <property name="Description" value="When you would be dealt at least 2 standard wound, prevent 1 and gain 1 subterfuge. Only active while in Stealth."/>
+         <property name="Description" value="When you would be dealt at least 2 standard wound, prevent 1 and gain 1 subterfuge. Only activates while in Stealth."/>
          <property name="Cost" value="3 weight"/>
          <property name="Play_Script" value="[PAYWEIGHT, 3]"/>
          <property name="Constant_Script" value="[1,  [ON, [AND, [STATUS, &quot;Stealth&quot;], [GTE, [DEALT, [OWNER, THIS], &quot;Standard&quot;], 2]], [DO, [PREVENT, 1, &quot;Standard&quot;], [GAINSUBTERFUGE, 1]]]"/>
@@ -140,7 +140,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000d" name="Hide">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 1 subterfuge and draw a card. This may not be played while already in Stealth."/>
+         <property name="Description" value="Until your next turn: Gain Stealth then gain 1 subterfuge and draw a card. This may not be played while already in Stealth."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
          <property name="Constant_Script" value="[1, [ONTURNSTART, [DO, [GAINSUBTERFUGE, 1], [DRAW, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]]"/>
@@ -150,7 +150,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000e" name="Sneak">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 2 subterfuge. This may not be played while already in Stealth."/>
+         <property name="Description" value="Until your next turn: Gain Stealth then gain 2 subterfuge. This may not be played while already in Stealth."/>
          <property name="Cost" value=" "/>
          <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
          <property name="Constant_Script" value="[1, [ONTURNSTART, [DO, [GAINSUBTERFUGE, 2], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]]"/>
@@ -160,7 +160,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e0000f" name="Take Advantage">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Stealth"/>
-         <property name="Description" value="Gain Stealth until your next turn, then gain 1 stamina. This may not be played while already in Stealth."/>
+         <property name="Description" value="Until your next turn: Gain Stealth then gain 1 stamina. This may not be played while already in Stealth."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value="[IF, [NOT, [STATUS, &quot;Stealth&quot;]], [DO, [GAINSTATUS, &quot;Stealth&quot;], [CONSTANT]], [FAIL, &quot;You are already in Stealth.&quot;]]"/>
          <property name="Constant_Script" value="[1, [ONTURNSTART, [DO, [GAINSTAMINA, 1], [LOSESTATUS, &quot;Stealth&quot;], [DISCARD, THIS]]]]"/>
@@ -230,9 +230,9 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00016" name="Remission">
          <property name="Type" value="Tactic"/>
          <property name="Subtype" value="Subterfuge"/>
-         <property name="Description" value="Pick a target with a shadow affliction. Convert one of their shadow afflictions to a normal shadow wound, and gain 1 subterfuge."/>
+         <property name="Description" value="Pick a target with a shadow affliction. Convert one of their shadow afflictions to a normal shadow wound, and gain 2 subterfuge."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value="[GETCHARACTER], [SET, REMISSION, [CHOOSETARGET, [AND, [EQUAL, [OWNER, CHECKED], TARGET], [EQUAL, [TYPE, CHECKED], &quot;Affliction&quot;], [EQUAL, [SUBTYPE, CHECKED], &quot;Shadow&quot;]], TABLE]], [CONVERTAFFLICTION, [GET, REMISSION], &quot;Shadow&quot;], [GAINSUBTERFUGE, 1]"/>
+         <property name="Play_Script" value="[GETCHARACTER], [SET, REMISSION, [CHOOSETARGET, [AND, [EQUAL, [OWNER, CHECKED], TARGET], [EQUAL, [TYPE, CHECKED], &quot;Affliction&quot;], [EQUAL, [SUBTYPE, CHECKED], &quot;Shadow&quot;]], TABLE]], [CONVERTAFFLICTION, [GET, REMISSION], &quot;Shadow&quot;], [GAINSUBTERFUGE, 2]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>
@@ -260,7 +260,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00019" name="Omega Venom">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Shadow"/>
-         <property name="Description" value="You may not cure other shadow afflictions."/>
+         <property name="Description" value="You may not cure or convert other shadow afflictions."/>
          <property name="Cost" value="2 subterfuge, 1 shadow"/>
          <property name="Play_Script" value="[GETENEMY], [PAYSUBTERFUGE, 2], [AFFLICT, TARGET, &quot;Shadow&quot;, THIS]"/>
          <property name="Constant_Script" value="[2, [EACHCURED, [ON, [AND, [EQUAL, [OWNER, CHECKED], [OWNER, THIS]], [EQUAL, [TYPE, CHECKED], &quot;Affliction&quot;], [EQUAL, [SUBTYPE, CHECKED], &quot;Shadow&quot;], [NOT, [EQUAL, CHECKED, THIS]]], [FAIL, &quot;The Omega venom prevents you from curing any other shadow afflictions.&quot;]]]]"/>

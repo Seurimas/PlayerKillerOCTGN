@@ -15,13 +15,18 @@ def target_token(current_state, current_token):
     if type(current_token) is not Token:
         raise Exception("TARGET cannot be a list head. [%s]" % (current_token, ))
     return current_state.get("TARGET", None)
+
 def checked_token(current_state, current_token):
     if not type(current_token) is Token:
         raise Exception("CHECKED cannot be a list head. [%s]" % (current_token, ))
     return current_state["CHECKED"]
+
 def targetcount_token(current_state, current_token):
     if not type(current_token) is Token:
         raise Exception("TARGETCOUNT cannot be a list head. [%s]" % (current_token, ))
+    return target_count(current_state)
+    
+def target_count(current_state):
     return len(current_state["TARGETS"]) if current_state.has_key("TARGETS") else (1 if current_state.has_key("TARGET") else 0)
 
 @token_func(2, 2)
@@ -101,15 +106,27 @@ def choose_type_token(current_state, current_token):
 def isenemy_token(current_state, current_token):
     candidate = get_value_from(current_state, current_token[1])
     myself = get_value_from(current_state, current_token[2])
-    if candidate.Type == "Class" and myself.Type == "Class":
-        if myself != candidate:
-            return True
-    return False
+    return is_enemy(myself, candidate)
 
 @token_func(2, 2)
 def ischaracter_token(current_state, current_token):
     candidate = get_value_from(current_state, current_token[1])
+    return is_character(candidate)
+    
+def is_enemy(myself, candidate):
+    if candidate.owner != myself.owner:
+        if candidate.Type == "Class":
+            return True
+        elif is_card_pet(candidate):
+            return True
+        elif is_card_monster(candidate) != is_card_monster(myself):
+            return True
+    return False
+    
+def is_character(candidate):
     if candidate.Type == "Class":
+        return True
+    elif is_card_npc(candidate):
         return True
     else:
         return False
@@ -181,6 +198,8 @@ def gettarget_token_dual(current_state, current_token):
             break
     if picked == -1:
         current_state["FAIL"] = "Cancelled picking targets."
+    elif picked == 0 and picked_cards == []:
+        current_state["FAIL"] = "Found no valid targets."
     elif len(picked_cards) < min_count and len(picked_cards) > max_count:
         current_state["FAIL"] = "Found %s targets but need between %s and %s" % (len(picked_cards), min_count, max_count)
     elif current_token[0] == Token("GETTARGETS"):

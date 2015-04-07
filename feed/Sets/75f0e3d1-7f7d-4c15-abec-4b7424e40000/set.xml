@@ -10,7 +10,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40000" name="Goblin">
          <property name="Type" value="Monster"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Do not draw at the beginning of your turn."/>
+         <property name="Description" value=" "/>
          <property name="Cost" value="5 weight, 5 health"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>
@@ -80,7 +80,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e40007" name="Kobold">
          <property name="Type" value="Monster"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="Do not draw at the beginning of your turn."/>
+         <property name="Description" value=""/>
          <property name="Cost" value="5 weight, 5 health"/>
          <property name="Play_Script" value=""/>
          <property name="Constant_Script" value=""/>

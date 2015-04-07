@@ -18,13 +18,6 @@ wounds = ("Standard",
           "Frost",
           "Mortal")
 
-wounds_markers = {"Standard":("Standard Wound", "7ae6b4f2-afee-423a-bc18-70a236b41000"),
-         "Burn":("Burn Wound", "7ae6b4f2-afee-423a-bc18-70a236b41001"),
-         "Frost":("Frost Wound", "7ae6b4f2-afee-423a-bc18-70a236b41002"),
-         "Mortal":("Mortal Wound", "7ae6b4f2-afee-423a-bc18-70a236b41003"),
-         "Shadow":("Shadow Wound", "7ae6b4f2-afee-423a-bc18-70a236b41004")
-         }
-
 PREVENTABLE = ["DEAL", "DEALONLY", "DEALEXTRA"]
 DEALT = PREVENTABLE + ["DEALALWAYS", "DEALALWAYSONLY", "DEALEXTRAALWAYS"]
 CURED = ["CURE"]
@@ -93,6 +86,9 @@ def prevent_token(current_state, current_token):
 def wounds_equal(wound1, wound2):
     return (type(wound1) == type(wound2) and wound1 == wound2) or wound1 == Token("ANY") or wound2 == Token("ANY")
 
+def targets_equal(target1, target2):
+    return target1 == Token("ANY") or target2 == Token("ANY") or target1 == target2
+
 def get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False):
     count = 0
     events = current_state.get("events", [])
@@ -100,10 +96,10 @@ def get_wounds_dealt(current_state, target, wound_type, preventable_only=False, 
         if event[0] not in DEALT:
             continue # Not a dealt-wounds event.
         elif (not preventable_only) or event[0] in PREVENTABLE:
-            if (target == Token("ANY") or event[1][0] == target) and wounds_equal(event[1][1], wound_type):
+            if targets_equal(target, event[1][0]) and wounds_equal(event[1][1], wound_type):
                 count += event[1][2]
         elif (not include_prevented) and event[0] == PREVENT:
-            if (target == Token("ANY") or event[1][0] == target) and wounds_equal(event[1][1], wound_type):
+            if targets_equal(target, event[1][0]) and wounds_equal(event[1][1], wound_type):
                 count -= event[1][2]
     return count
     
@@ -200,7 +196,7 @@ def wounds_token_dual(current_state, current_token):
 def getwound_token(current_state, current_token):
     target = get_value_from(current_state, current_token[1])
     wound_type = get_value_from(current_state, current_token[2])
-    if target.markers[wounds_markers[wound_type]] != 0:
+    if marker_count(target, wound_type) != 0:
         return ("WOUND", target, wound_type)
     else:
         return None
@@ -214,7 +210,7 @@ def afflict_token_dual(current_state, current_token):
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
         affliction = get_value_from(current_state, current_token[3])
-        if target.markers[wounds_markers[wound_type]] != 0:
+        if marker_count(target, wound_type) != 0:
             target_wound = ("WOUND", target, wound_type)
         else:
             abort(current_state, "Target has no %s wounds" % wound_type)
@@ -241,7 +237,7 @@ def get_normal_wounds_count(target, wound_type, current_state=None):
         just_removed = get_wounds_removed(current_state, target, wound_type)
     else:
         just_removed = 0
-    return target.markers[wounds_markers[wound_type]] - just_removed
+    return marker_count(target, wound_type) - just_removed
 
 def get_afflictions_count(wound_type, target, current_state=None):
     afflictions = 0
@@ -356,6 +352,11 @@ def cure_token(current_state, current_token):
     else:
         remove_wounds(current_state, target, (wound_choices[picked - 1], 1), remove_type="CURE")
         return True
+        
+def remove_affliction(affliction):
+    target = card_owner(affliction)
+    affliction.moveTo(me.piles["Discard"])
+    add_health_marker(target, 1)
 
 if __name__ == "__main__":
     for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY"]:

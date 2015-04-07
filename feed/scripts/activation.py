@@ -8,6 +8,7 @@ def setup_state_changes():
     change_handlers.append(handle_draw) # Done!
     change_handlers.append(handle_discard) # Done!
     change_handlers.append(handle_constant) # Done!
+    change_handlers.append(handle_pets) # Done!
     change_handlers.append(handle_counters) # Done!
     change_handlers.append(handle_status) # Done!
     change_handlers.append(handle_turn_state) # Done!
@@ -24,7 +25,8 @@ def handle_turn_state(current_state, dummy_card):
     
 def handle_gain_health(current_state, dummy_card):
     if current_state.has_key("GAINHEALTH"):
-        me.health += current_state.get("GAINHEALTH", 0)
+        for target, value in current_state["GAINHEALTH"].items():
+            add_health_marker(target, value)
     
 def handle_retreat(current_state, dummy_card):
     mute()
@@ -53,17 +55,34 @@ def handle_counters(current_state, dummy_card): # Useless dummy card.
     mute()
     for target, counters in current_state.get("gain_stat", {}).items():
         for statname, value in counters.items():
-            target.controller.counters[statname].value += value
-            notify("%s gains %d %s" % (target.controller.name, value, statname))
+            gain_stat_counter(target, statname, value)
     for target, counters in current_state.get("pay", {}).items():
         for statname, value in counters.items():
-            if value > 0:
-                target.controller.counters[statname].value -= value
-                notify("%s pays %d %s" % (target.controller.name, value, statname))
+            if statname != "Stamina" or marker_count(target, "Max Stamina") == 0: # Not stamina. Not a pet with stamina.
+                pay_stat_counter(target, statname, value)
+            else:
+                pay_stat_marker(target, statname, value)
     for target, counters in current_state.get("set_stat", {}).items():
         for statname, value in counters.items():
-            target.controller.counters[statname].value = value
-            notify("%s %s set to %d" % (target.controller.name, statname, value))
+            set_stat_counter(target, statname, value)
+            
+def gain_stat_counter(target, statname, value):
+    target.controller.counters[statname].value += value
+    notify("%s (%s) gains %d %s" % (target.name, target.controller.name, value, statname))
+    
+def set_stat_counter(target, statname, value):
+    target.controller.counters[statname].value = value
+    notify("%s %s set to %d" % (target.controller.name, statname, value))
+    
+def pay_stat_counter(target, statname, value):
+    if value > 0:
+        target.controller.counters[statname].value -= value
+        notify("%s (%s) pays %d %s" % (target.name, target.controller.name, value, statname))
+    
+def pay_stat_marker(target, statname, value):
+    if value > 0:
+        target.controller.counters[statname].value -= value
+        notify("%s (%s) pays %d %s" % (target.name, target.controller.name, value, statname))
                 
 def handle_afflict(current_state, dummy_card): # We want the dummy card!
     mute()
@@ -76,9 +95,9 @@ def handle_afflict(current_state, dummy_card): # We want the dummy card!
                     wound_type = dummy_card # Swap out the dummy card.
                 mark_card_affliction(wound_type)
                 wound_type.setController(target.controller)
+                if is_card_npc(target):
+                    set_npc_owner(wound_type, target)
                 remoteCall(target.controller, "rearrange_afflictions", [target.controller])
-                if target.Type == "Class":
-                    target.controller.counters["Health"].value -= always_one
                 notify("%s received %s" % (target.controller.name, wound_type))
                 
 def handle_constant(current_state, dummy_card): # We want the dummy card!
@@ -88,6 +107,16 @@ def handle_constant(current_state, dummy_card): # We want the dummy card!
         if constant == current_state["THIS"]:
             constant = dummy_card # Swap out the dummy card.
         mark_card_constant(constant)
+                
+def handle_pets(current_state, dummy_card): # We want the dummy card!
+    mute()
+    for pet, health, max_stamina in current_state.get("pets", []):
+        notify("%s remains in play" % (pet.name))
+        if pet == current_state["THIS"]:
+            pet = dummy_card # Swap out the dummy card.
+        mark_card_pet(pet)
+        add_health_marker(pet, health)
+        add_max_stamina_marker(pet, health)
         
 def handle_damage(current_state, dummy_card): # Dummy card useless here.
     mute()
@@ -96,9 +125,7 @@ def handle_damage(current_state, dummy_card): # Dummy card useless here.
             wound_type = wounds[0]
             wound_count = wounds[1]
             if type(wound_type) is str: # Normal wound
-                target.markers[wounds_markers[wound_type]] += wound_count
-                if target.Type == "Class":
-                    target.controller.counters["Health"].value -= wound_count
+                add_wound_marker(target, wound_type, wound_count)
             notify("%s received %s %s" % (target.controller.name, wound_count, wound_type))
 
 def handle_cure(current_state, dummy_card): # Dummy card useless here.
@@ -109,23 +136,21 @@ def handle_cure(current_state, dummy_card): # Dummy card useless here.
                 wound_type = wounds[0]
                 wound_count = wounds[1]
                 if type(wound_type) is str: # Normal wound
-                    target.markers[wounds_markers[wound_type]] -= wound_count
+                    remove_wound_marker(target, wound_type, wound_count)
                     notify("%s cured %s %s" % (target.controller.name, wound_count, wound_type))
                 elif type(wound_type) is Card:
                     notify("%s cured %s" % (target.controller.name, wound_type.name))
                     wound_type.moveTo(me.piles["Discard"])
                 else:
                     raise Exception("Invalid wound type: %s (%s)" % (wound_type, type(wound_type)))
-                if target.Type == "Class":
-                    target.controller.counters["Health"].value += wound_count
             else: # ConvertAffliction
                 affliction = wounds[0]
                 always_one = wounds[1]
                 wound_type = wounds[2]
                 notify("%s convert %s to a normal %s wound" % (target.controller.name, affliction.name, wound_type))
-                target.markers[wounds_markers[wound_type]] += always_one
+                add_wound_marker(target, wound_type, always_one)
                 if type(affliction) is Card:
-                    affliction.moveTo(me.piles["Discard"])
+                    remove_affliction(affliction)
                 else:
                     raise Exception("Invalid affliction type: %s (%s)" % (affliction, type(affliction)))
 
@@ -136,15 +161,25 @@ def handle_draw(current_state, dummy_card): # Ignore the dummy card still.
         card = drawn_card[1]
         card.moveTo(player.hand)
         notify("%s drew a card." % (player.name, ))
+        whisper("You drew {}.".format(card))
 
 def handle_discard(current_state, dummy_card):
     mute()
     for discarded in current_state.get("discards", []):
-        notify("%s was discarded" % (discarded.name))
+        notify("{} was discarded".format(discarded.name))
         if discarded.Type == "Item":
             discarded.moveTo(discarded.owner.piles["Backpack"])
         else:
             discarded.moveTo(discarded.owner.piles["Discard"])
 
+this_turn = []
+def clear_turn():
+    global this_turn
+    this_turn = []
+
+def add_action_this_turn(action):
+    global this_turn
+    this_turn.append(action)
+    
 if __name__ == "__main__":
     setup_state_changes()

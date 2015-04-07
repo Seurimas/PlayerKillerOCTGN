@@ -11,5 +11,8 @@
 		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41002" name="Frost Wound" />
 		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41003" name="Mortal Wound" />
 		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41004" name="Shadow Wound" />
+		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41005" name="Health" />
+		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41006" name="Max Stamina" />
+		<marker id="7ae6b4f2-afee-423a-bc18-70a236b41007" name="Stamina" />
 	</markers>
 </set>

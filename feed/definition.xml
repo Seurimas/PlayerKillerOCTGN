@@ -4,7 +4,7 @@
       name="Player-Killer" 
       id="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
       octgnVersion="0.0.0.1" 
-      version="0.0.0.2"
+      version="0.0.0.3"
       markersize="16" 
       setsurl="http://www.google.com"
       gameurl="http://www.google.com"
@@ -21,6 +21,7 @@
         <script src="scripts/counters.py" />
         <script src="scripts/game_scripts.py" />
         <script src="scripts/targetting.py" />
+        <script src="scripts/markers.py" />
     </scripts>
     <events>
        <event name="OnTableLoad" action="chkTwoSided" />
