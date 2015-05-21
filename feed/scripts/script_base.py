@@ -339,3 +339,15 @@ def get_token(current_state, current_token):
 
 add_token_script(Token("GET"), get_token)
 assert(get_value_from({"VARIABLE": 1}, [Token("SET"), Token("VARIABLE"), 1]) == 1)
+    
+def variable_token(variable):
+    @token_func(0, 0)
+    def _actual_token(current_state, current_token):
+        return current_state.get(variable, None)
+    return _actual_token
+    
+def singleton_token(singleton):
+    @token_func(0, 0)
+    def _actual_token(current_state, current_token):
+        return current_token
+    return _actual_token

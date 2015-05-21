@@ -11,24 +11,33 @@ except:
             return decorated_function
         return actual_decorator
 
-def get_counter_value(target, statname):
-    return target.controller.counters[statname.capitalize()].value
+def get_stat_value(target, statname):
+    if statname.capitalize() != "Stamina" or marker_count(target, "Max Stamina") == 0: # Not stamina. Not a pet with stamina.
+        return target.controller.counters[statname.capitalize()].value
+    else:
+        return get_stamina_count_marker(target)
 
 def get_paid_value(target, statname, current_state):
     return current_state.get("pay", {}).get(target, {}).get(statname.capitalize(), 0)
 
-def can_pay(target, statname, current_state):
-    return target is not None and get_counter_value(target, statname) >= get_paid_value(target, statname, current_state)
+def overpaid(target, statname, current_state):
+    if target is not None and get_stat_value(target, statname) >= get_paid_value(target, statname, current_state):
+        return False
+    else:
+        return True
 
-def playerstat_token(statname):
+def stat_token(statname):
     @token_func(1, 2)
     def _actual_token(current_state, current_token):
         if len(current_token) == 1:
             target = owner_this(current_state)
         else:
             target = get_value_from(current_state, current_token[1])
-        counter_value = get_counter_value(target, statname)
-        return counter_value
+        if target.Type == "Class":
+            stat_value = get_stat_value(target, statname)
+        elif is_card_npc(target):
+            stat_value = get_stamina_count_marker(target)
+        return stat_value
     return _actual_token
 
 def payxstat_token(statname):
@@ -38,7 +47,7 @@ def payxstat_token(statname):
             target = owner_this(current_state)
         else:
             target = get_value_from(current_state, current_token[1])
-        max_paid = get_counter_value(target, statname) - get_paid_value(target, statname, current_state)
+        max_paid = get_stat_value(target, statname) - get_paid_value(target, statname, current_state)
         paid = choosex_token(current_state, [Token("CHOOSEX"), "How much %s is X? (Max: %d)" % (statname.capitalize(), max_paid),
                                              0, max_paid])
         pay_stat(statname, paid, target, current_state)
@@ -55,8 +64,8 @@ def paystat_token(statname):
             target = get_value_from(current_state, current_token[1])
             amount = get_value_from(current_state, current_token[2])
         pay_stat(statname, amount, target, current_state)
-        if not can_pay(target, statname, current_state):
-            abort(current_state, "Cannot pay %d %s (only have %d)" % (amount, statname.capitalize(), get_counter_value(target, statname)))
+        if overpaid(target, statname, current_state):
+            abort(current_state, "%s cannot pay %d %s (only have %d)" % (target.name, amount, statname.capitalize(), get_stat_value(target, statname)))
     return _actual_token
 
 def reducecoststat_token(statname):
@@ -137,3 +146,16 @@ def gain_stat(statname, amount, target, current_state):
     
 def lose_stat(statname, amount, target, current_state):
     gain_stat(statname, amount, target, current_state)
+    
+def gain_stat_counter(target, statname, value):
+    target.controller.counters[statname].value += value
+    notify("%s (%s) gains %d %s" % (target.name, target.controller.name, value, statname))
+    
+def set_stat_counter(target, statname, value):
+    target.controller.counters[statname].value = value
+    notify("%s %s set to %d" % (target.controller.name, statname, value))
+    
+def pay_stat_counter(target, statname, value):
+    if value > 0:
+        target.controller.counters[statname].value -= value
+        

@@ -13,6 +13,7 @@ def setup_state_changes():
     change_handlers.append(handle_status) # Done!
     change_handlers.append(handle_turn_state) # Done!
     change_handlers.append(handle_gain_health) # Done!
+    change_handlers.append(handle_refresh_stamina) # Done!
     whisper("Setting up activation scripts!")
 
 def activate_state_change(current_state, dummy_card=None):
@@ -51,6 +52,12 @@ def handle_status(current_state, dummy_card): # Dummy card useless here.
             loseStatus(target, status)
         notify("%s (%s) %s set to %s" % (target.name, target.controller.name, status, value))
         
+def remove_stat(target, statname, value):
+    if statname != "Stamina" or marker_count(target, "Max Stamina") == 0: # Not stamina. Not a pet with stamina.
+        pay_stat_counter(target, statname, value)
+    else:
+        remove_stamina_marker(target, value)    
+    
 def handle_counters(current_state, dummy_card): # Useless dummy card.
     mute()
     for target, counters in current_state.get("gain_stat", {}).items():
@@ -58,31 +65,11 @@ def handle_counters(current_state, dummy_card): # Useless dummy card.
             gain_stat_counter(target, statname, value)
     for target, counters in current_state.get("pay", {}).items():
         for statname, value in counters.items():
-            if statname != "Stamina" or marker_count(target, "Max Stamina") == 0: # Not stamina. Not a pet with stamina.
-                pay_stat_counter(target, statname, value)
-            else:
-                pay_stat_marker(target, statname, value)
+            remove_stat(target, statname, value)
+            notify("%s (%s) pays %d %s" % (target.name, target.controller.name, value, statname))
     for target, counters in current_state.get("set_stat", {}).items():
         for statname, value in counters.items():
             set_stat_counter(target, statname, value)
-            
-def gain_stat_counter(target, statname, value):
-    target.controller.counters[statname].value += value
-    notify("%s (%s) gains %d %s" % (target.name, target.controller.name, value, statname))
-    
-def set_stat_counter(target, statname, value):
-    target.controller.counters[statname].value = value
-    notify("%s %s set to %d" % (target.controller.name, statname, value))
-    
-def pay_stat_counter(target, statname, value):
-    if value > 0:
-        target.controller.counters[statname].value -= value
-        notify("%s (%s) pays %d %s" % (target.name, target.controller.name, value, statname))
-    
-def pay_stat_marker(target, statname, value):
-    if value > 0:
-        target.controller.counters[statname].value -= value
-        notify("%s (%s) pays %d %s" % (target.name, target.controller.name, value, statname))
                 
 def handle_afflict(current_state, dummy_card): # We want the dummy card!
     mute()
@@ -97,6 +84,7 @@ def handle_afflict(current_state, dummy_card): # We want the dummy card!
                 wound_type.setController(target.controller)
                 if is_card_npc(target):
                     set_npc_owner(wound_type, target)
+                remove_health_marker(target, 1)
                 remoteCall(target.controller, "rearrange_afflictions", [target.controller])
                 notify("%s received %s" % (target.controller.name, wound_type))
                 
@@ -111,12 +99,17 @@ def handle_constant(current_state, dummy_card): # We want the dummy card!
 def handle_pets(current_state, dummy_card): # We want the dummy card!
     mute()
     for pet, health, max_stamina in current_state.get("pets", []):
-        notify("%s remains in play" % (pet.name))
         if pet == current_state["THIS"]:
             pet = dummy_card # Swap out the dummy card.
         mark_card_pet(pet)
         add_health_marker(pet, health)
-        add_max_stamina_marker(pet, health)
+        add_max_stamina_marker(pet, max_stamina)
+        refresh_stamina_marker(pet)
+        
+def handle_refresh_stamina(current_state, dummy_card):
+    mute()
+    for pet in current_state.get("refresh_stamina", []):
+        refresh_stamina_marker(pet)
         
 def handle_damage(current_state, dummy_card): # Dummy card useless here.
     mute()
@@ -160,7 +153,8 @@ def handle_draw(current_state, dummy_card): # Ignore the dummy card still.
         player = drawn_card[0]
         card = drawn_card[1]
         card.moveTo(player.hand)
-        notify("%s drew a card." % (player.name, ))
+        for p in players[1:]:
+            remoteCall(p, "whisper", "%s drew a card." % (player.name, ))
         whisper("You drew {}.".format(card))
 
 def handle_discard(current_state, dummy_card):

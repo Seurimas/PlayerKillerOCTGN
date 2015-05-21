@@ -94,7 +94,7 @@
          <property name="Cost" value="1 standard"/>
          <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [AFFLICT, [GETWOUND, TARGET, &quot;Standard&quot;], THIS], [FAIL, &quot;That target does not have any standard wounds.&quot;]]"/>
          <property name="Constant_Script" value="[0, [ONTURNSTART, [LOSESTAMINA, 1]]]"/>
-         <property name="Use_Script" value="[PAYDISCARD], [CONVERTAFFLICTION, THIS, &quot;Standard&quot;]"/>
+         <property name="Use_Script" value="[PAYDISCARD], [PAYDISCARD], [CONVERTAFFLICTION, THIS, &quot;Standard&quot;]"/>
     </card>
 
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e30009" name="Two Steps Forward">
@@ -120,7 +120,7 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e3000b" name="Weariness">
          <property name="Type" value="Affliction"/>
          <property name="Subtype" value="Standard"/>
-         <property name="Description" value="At the start of your turn, take 1 standard wound. Cure Weariness when you retreat."/>
+         <property name="Description" value="Lose 2 health. When you cure or convert Weariness, gain 1 additional health (in addition to health gained when curing wounds). When you retreat, cure Weariness."/>
          <property name="Cost" value=""/>
          <property name="Play_Script" value="[GETENEMY], [IF, [NORMALWOUNDS, TARGET, &quot;Standard&quot;], [AFFLICT, [GETWOUND, TARGET, &quot;Standard&quot;], THIS], [FAIL, &quot;That target does not have any standard wounds.&quot;]]"/>
          <property name="Constant_Script" value="[0, [ONTURNSTART, [TAKEWOUNDS, 1, &quot;Standard&quot;]]], [0, [ON, [AND, [EQUAL, TYPE, &quot;RETREAT&quot;], [EQUAL, CHARACTER, [OWNER, THIS]]], [CURE, THIS]]]"/>

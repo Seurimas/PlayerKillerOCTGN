@@ -29,7 +29,7 @@ def feedConstants(card, x=0, y=0):
     state_str = askString("State:", "{}")
     state = eval(state_str)
     state["CHARACTER"] = me
-    state["THIS"] = None
+    state["THIS"] = card
     for x in range(-2, 5):
         state = applyCard(x, card, state)
         if type(state) is str:
@@ -54,6 +54,10 @@ def check_scripts(group, x=0, y=0):
                 raise Exception("Could not create card %s" % card_model)
             check_card(card)
             card.delete()
-            
-            
+                        
+def debugGetOwner(card, x=0, y=0):
+    mute()
+    notify("{}".format(get_value_from({}, [Token("OWNER"), card])))
+    notify(str(my_class(me) == get_value_from({}, [Token("OWNER"), card])))
+
 """[DISCARD, THIS], [REMOVENORMALWOUNDS, [CHOOSENORMALWOUND, "Which wound are you converting?", [OWNER, THIS], [NOT, [EQUAL, TYPE, "Standard"]]]], [TAKEWOUNDS, 1, "Standard"]"""

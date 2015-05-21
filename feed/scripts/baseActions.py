@@ -1,12 +1,17 @@
 flipBoard = -1
-flipModX = -Card.width()
-flipModY = -Card.height()
-MAX_HAND_SIZE = 7
+flipModX = -63
+flipModY = -88
+# flipModX = -Card.width()
+# flipModY = -Card.height()
+# MAX_HAND_SIZE = 7
 
 post_priorities = [0, 1, 2, 3]
 pre_priorities = [-3, -2, -1]
 all_priorities = pre_priorities + post_priorities
 
+rule_cards = ["75f0e3d1-7f7d-4c15-abec-4b7424e70000", # Stealth is Fleeting
+              
+              ]
 
 def setup_class(current_state):
     for card in me.hand:
@@ -61,13 +66,18 @@ def checkDeck(player, groups):
         drawn.moveTo(me.hand)
     for card_type in type_counts:
         whisper("Your deck contains %d %s" % (type_counts[card_type], card_type))
+    for card_id in rule_cards:
+        card = table.create(card_id, 0, 0, quantity=1, persist=False)
+    rearrange_rules(me)
 
 desiredLocations = {"Class":(0, 0),
                     "Item":(75, 0),
                     "Affliction":(0, 100),
                     "Tactic":(0, 200),
                     "Attack":(0, 300),
-                    "Spell":(0, 400)}
+                    "Spell":(0, 400),
+                    "Rule":(0,500),
+                    }
 
 def cardCount(player, type):
     acc = 0
@@ -100,13 +110,23 @@ def rearrange_items(player):
             y = flipModY
             card.moveToTable(x, y)
             item_i += 1
+            
+def rearrange_rules(player):
+    rule_i = 0
+    for card in table:
+        if card.Type == "Rule" and card.controller == player:
+            x = (desiredLocations["Rule"][0] + rule_i * card.width()) * flipBoard + flipModX
+            y = flipModY + desiredLocations["Rule"][1] * flipBoard
+            card.moveToTable(x, y)
+            rule_i += 1
 
-def checkMovedCard(player, card, fromGroup, toGroup,
-                   oldIndex, index,
+def checkMovedCard(player, cards, fromGroups, toGroups,
+                   oldIndexes, indexes,
                    oldX, oldY, x, y,
-                   isScriptMove):
-    if isScriptMove:
-        return
+                   highlights,
+                   markers,
+                   faceup):
+    pass
     
 def draw(group):
     character = my_class(me)
@@ -223,6 +243,8 @@ def useCard(card, x = 0, y = 0):
     base_state = state
     if card.group == me.hand:
         state["PLAYEDCARD"] = card
+    else:
+        state["PLAYEDCARD"] = None
     state = applyWithPriorities(state, pre_priorities)
     if type(state) is str:
         return
@@ -354,13 +376,13 @@ def mark_card_pet(card):
     add_unique_npc_marker(card)
     
 def is_card_temporary(card):
-    return card.highlight is not None and card.highlight.upper() == "#0000FF"
+    return card.highlight is not None and card.highlight.upper() == TEMP_HILITE
     
 def is_card_pet(card):
-    return card.highlight is not None and card.highlight.upper() == "#FFFFFF"
+    return card.highlight is not None and card.highlight.upper() == PET_HILITE
         
 def is_card_monster(card):
-    return card.highlight is not None and card.highlight.upper() == "#FF00FF"
+    return card.highlight is not None and card.highlight.upper() == NPC_HILITE
     
 def is_card_npc(card):
     return is_card_pet(card) or is_card_monster(card)

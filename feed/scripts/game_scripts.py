@@ -27,6 +27,7 @@ def setupTokens():
     
     add_token_script(Token("ONTURNSTART"), on_turn_start_token)
     add_token_script(Token("ONTURNEND"), on_turn_end_token)
+    add_token_script(Token("ONDEATH"), on_death_token)
     add_token_script(Token("ISATTACK"), is_attack_token)
     add_token_script(Token("ISSPELL"), is_spell_token)
     add_token_script(Token("ISPLAYINGCARD"), is_playing_card_token)
@@ -35,6 +36,7 @@ def setupTokens():
     # Pet and NPC effects
     add_token_script(Token("PET"), pet_token)
     add_token_script(Token("ATTACK"), attack_token)
+    add_token_script(Token("REFRESHSTAMINA"), refresh_stamina_token)
     
     # Item effects.
     add_token_script(Token("GAINWEIGHT"), gain_weight_token)
@@ -67,6 +69,7 @@ def setupTokens():
     add_token_script(Token("GETENEMY"), getenemy_token)
     add_token_script(Token("GETCHARACTER"), getcharacter_token)
     add_token_script(Token("TARGET"), target_token)
+    add_token_script(Token("ACTIONS"), actions_token)
     
     # Variables and references
     add_token_script(Token("CHOOSEX"), choosex_token)
@@ -91,14 +94,14 @@ def setupTokens():
     add_token_script(Token("GAINSTATUS"), gain_status_token)
     add_token_script(Token("LOSESTATUS"), lose_status_token)
     for counter in counters:
-        add_token_script(Token(counter), playerstat_token(counter))
+        add_token_script(Token(counter), stat_token(counter))
         if counter != "HEALTH":
-            add_token_script(Token("GAIN" + counter), gainstat_token(counter))
-            add_token_script(Token("PAY" + counter), paystat_token(counter))
-            add_token_script(Token("PAYX" + counter), payxstat_token(counter))
-            add_token_script(Token("REDUCECOST" + counter), reducecoststat_token(counter))
-            add_token_script(Token("LOSE" + counter), losestat_token(counter))
-            add_token_script(Token("SET" + counter), setstat_token(counter))
+            add_token_script(Token("GAIN" + counter), gainstat_token(counter.capitalize()))
+            add_token_script(Token("PAY" + counter), paystat_token(counter.capitalize()))
+            add_token_script(Token("PAYX" + counter), payxstat_token(counter.capitalize()))
+            add_token_script(Token("REDUCECOST" + counter), reducecoststat_token(counter.capitalize()))
+            add_token_script(Token("LOSE" + counter), losestat_token(counter.capitalize()))
+            add_token_script(Token("SET" + counter), setstat_token(counter.capitalize()))
         
     # Wound manipulation and afflictions
     add_token_script(Token("DEALT"), dealt_token)
@@ -132,7 +135,7 @@ def attack_token(current_state, current_token):
     old_state = replace_this(current_state, attacker, types=True) # Replace types to store them in old_state
     current_state["CHARACTER"] = attacker
     current_state["TYPE"] = "Attack"
-    del current_state["SUBTYPE"]
+    current_state["SUBTYPE"] = ""
     current_state = applyWithPriorities(current_state, pre_priorities)
     if type(current_state) is str:
         return current_state
@@ -220,18 +223,6 @@ def played_token(current_state, current_token):
     else:
         card = get_value_from(current_state, current_token[1])
     return card.group == table
-    
-def variable_token(variable):
-    @token_func(0, 0)
-    def _actual_token(current_state, current_token):
-        return current_state.get(variable, None)
-    return _actual_token
-    
-def singleton_token(singleton):
-    @token_func(0, 0)
-    def _actual_token(current_state, current_token):
-        return current_token
-    return _actual_token
     
 def card_value_token(singleton):
     @token_func(0, 2)
@@ -493,6 +484,8 @@ def this_turn_token(current_state, current_token):
     for action in so_far_this_turn:
         dummy_state = current_state.copy()
         dummy_state.update(action)
+        dummy_state["THIS"] = current_state["THIS"]
+        dummy_state["PLAYEDCARD"] = action.get("PLAYEDCARD", None)
         value = get_value_from(dummy_state, validator)
         if value:
             return value
@@ -506,7 +499,14 @@ def on_turn_start_token(current_state, current_token):
     else:
         x = owner_this(current_state)
         y = current_token[1]
-    return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "TurnStart"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
+    if current_state['TYPE'] == "TurnStart":
+        if x.controller == current_state['CHARACTER'].controller:
+            return get_value_from(current_state, y)
+        else:
+            return None
+    else:
+        return None
+#     return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "TurnStart"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
 
 @token_func(2, 3)
 def on_turn_end_token(current_state, current_token):
@@ -516,11 +516,28 @@ def on_turn_end_token(current_state, current_token):
     else:
         x = owner_this(current_state)
         y = current_token[1]
-    return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "TurnEnd"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
+    if current_state['TYPE'] == "TurnEnd":
+        if x.controller == current_state['CHARACTER'].controller:
+            return get_value_from(current_state, y)
+        else:
+            return None
+    else:
+        return None
+#     return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "TurnEnd"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
+
+@token_func(2, 3)
+def on_death_token(current_state, current_token):
+    if len(current_token) == 3:
+        x = current_token[1]
+        y = current_token[2]
+    else:
+        x = owner_this(current_state)
+        y = current_token[1]
+    return get_value_from(current_state, [Token("ON"), [Token("AND"), [Token("EQUAL"), Token("TYPE"), "Death"], [Token("EQUAL"), Token("CHARACTER"), x]], y])
 
 @token_func(1, 1)
 def is_playing_card_token(current_state, current_token):
-    return current_state.has_key("PLAYEDCARD")
+    return current_state.has_key("PLAYEDCARD") and current_state["PLAYEDCARD"] != None
 
 @token_func(1, 1)
 def is_attack_token(current_state, current_token):
@@ -577,7 +594,17 @@ def gain_health_token(current_state, current_token):
     gained_health += value
     gained_healths[target] = gained_health
     current_state["GAINHEALTH"] = gained_healths
-
+    
+@token_func(1, 2)
+def refresh_stamina_token(current_state, current_token):
+    if len(current_token) == 1:
+        target = owner_this(current_state)
+    else:
+        target = get_value_from(current_state, current_token[1])
+    refreshed_stamina = current_state.get("refresh_stamina", [])
+    refreshed_stamina.append(target)
+    current_state["refresh_stamina"] = refreshed_stamina
+    
 if __name__ == "__main__":
     from targetting import *
     from wounds import *

@@ -42,6 +42,9 @@ def refresh_stamina_marker(target):
 def remove_stamina_marker(target, value):
     target.markers[markers["Stamina"]] -= value
     
+def get_stamina_count_marker(target):
+    return target.markers[markers["Stamina"]]
+    
 def addStatus(target, status):
     target.markers[status, status_counter_id] = 1
 
@@ -49,6 +52,7 @@ def loseStatus(target, status):
     target.markers[status, status_counter_id] = 0
     
 def add_unique_npc_marker(target):
+    global unique_npc_count
     target.markers[unique_npc_markers[unique_npc_count]] = 1
     unique_npc_count += 1
     
@@ -56,6 +60,11 @@ def set_npc_owner(target, owner):
     for marker in unique_npc_markers:
         if owner.markers[marker] != 0:
             target.markers[marker] = 1
+    
+def get_npc(marker):
+    for card in table:
+        if card.markers[marker] != 0 and is_card_npc(card):
+            return card
     
 def get_npc_owner(card):
     for marker in unique_npc_markers:

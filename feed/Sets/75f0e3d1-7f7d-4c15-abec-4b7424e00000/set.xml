@@ -10,10 +10,10 @@
     <card id="75f0e3d1-7f7d-4c15-abec-4b7424e00000" name="Rogue">
          <property name="Type" value="Class"/>
          <property name="Subtype" value=""/>
-         <property name="Description" value="At the start of your turn, gain 1 subterfuge or 2 if in Stealth. At the end of your turn, lose all subterfuge."/>
+         <property name="Description" value="At the start of your turn, gain 1 subterfuge or 2 if in Stealth. (Subterfuge is set to 0 at the end of your turn.)"/>
          <property name="Cost" value="15 weight, 15 health"/>
          <property name="Play_Script" value="[GAINWEIGHT, 15], [GAINHEALTH, 15]"/>
-         <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, [IF, [STATUS, &quot;Stealth&quot;], 2, 1]]], [ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Constant_Script" value="[0, [ONTURNSTART, [GAINSUBTERFUGE, [IF, [STATUS, &quot;Stealth&quot;], 2, 1]]]"/>
          <property name="Use_Script" value=""/>
     </card>
 
@@ -242,7 +242,7 @@
          <property name="Subtype" value="Subterfuge"/>
          <property name="Description" value="Gain 2 subterfuge."/>
          <property name="Cost" value=""/>
-         <property name="Play_Script" value="[GAINSUBTERFUGE, 1]"/>
+         <property name="Play_Script" value="[GAINSUBTERFUGE, 2]"/>
          <property name="Constant_Script" value=""/>
          <property name="Use_Script" value=""/>
     </card>

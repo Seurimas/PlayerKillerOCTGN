@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<set xmlns:noNamespaceSchemaLocation="CardSet.xsd" 
+     name="Aspects" 
+     id="75f0e3d1-7f7d-4c15-abec-4b7424e60000" 
+     gameId="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+     gameVersion="0.0.0.1" 
+     version="0.0.0.1">
+<cards>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e60000" name="Toughness">
+         <property name="Type" value="Aspect"/>
+         <property name="Subtype" value="Human"/>
+         <property name="Description" value="You have 2 more health."/>
+         <property name="Cost" value=""/>
+         <property name="Play_Script" value="[GAINHEALTH, 2]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value=""/>
+    </card>
+</cards></set>

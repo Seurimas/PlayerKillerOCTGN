@@ -124,7 +124,8 @@ def dealt_token(current_state, current_token):
     else:
         target = get_value_from(current_state, current_token[1])
         wound_type = get_value_from(current_state, current_token[2])
-    return get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False)
+    wounds_dealt = get_wounds_dealt(current_state, target, wound_type, preventable_only=False, include_prevented=False)
+    return wounds_dealt
 
 @token_func(2, 3)
 def cured_token(current_state, current_token):
@@ -355,8 +356,8 @@ def cure_token(current_state, current_token):
         
 def remove_affliction(affliction):
     target = card_owner(affliction)
-    affliction.moveTo(me.piles["Discard"])
     add_health_marker(target, 1)
+    affliction.moveTo(me.piles["Discard"])
 
 if __name__ == "__main__":
     for deal_type in ["DEAL", "DEALONLY", "DEALALWAYS", "DEALALWAYSONLY"]:

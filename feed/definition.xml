@@ -5,6 +5,7 @@
       id="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
       octgnVersion="0.0.0.1" 
       version="0.0.0.3"
+	  scriptVersion="3.1.0.2"
       markersize="16" 
       setsurl="http://www.google.com"
       gameurl="http://www.google.com"
@@ -28,7 +29,6 @@
        <event name="OnTableLoad" action="setupTokens" />
        <event name="OnTableLoad" action="setup_state_changes" />
        <event name="OnLoadDeck" action="checkDeck" />
-       <event name="OnMoveCard" action="checkMovedCard" />
     </events>
     <sounds>
     </sounds>
@@ -66,6 +66,7 @@
 		<cardaction menu="Set Use Script" default="False" execute="setUseScript"/>
 		<cardaction menu="Try Constants" default="False" execute="feedConstants"/>
 		<cardaction menu="Check Card" default="False" execute="check_card"/>
+		<cardaction menu="Get Owner" default="False" execute="debugGetOwner"/>
 	</cardactions>
 	<groupaction menu="(DEBUG) Check All Scripts - MAY TAKE LONG TIME" default="False" execute="check_scripts"/>
 	</table>

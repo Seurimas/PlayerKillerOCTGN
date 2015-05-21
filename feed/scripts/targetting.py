@@ -89,6 +89,24 @@ def choose_token(current_state, current_token):
         current_state["FAIL"] = "Cancelled making choice."
     else:
         return picked - 1
+    
+@token_func(3, 999)
+def actions_token(current_state, current_token):
+#     prompt = get_value_from(current_state, current_token[1])
+    prompt = "Choose an action:"
+    choices = []
+    actions = []
+    pairs = zip(current_token[1::2], current_token[2::2])
+    for value, script in pairs:
+        choices.append(get_value_from(current_state, value))
+        actions.append(script)
+    colorList = ["#FFFFFF" for _ in choices]
+    customButtons = ["Cancel"]
+    picked = askChoice(prompt, choices, colorList, customButtons=customButtons)
+    if picked == 0 or picked == -1:
+        current_state["FAIL"] = "Cancelled taking action."
+    else:
+        return get_value_from(current_state, actions[picked - 1])
 
 @token_func(2, 2)
 def choose_type_token(current_state, current_token):

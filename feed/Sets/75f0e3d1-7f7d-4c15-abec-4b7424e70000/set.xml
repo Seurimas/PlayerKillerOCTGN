@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<set xmlns:noNamespaceSchemaLocation="CardSet.xsd" 
+     name="Special" 
+     id="75f0e3d1-7f7d-4c15-abec-4b7424e70000" 
+     gameId="87821418-5d9a-4be5-ad28-ed2e189fe9fb" 
+     gameVersion="0.0.0.1" 
+     version="0.0.0.1">
+<cards>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e70000" name="Stealth is Fleeting">
+         <property name="Type" value="Rule"/>
+         <property name="Subtype" value="Subterfuge"/>
+         <property name="Description" value="Subterfuge is set to 0 at the end of each character's turn."/>
+         <property name="Cost" value=" "/>
+         <property name="Play_Script" value=""/>
+         <property name="Constant_Script" value="[ONTURNEND, [SETSUBTERFUGE, 0]]]"/>
+         <property name="Use_Script" value=""/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e70001" name="Punch">
+         <property name="Type" value="Attack"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Deal 1 standard wound to a target. Ignore weapons for this attack. Can only be done once per turn."/>
+         <property name="Cost" value="SPECIAL"/>
+         <property name="Play_Script" value="[PUNCH]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value="[PUNCH]"/>
+    </card>
+
+    <card id="75f0e3d1-7f7d-4c15-abec-4b7424e70002" name="Retreat">
+         <property name="Type" value="Retreat"/>
+         <property name="Subtype" value=""/>
+         <property name="Description" value="Add your hand and discard to your deck. Shuffle your deck. Return all items from your backpack into play. Cannot do anything else this turn."/>
+         <property name="Cost" value="SPECIAL"/>
+         <property name="Play_Script" value="[RETREAT]"/>
+         <property name="Constant_Script" value=""/>
+         <property name="Use_Script" value="[RETREAT]"/>
+    </card>
+</cards></set>

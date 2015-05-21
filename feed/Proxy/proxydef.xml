@@ -7,9 +7,10 @@
             <border color="#FFFFFF" size="2" />
         </block>
         <block type="text" id="cost">
-            <location x="40" y="50" />
+            <location x="40" y="70" />
             <text color="#000000" size="15" />
             <border color="#FFFFFF" size="2" />
+			<wordwrap height="15" width="320" align="far"/>
         </block>
         <block type="text" id="cardtype">
             <location x="40" y="300" />
@@ -17,7 +18,7 @@
             <border color="#FFFFFF" size="2" />
         </block>
         <block type="text" id="text">
-            <location x="40" y="330" />
+            <location x="40" y="340" />
             <text color="#000000" size="15" />
             <border color="#FFFFFF" size="2" />
             <wordwrap height="150" width="300" />
@@ -28,7 +29,7 @@
             <border color="#FFFFFF" size="2" />
         </block>
     </blocks>
-    <template src="proxy/White_Card_Template.png" default="True">
+    <template src="proxy/Red_Card_Template.png" default="True">
         <matches>
             <match name="Color" value="value" />
             <match name="property2" value="value" />
